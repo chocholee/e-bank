@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/e-bank.iml" filepath="$PROJECT_DIR$/e-bank.iml" />
       <module fileurl="file://$PROJECT_DIR$/ebank-core/ebank-core.iml" filepath="$PROJECT_DIR$/ebank-core/ebank-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ebank-parent.iml" filepath="$PROJECT_DIR$/ebank-parent.iml" />
       <module fileurl="file://$PROJECT_DIR$/ebank-web/ebank-web.iml" filepath="$PROJECT_DIR$/ebank-web/ebank-web.iml" />
     </modules>
   </component>

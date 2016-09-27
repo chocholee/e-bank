@@ -27,9 +27,8 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="e-bank" target="1.5" />
       <module name="ebank-core" target="1.8" />
-      <module name="ebank-security" target="1.8" />
+      <module name="ebank-parent" target="1.5" />
       <module name="ebank-web" target="1.8" />
     </bytecodeTargetLevel>
   </component>
