@@ -1,4 +1,4 @@
-package cn.cloudwalk.ebank.core.repository.resource;
+package cn.cloudwalk.ebank.core.repository.function;
 
 import cn.cloudwalk.ebank.core.repository.IHibernateRepository;
 
@@ -7,5 +7,5 @@ import cn.cloudwalk.ebank.core.repository.IHibernateRepository;
  *
  * @author 李文禾
  */
-public interface IResourceRepository<T, ID> extends IHibernateRepository<T, ID> {
+public interface IFunctionRepository<T, ID> extends IHibernateRepository<T, ID> {
 }

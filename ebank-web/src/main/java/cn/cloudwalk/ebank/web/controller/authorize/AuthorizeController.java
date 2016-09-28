@@ -1,5 +1,6 @@
-package cn.cloudwalk.ebank.web.controller;
+package cn.cloudwalk.ebank.web.controller.authorize;
 
+import cn.cloudwalk.ebank.web.controller.shared.BaseController;
 import com.google.code.kaptcha.util.Config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.web.WebAttributes;
@@ -25,7 +26,7 @@ import java.util.Date;
  * @author 李文禾
  */
 @Controller
-public class AuthorizeController {
+public class AuthorizeController extends BaseController {
 
     @Autowired
     private Config captchaService;

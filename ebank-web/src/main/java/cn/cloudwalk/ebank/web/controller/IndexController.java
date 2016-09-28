@@ -1,5 +1,6 @@
 package cn.cloudwalk.ebank.web.controller;
 
+import cn.cloudwalk.ebank.web.controller.shared.BaseController;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @author 李文禾
  */
 @Controller
-public class IndexController {
+public class IndexController extends BaseController {
 
     @RequestMapping("/")
     @ResponseBody

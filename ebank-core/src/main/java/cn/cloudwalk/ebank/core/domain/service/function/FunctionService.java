@@ -1,7 +1,7 @@
-package cn.cloudwalk.ebank.core.domain.service.resource;
+package cn.cloudwalk.ebank.core.domain.service.function;
 
-import cn.cloudwalk.ebank.core.domain.model.resource.ResourceEntity;
-import cn.cloudwalk.ebank.core.repository.resource.IResourceRepository;
+import cn.cloudwalk.ebank.core.domain.model.function.FunctionEntity;
+import cn.cloudwalk.ebank.core.repository.function.IFunctionRepository;
 import org.hibernate.FetchMode;
 import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,15 +19,15 @@ import java.util.Map;
  *
  * @author 李文禾
  */
-@Service("resourceService")
+@Service("functionService")
 @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-public class ResourceService implements IResourceService {
+public class FunctionService implements IFunctionService {
 
     @Autowired
-    private IResourceRepository<ResourceEntity, String> resourceRepository;
+    private IFunctionRepository<FunctionEntity, String> functionRepository;
 
     @Override
-    public List<ResourceEntity> findAll() {
+    public List<FunctionEntity> findAll() {
         // 添加排序
         List<Order> orders = new ArrayList<>();
         orders.add(Order.asc("order"));
@@ -36,6 +36,6 @@ public class ResourceService implements IResourceService {
         Map<String, FetchMode> fetchModeMap = new HashMap<>();
         fetchModeMap.put("roleEntities", FetchMode.JOIN);
 
-        return resourceRepository.findAll(null, orders, fetchModeMap);
+        return functionRepository.findAll(null, orders, fetchModeMap);
     }
 }

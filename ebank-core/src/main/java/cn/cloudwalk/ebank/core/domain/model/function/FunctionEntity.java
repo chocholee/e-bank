@@ -1,4 +1,4 @@
-package cn.cloudwalk.ebank.core.domain.model.resource;
+package cn.cloudwalk.ebank.core.domain.model.function;
 
 import cn.cloudwalk.ebank.core.domain.model.role.RoleEntity;
 import cn.cloudwalk.ebank.core.support.entity.AbstractEntity;
@@ -13,28 +13,30 @@ import java.util.Set;
  * @author 李文禾
  */
 @Entity
-@Table(name = "resource")
-public class ResourceEntity extends AbstractEntity {
+@Table(name = "function")
+public class FunctionEntity extends AbstractEntity {
 
-    private String              name;                   // 资源名称
+    private String              name;                   // 功能名称
 
-    private String              uri;                    // 资源标识
+    private String              code;                   // 功能编码
 
-    private String              icon;                   // 资源图标
+    private String              uri;                    // 功能标识
 
-    private String              description;            // 资源描述
+    private String              iconId;                 // 功能图标
 
-    private Integer             order;                  // 资源排序
+    private String              description;            // 功能描述
 
-    private ResourceEntityType  type;                   // 资源类型
+    private Integer             order;                  // 功能排序
 
-    private ResourceEntity      parent;                 // 关联父资源
+    private FunctionEntityType  type;                   // 功能类型
+
+    private FunctionEntity      parent;                 // 关联父资源
 
     private Set<RoleEntity>     roleEntities;           // 关联角色
 
     @Id
-    @GenericGenerator(name = "resource_entity_generator", strategy = "uuid")
-    @GeneratedValue(generator = "resource_entity_generator")
+    @GenericGenerator(name = "function_entity_generator", strategy = "uuid")
+    @GeneratedValue(generator = "function_entity_generator")
     @Override
     public String getId() {
         return super.getId();
@@ -51,14 +53,19 @@ public class ResourceEntity extends AbstractEntity {
         return name;
     }
 
+    @Column(name = "code", nullable = false)
+    public String getCode() {
+        return code;
+    }
+
     @Column(name = "uri")
     public String getUri() {
         return uri;
     }
 
-    @Column(name = "icon")
-    public String getIcon() {
-        return icon;
+    @Column(name = "icon_id")
+    public String getIconId() {
+        return iconId;
     }
 
     @Column(name = "description")
@@ -73,17 +80,17 @@ public class ResourceEntity extends AbstractEntity {
 
     @Column(name = "type", nullable = false)
     @Enumerated(EnumType.STRING)
-    public ResourceEntityType getType() {
+    public FunctionEntityType getType() {
         return type;
     }
 
     @OneToOne
     @JoinColumn(name = "parent", referencedColumnName = "id")
-    public ResourceEntity getParent() {
+    public FunctionEntity getParent() {
         return parent;
     }
 
-    @ManyToMany(mappedBy = "resourceEntities", cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "functionEntities", cascade = CascadeType.ALL)
     public Set<RoleEntity> getRoleEntities() {
         return roleEntities;
     }
@@ -92,12 +99,16 @@ public class ResourceEntity extends AbstractEntity {
         this.name = name;
     }
 
+    public void setCode(String code) {
+        this.code = code;
+    }
+
     public void setUri(String uri) {
         this.uri = uri;
     }
 
-    public void setIcon(String icon) {
-        this.icon = icon;
+    public void setIconId(String iconId) {
+        this.iconId = iconId;
     }
 
     public void setDescription(String description) {
@@ -108,11 +119,11 @@ public class ResourceEntity extends AbstractEntity {
         this.order = order;
     }
 
-    public void setType(ResourceEntityType type) {
+    public void setType(FunctionEntityType type) {
         this.type = type;
     }
 
-    public void setParent(ResourceEntity parent) {
+    public void setParent(FunctionEntity parent) {
         this.parent = parent;
     }
 

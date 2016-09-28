@@ -1,8 +1,10 @@
 package cn.cloudwalk.ebank.core.domain.service.user;
 
 import cn.cloudwalk.ebank.core.domain.model.user.UserEntity;
-
-import java.util.List;
+import cn.cloudwalk.ebank.core.domain.service.user.command.UserAddCommand;
+import cn.cloudwalk.ebank.core.domain.service.user.command.UserEditCommand;
+import cn.cloudwalk.ebank.core.domain.service.user.command.UserPaginationCommand;
+import cn.cloudwalk.ebank.core.repository.Pagination;
 
 /**
  * Created by liwenhe on 2016/9/21.
@@ -11,15 +13,19 @@ import java.util.List;
  */
 public interface IUserService {
 
-    List<UserEntity> findAll();
+    Pagination<UserEntity> pagination(UserPaginationCommand command);
 
     UserEntity findById(String id);
 
     UserEntity findByUsername(String username);
 
-    UserEntity save(UserEntity entity);
+    UserEntity save(UserAddCommand command);
 
-    UserEntity update(UserEntity entity);
+    UserEntity update(UserEditCommand command);
 
     void delete(UserEntity entity);
+
+    void lock(String id);
+
+    void authorize(String id, String[] roleIds);
 }

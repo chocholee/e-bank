@@ -1,8 +1,8 @@
 package cn.cloudwalk.ebank.core.domain.model.role;
 
-import cn.cloudwalk.ebank.core.support.entity.AbstractEntity;
-import cn.cloudwalk.ebank.core.domain.model.resource.ResourceEntity;
+import cn.cloudwalk.ebank.core.domain.model.function.FunctionEntity;
 import cn.cloudwalk.ebank.core.domain.model.user.UserEntity;
+import cn.cloudwalk.ebank.core.support.entity.AbstractEntity;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -27,7 +27,7 @@ public class RoleEntity extends AbstractEntity {
 
     private Set<UserEntity>     userEntities;           // 关联用户
 
-    private Set<ResourceEntity> resourceEntities;       // 关联资源
+    private Set<FunctionEntity> functionEntities;       // 关联资源
 
     @Id
     @GenericGenerator(name = "role_entity_generator", strategy = "uuid")
@@ -70,14 +70,14 @@ public class RoleEntity extends AbstractEntity {
     }
 
     @ManyToMany
-    @JoinTable(name = "role_resource",
+    @JoinTable(name = "role_function",
             joinColumns =
             @JoinColumn(name = "role_id", referencedColumnName = "id"),
             inverseJoinColumns =
-            @JoinColumn(name = "resource_id", referencedColumnName = "id")
+            @JoinColumn(name = "function_id", referencedColumnName = "id")
     )
-    public Set<ResourceEntity> getResourceEntities() {
-        return resourceEntities;
+    public Set<FunctionEntity> getFunctionEntities() {
+        return functionEntities;
     }
 
     public void setName(String name) {
@@ -100,7 +100,7 @@ public class RoleEntity extends AbstractEntity {
         this.userEntities = userEntities;
     }
 
-    public void setResourceEntities(Set<ResourceEntity> resourceEntities) {
-        this.resourceEntities = resourceEntities;
+    public void setFunctionEntities(Set<FunctionEntity> functionEntities) {
+        this.functionEntities = functionEntities;
     }
 }

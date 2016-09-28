@@ -1,0 +1,40 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: liwenhe
+  Date: 2016/9/28
+  Time: 14:28
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
+<html>
+<head>
+    <title>用户编辑</title>
+</head>
+<body>
+<form:form action="/user/edit/${user.id}" method="post" modelAttribute="user">
+    <div>
+        <form:label path="username">用户名</form:label>
+        <form:input path="username" readonly="true"/>
+        <form:errors path="username"/>
+    </div>
+    <div>
+        <form:label path="realname">真实姓名</form:label>
+        <form:input  path="realname"/>
+    </div>
+    <div>
+        <form:label path="phone">手机号码</form:label>
+        <form:input path="phone"/>
+    </div>
+    <div>
+        <form:label path="email">邮箱</form:label>
+        <form:input path="email"/>
+    </div>
+    <div>
+        <form:label path="remark">备注</form:label>
+        <form:input path="remark"/>
+    </div>
+    <input type="submit" value="创建">
+</form:form>
+</body>
+</html>
