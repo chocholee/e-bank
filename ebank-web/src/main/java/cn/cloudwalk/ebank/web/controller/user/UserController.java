@@ -8,13 +8,13 @@ import cn.cloudwalk.ebank.core.domain.service.user.command.UserAddCommand;
 import cn.cloudwalk.ebank.core.domain.service.user.command.UserEditCommand;
 import cn.cloudwalk.ebank.core.domain.service.user.command.UserPaginationCommand;
 import cn.cloudwalk.ebank.core.repository.Pagination;
-import cn.cloudwalk.ebank.core.support.exception.UniquePropertyException;
 import cn.cloudwalk.ebank.web.controller.shared.BaseController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -50,19 +50,19 @@ public class UserController extends BaseController {
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.GET)
-    public ModelAndView add(@ModelAttribute("user")UserAddCommand command) {
+    public ModelAndView add(@ModelAttribute("user") UserAddCommand command) {
         return new ModelAndView("/user/add");
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public ModelAndView add(@Validated @ModelAttribute("user")UserAddCommand command,
+    public ModelAndView add(@Validated @ModelAttribute("user") UserAddCommand command,
                             BindingResult bindingResult,
                             RedirectAttributes redirectAttributes) {
+        // TODO
         if (bindingResult.hasErrors()) {
             return new ModelAndView("/user/add");
         }
 
-        // TODO
         try {
             userService.save(command);
             return new ModelAndView("redirect:/user/list");
@@ -76,25 +76,26 @@ public class UserController extends BaseController {
     }
 
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
-    public ModelAndView edit(@PathVariable String id) {
+    public ModelAndView edit(@PathVariable String id, Model model) {
         UserEntity entity = userService.findById(id);
         if (null == entity) {
             // TODO
             return new ModelAndView("redirect:/user/list");
+        } else {
+            model.addAttribute("user", entity);
+            return new ModelAndView("/user/edit");
         }
-        return new ModelAndView("/user/edit", "user", entity);
     }
 
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.POST)
-    public ModelAndView edit(@PathVariable String id,
-                             @Validated @ModelAttribute("user")UserEditCommand command,
+    public ModelAndView edit(@Validated @ModelAttribute("user") UserEditCommand command,
                              BindingResult bindingResult,
                              RedirectAttributes redirectAttributes) {
+        // TODO
         if (bindingResult.hasErrors()) {
             return new ModelAndView("/user/edit");
         }
 
-        // TODO
         try {
             userService.update(command);
             return new ModelAndView("redirect:/user/list");
@@ -108,8 +109,7 @@ public class UserController extends BaseController {
     public ModelAndView delete(@PathVariable String id, RedirectAttributes redirectAttributes) {
         // TODO
         try {
-            UserEntity entity = userService.findById(id);
-            userService.delete(entity);
+            userService.delete(id);
             return new ModelAndView("redirect:/user/list");
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
@@ -130,16 +130,30 @@ public class UserController extends BaseController {
     }
 
     @RequestMapping(value = "/authorize/{id}", method = RequestMethod.GET)
-    public ModelAndView authorize(@PathVariable String id) {
+    public ModelAndView authorize(@PathVariable String id, Model model) {
+        // TODO
         List<RoleEntity> roleEntities = roleService.findAll();
-        return new ModelAndView("/user/authorize", "roles", roleEntities).addObject("id", id);
+        UserEntity entity = userService.findById(id);
+        if (null == entity) {
+            return new ModelAndView("redirect:/user/list");
+        } else {
+            model.addAttribute("user", entity);
+            model.addAttribute("roles", roleEntities);
+            return new ModelAndView("/user/authorize");
+        }
     }
 
     @RequestMapping(value = "/authorize/{id}", method = RequestMethod.POST)
     public ModelAndView authorize(@PathVariable String id, String[] roleIds, RedirectAttributes redirectAttributes) {
-        userService.authorize(id, roleIds);
-        redirectAttributes.addAttribute("id", id);
-        return new ModelAndView("redirect:/user/authorize/{id}");
+        // TODO
+        try {
+            userService.authorize(id, roleIds);
+            redirectAttributes.addAttribute("id", id);
+            return new ModelAndView("redirect:/user/authorize/{id}");
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return null;
+        }
     }
 
 }

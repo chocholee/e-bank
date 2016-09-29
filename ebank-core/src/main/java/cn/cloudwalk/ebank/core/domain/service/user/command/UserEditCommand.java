@@ -29,6 +29,8 @@ public class UserEditCommand extends AbstractCommand {
 
     private Date   loginDate;
 
+    private UserEditCommand parent;
+
     public String getId() {
         return id;
     }
@@ -61,6 +63,10 @@ public class UserEditCommand extends AbstractCommand {
         return loginDate;
     }
 
+    public UserEditCommand getParent() {
+        return parent;
+    }
+
     public void setId(String id) {
         this.id = id;
     }
@@ -91,5 +97,9 @@ public class UserEditCommand extends AbstractCommand {
 
     public void setLoginDate(Date loginDate) {
         this.loginDate = loginDate;
+    }
+
+    public void setParent(UserEditCommand parent) {
+        this.parent = parent;
     }
 }

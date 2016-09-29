@@ -6,6 +6,8 @@ import cn.cloudwalk.ebank.core.domain.service.user.command.UserEditCommand;
 import cn.cloudwalk.ebank.core.domain.service.user.command.UserPaginationCommand;
 import cn.cloudwalk.ebank.core.repository.Pagination;
 
+import java.util.List;
+
 /**
  * Created by liwenhe on 2016/9/21.
  *
@@ -15,6 +17,8 @@ public interface IUserService {
 
     Pagination<UserEntity> pagination(UserPaginationCommand command);
 
+    List<UserEntity> findAll();
+
     UserEntity findById(String id);
 
     UserEntity findByUsername(String username);
@@ -23,7 +27,7 @@ public interface IUserService {
 
     UserEntity update(UserEditCommand command);
 
-    void delete(UserEntity entity);
+    void delete(String id);
 
     void lock(String id);
 

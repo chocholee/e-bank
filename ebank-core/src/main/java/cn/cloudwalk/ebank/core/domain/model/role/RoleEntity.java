@@ -29,6 +29,19 @@ public class RoleEntity extends AbstractEntity {
 
     private Set<FunctionEntity> functionEntities;       // 关联资源
 
+    public RoleEntity() {
+        super();
+    }
+
+    public RoleEntity(String name, String description, Integer order, RoleEntity parent, Set<FunctionEntity> functionEntities) {
+        this();
+        this.name = name;
+        this.description = description;
+        this.order = order;
+        this.parent = parent;
+        this.functionEntities = functionEntities;
+    }
+
     @Id
     @GenericGenerator(name = "role_entity_generator", strategy = "uuid")
     @GeneratedValue(generator = "role_entity_generator")
@@ -64,7 +77,8 @@ public class RoleEntity extends AbstractEntity {
         return parent;
     }
 
-    @ManyToMany(mappedBy = "roleEntities", cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "roleEntities",
+            cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH, CascadeType.MERGE})
     public Set<UserEntity> getUserEntities() {
         return userEntities;
     }

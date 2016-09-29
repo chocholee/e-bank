@@ -9,7 +9,7 @@ public enum FunctionEntityType {
     ALL("全部", Boolean.TRUE),
     FIRST("一级菜单", Boolean.FALSE),
     SECOND("二级菜单", Boolean.FALSE),
-    third("三级菜单", Boolean.FALSE);
+    THIRD("三级菜单", Boolean.FALSE);
 
     private final String name;
 

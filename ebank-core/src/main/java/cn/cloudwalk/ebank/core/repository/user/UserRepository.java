@@ -17,6 +17,14 @@ public class UserRepository extends AbstractHibernateRepository<UserEntity, Stri
         implements IUserRepository<UserEntity, String> {
 
     @Override
+    public UserEntity findById(String id) {
+        Criteria criteria = getSession().createCriteria(getPersistenceClass());
+        criteria.add(Restrictions.eq("id", id))
+                .setFetchMode("roleEntities", FetchMode.JOIN);
+        return (UserEntity) criteria.uniqueResult();
+    }
+
+    @Override
     public UserEntity findByUsername(String username) {
         Criteria criteria = getSession().createCriteria(getPersistenceClass());
         criteria.add(Restrictions.eq("username", username))

@@ -10,6 +10,8 @@ import org.hibernate.validator.constraints.NotBlank;
  */
 public class UserAddCommand extends AbstractCommand {
 
+    private String id;
+
     @NotBlank(message = "{UserAddCommand.username.NotBlank}")
     private String username;
 
@@ -23,6 +25,12 @@ public class UserAddCommand extends AbstractCommand {
     private String email;
 
     private String remark;
+
+    private UserAddCommand parent;
+
+    public String getId() {
+        return id;
+    }
 
     public String getUsername() {
         return username;
@@ -48,6 +56,14 @@ public class UserAddCommand extends AbstractCommand {
         return remark;
     }
 
+    public UserAddCommand getParent() {
+        return parent;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public void setUsername(String username) {
         this.username = username;
     }
@@ -70,5 +86,9 @@ public class UserAddCommand extends AbstractCommand {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public void setParent(UserAddCommand parent) {
+        this.parent = parent;
     }
 }

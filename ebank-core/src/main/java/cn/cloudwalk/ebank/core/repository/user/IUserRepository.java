@@ -10,6 +10,8 @@ import cn.cloudwalk.ebank.core.repository.IHibernateRepository;
  */
 public interface IUserRepository<T, ID> extends IHibernateRepository<T, ID> {
 
+    UserEntity findById(String id);
+
     UserEntity findByUsername(String username);
 
 }

@@ -1,7 +1,6 @@
 package cn.cloudwalk.ebank.core.support.security;
 
 import cn.cloudwalk.ebank.core.domain.model.function.FunctionEntity;
-import cn.cloudwalk.ebank.core.domain.model.function.FunctionEntityType;
 import cn.cloudwalk.ebank.core.domain.model.role.RoleEntity;
 import cn.cloudwalk.ebank.core.domain.service.function.IFunctionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +24,7 @@ import java.util.*;
 public class CustomFilterInvocationSecurityMetadataSource implements FilterInvocationSecurityMetadataSource {
 
     @Autowired
-    private IFunctionService resourceService;
+    private IFunctionService functionService;
 
     private Map<RequestMatcher, Collection<ConfigAttribute>> requestMap = new HashMap<>();
 
@@ -34,8 +33,8 @@ public class CustomFilterInvocationSecurityMetadataSource implements FilterInvoc
         // 初始化数据,为后面决策管理器提供数据
         // 数据存储形式: <路径地址, 角色集>
         // 通过数据查询资源集合
-        List<FunctionEntity> resourceEntities = resourceService.findAll();
-        for (FunctionEntity functionEntity : resourceEntities) {
+        List<FunctionEntity> functionEntities = functionService.findAll();
+        for (FunctionEntity functionEntity : functionEntities) {
             // 得到角色集合并放入configAttributes中
             List<ConfigAttribute> configAttributes = new ArrayList<>();
             for (RoleEntity roleEntity : functionEntity.getRoleEntities()) {

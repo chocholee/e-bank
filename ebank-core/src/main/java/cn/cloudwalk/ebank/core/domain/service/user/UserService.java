@@ -42,18 +42,27 @@ public class UserService implements IUserService {
 
     @Override
     public Pagination<UserEntity> pagination(UserPaginationCommand command) {
+        // 添加查寻条件
         List<Criterion> criterions = new ArrayList<>();
         if (!StringUtils.isEmpty(command.getUsername())) {
             criterions.add(Restrictions.like("username", command.getUsername(), MatchMode.ANYWHERE));
         }
+
+        // 添加排序
         List<Order> orders = new ArrayList<>();
         orders.add(Order.desc("createdDate"));
+
         return userRepository.pagination(command.getPage(), command.getPageSize(), criterions, orders);
     }
 
     @Override
+    public List<UserEntity> findAll() {
+        return userRepository.findAll();
+    }
+
+    @Override
     public UserEntity findById(String id) {
-        return userRepository.getById(id);
+        return userRepository.findById(id);
     }
 
     @Override
@@ -84,6 +93,7 @@ public class UserService implements IUserService {
 
     @Override
     public UserEntity update(UserEditCommand command) {
+        // 查找用户信息并更新
         UserEntity entity = this.findById(command.getId());
         entity.setRealname(command.getRealname());
         entity.setPhone(command.getPhone());
@@ -95,7 +105,8 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public void delete(UserEntity entity) {
+    public void delete(String id) {
+        UserEntity entity = this.findById(id);
         userRepository.delete(entity);
     }
 
@@ -113,9 +124,11 @@ public class UserService implements IUserService {
     @Override
     public void authorize(String id, String[] roleIds) {
         Set<RoleEntity> roleEntities = new HashSet<>();
-        for (String roleId : roleIds) {
-            RoleEntity roleEntity = roleRepository.getById(roleId);
-            roleEntities.add(roleEntity);
+        if (null != roleIds) {
+            for (String roleId : roleIds) {
+                RoleEntity roleEntity = roleRepository.getById(roleId);
+                roleEntities.add(roleEntity);
+            }
         }
         UserEntity entity = this.findById(id);
         entity.setRoleEntities(roleEntities);

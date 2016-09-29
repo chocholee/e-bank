@@ -34,6 +34,24 @@ public class FunctionEntity extends AbstractEntity {
 
     private Set<RoleEntity>     roleEntities;           // 关联角色
 
+    public FunctionEntity() {
+        super();
+    }
+
+    public FunctionEntity(String name, String code, String uri, String iconId, String description, Integer order,
+                          FunctionEntityType type, FunctionEntity parent, Set<RoleEntity> roleEntities) {
+        this();
+        this.name = name;
+        this.code = code;
+        this.uri = uri;
+        this.iconId = iconId;
+        this.description = description;
+        this.order = order;
+        this.type = type;
+        this.parent = parent;
+        this.roleEntities = roleEntities;
+    }
+
     @Id
     @GenericGenerator(name = "function_entity_generator", strategy = "uuid")
     @GeneratedValue(generator = "function_entity_generator")

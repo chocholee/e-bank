@@ -1,16 +1,26 @@
 package cn.cloudwalk.ebank.core.domain.service.role;
 
+import cn.cloudwalk.ebank.core.domain.model.function.FunctionEntity;
 import cn.cloudwalk.ebank.core.domain.model.role.RoleEntity;
+import cn.cloudwalk.ebank.core.domain.service.role.command.RoleCommand;
+import cn.cloudwalk.ebank.core.domain.service.role.command.RolePaginationCommand;
+import cn.cloudwalk.ebank.core.repository.Pagination;
+import cn.cloudwalk.ebank.core.repository.function.IFunctionRepository;
 import cn.cloudwalk.ebank.core.repository.role.IRoleRepository;
-import org.hibernate.FetchMode;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by liwenhe on 2016/9/21.
@@ -24,10 +34,73 @@ public class RoleService implements IRoleService {
     @Autowired
     private IRoleRepository<RoleEntity, String> roleRepository;
 
+    @Autowired
+    private IFunctionRepository<FunctionEntity, String> functionRepository;
+
+    @Override
+    public Pagination<RoleEntity> pagination(RolePaginationCommand command) {
+        List<Criterion> criterions = new ArrayList<>();
+        if (!StringUtils.isEmpty(command.getName())) {
+            criterions.add(Restrictions.like("name", command.getName(), MatchMode.ANYWHERE));
+        }
+        List<Order> orders = new ArrayList<>();
+        orders.add(Order.asc("order"));
+        return roleRepository.pagination(command.getPage(), command.getPageSize(), criterions, orders);
+    }
+
     @Override
     public List<RoleEntity> findAll() {
-        Map<String, FetchMode> fetchModeMap = new HashMap<>();
-        fetchModeMap.put("userEntities", FetchMode.JOIN);
-        return roleRepository.findAll(null, null, fetchModeMap);
+        return roleRepository.findAll();
+    }
+
+    @Override
+    public RoleEntity findById(String id) {
+        return roleRepository.findById(id);
+    }
+
+    @Override
+    public RoleEntity save(RoleCommand command) {
+        RoleEntity parent = this.findById(command.getParent().getId());
+        RoleEntity entity = new RoleEntity(
+                command.getName(),
+                command.getDescription(),
+                command.getOrder(),
+                parent,
+                null
+        );
+        roleRepository.save(entity);
+        return entity;
+    }
+
+    @Override
+    public RoleEntity update(RoleCommand command) {
+        RoleEntity entity = this.findById(command.getId());
+        RoleEntity parent = this.findById(command.getParent().getId());
+        entity.setName(command.getName());
+        entity.setDescription(command.getDescription());
+        entity.setOrder(command.getOrder());
+        entity.setParent(parent);
+        roleRepository.update(entity);
+        return entity;
+    }
+
+    @Override
+    public void delete(String id) {
+        RoleEntity entity = this.findById(id);
+        roleRepository.delete(entity);
+    }
+
+    @Override
+    public void authorize(String id, String[] functionIds) {
+        Set<FunctionEntity> functionEntities = new HashSet<>();
+        if (null != functionIds) {
+            for (String functionId : functionIds) {
+                FunctionEntity functionEntity = functionRepository.getById(functionId);
+                functionEntities.add(functionEntity);
+            }
+        }
+        RoleEntity entity = this.findById(id);
+        entity.setFunctionEntities(functionEntities);
+        roleRepository.update(entity);
     }
 }
