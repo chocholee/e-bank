@@ -3,11 +3,11 @@ package cn.cloudwalk.ebank.core.domain.service.user;
 import cn.cloudwalk.ebank.core.domain.model.role.RoleEntity;
 import cn.cloudwalk.ebank.core.domain.model.user.UserEntity;
 import cn.cloudwalk.ebank.core.domain.model.user.UserEntityStatus;
+import cn.cloudwalk.ebank.core.domain.service.role.IRoleService;
 import cn.cloudwalk.ebank.core.domain.service.user.command.UserAddCommand;
 import cn.cloudwalk.ebank.core.domain.service.user.command.UserEditCommand;
 import cn.cloudwalk.ebank.core.domain.service.user.command.UserPaginationCommand;
 import cn.cloudwalk.ebank.core.repository.Pagination;
-import cn.cloudwalk.ebank.core.repository.role.IRoleRepository;
 import cn.cloudwalk.ebank.core.repository.user.IUserRepository;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
@@ -35,7 +35,7 @@ public class UserService implements IUserService {
     private IUserRepository<UserEntity, String> userRepository;
 
     @Autowired
-    private IRoleRepository<RoleEntity, String> roleRepository;
+    private IRoleService roleService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -126,7 +126,7 @@ public class UserService implements IUserService {
         Set<RoleEntity> roleEntities = new HashSet<>();
         if (null != roleIds) {
             for (String roleId : roleIds) {
-                RoleEntity roleEntity = roleRepository.getById(roleId);
+                RoleEntity roleEntity = roleService.findById(roleId);
                 roleEntities.add(roleEntity);
             }
         }

@@ -7,6 +7,7 @@ import cn.cloudwalk.ebank.core.domain.service.role.IRoleService;
 import cn.cloudwalk.ebank.core.domain.service.role.command.RoleCommand;
 import cn.cloudwalk.ebank.core.domain.service.role.command.RolePaginationCommand;
 import cn.cloudwalk.ebank.core.repository.Pagination;
+import cn.cloudwalk.ebank.core.support.security.CustomFilterInvocationSecurityMetadataSource;
 import cn.cloudwalk.ebank.web.controller.shared.BaseController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,6 +41,9 @@ public class RoleController extends BaseController {
 
     @Autowired
     private IFunctionService functionService;
+
+    @Autowired
+    private CustomFilterInvocationSecurityMetadataSource securityMetadataSource;
 
     @RequestMapping("/list")
     public ModelAndView list(RolePaginationCommand command) {
@@ -146,6 +150,8 @@ public class RoleController extends BaseController {
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             return null;
+        } finally {
+            securityMetadataSource.init();
         }
     }
 

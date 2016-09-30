@@ -35,11 +35,15 @@ public class CustomFilterInvocationSecurityMetadataSource implements FilterInvoc
         // 通过数据查询资源集合
         List<FunctionEntity> functionEntities = functionService.findAll();
         for (FunctionEntity functionEntity : functionEntities) {
+            // 查寻function entity的详细数据
+            FunctionEntity functionEntityDetail = functionService.findById(functionEntity.getId());
+
             // 得到角色集合并放入configAttributes中
             List<ConfigAttribute> configAttributes = new ArrayList<>();
-            for (RoleEntity roleEntity : functionEntity.getRoleEntities()) {
+            for (RoleEntity roleEntity : functionEntityDetail.getRoleEntities()) {
                 configAttributes.add(new SecurityConfig(roleEntity.getName()));
             }
+
             // 添加一个路径并添加该路径的角色集
             if (!StringUtils.isEmpty(functionEntity.getUri()))
                 requestMap.put(new AntPathRequestMatcher(functionEntity.getUri()), configAttributes);

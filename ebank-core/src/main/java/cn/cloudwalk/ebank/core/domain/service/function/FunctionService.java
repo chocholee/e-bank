@@ -56,7 +56,7 @@ public class FunctionService implements IFunctionService {
 
     @Override
     public FunctionEntity findById(String id) {
-        return functionRepository.getById(id);
+        return functionRepository.findById(id);
     }
 
     @Override

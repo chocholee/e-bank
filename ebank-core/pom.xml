@@ -154,6 +154,11 @@
             <artifactId>kaptcha</artifactId>
             <scope>provided</scope>
         </dependency>
+
+        <dependency>
+            <groupId>com.arm4j.weixin</groupId>
+            <artifactId>arm4j-weixin</artifactId>
+        </dependency>
     </dependencies>
     
 </project>

@@ -2,10 +2,10 @@ package cn.cloudwalk.ebank.core.domain.service.role;
 
 import cn.cloudwalk.ebank.core.domain.model.function.FunctionEntity;
 import cn.cloudwalk.ebank.core.domain.model.role.RoleEntity;
+import cn.cloudwalk.ebank.core.domain.service.function.IFunctionService;
 import cn.cloudwalk.ebank.core.domain.service.role.command.RoleCommand;
 import cn.cloudwalk.ebank.core.domain.service.role.command.RolePaginationCommand;
 import cn.cloudwalk.ebank.core.repository.Pagination;
-import cn.cloudwalk.ebank.core.repository.function.IFunctionRepository;
 import cn.cloudwalk.ebank.core.repository.role.IRoleRepository;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
@@ -35,7 +35,7 @@ public class RoleService implements IRoleService {
     private IRoleRepository<RoleEntity, String> roleRepository;
 
     @Autowired
-    private IFunctionRepository<FunctionEntity, String> functionRepository;
+    private IFunctionService functionService;
 
     @Override
     public Pagination<RoleEntity> pagination(RolePaginationCommand command) {
@@ -95,7 +95,7 @@ public class RoleService implements IRoleService {
         Set<FunctionEntity> functionEntities = new HashSet<>();
         if (null != functionIds) {
             for (String functionId : functionIds) {
-                FunctionEntity functionEntity = functionRepository.getById(functionId);
+                FunctionEntity functionEntity = functionService.findById(functionId);
                 functionEntities.add(functionEntity);
             }
         }
