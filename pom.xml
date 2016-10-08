@@ -334,4 +334,19 @@
         <defaultGoal>compiler</defaultGoal>
     </build>
 
+    <profiles>
+        <profile>
+            <id>liwenhe-nexus</id>
+            <repositories>
+                <repository>
+                    <id>liwenhe-nexus</id>
+                    <url>http://linode.nexus.liwenhe.com/repository/maven-public/</url>
+                </repository>
+            </repositories>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+    </profiles>
+
 </project>
