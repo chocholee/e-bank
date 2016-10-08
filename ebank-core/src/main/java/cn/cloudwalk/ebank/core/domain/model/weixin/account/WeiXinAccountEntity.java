@@ -1,4 +1,4 @@
-package cn.cloudwalk.ebank.core.domain.model.weixinaccount;
+package cn.cloudwalk.ebank.core.domain.model.weixin.account;
 
 import cn.cloudwalk.ebank.core.domain.model.user.UserEntity;
 import cn.cloudwalk.ebank.core.support.entity.AbstractEntity;

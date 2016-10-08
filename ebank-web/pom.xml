@@ -120,6 +120,11 @@
             <groupId>com.github.axet</groupId>
             <artifactId>kaptcha</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.arm4j.weixin</groupId>
+            <artifactId>arm4j-weixin</artifactId>
+        </dependency>
     </dependencies>
     
 </project>

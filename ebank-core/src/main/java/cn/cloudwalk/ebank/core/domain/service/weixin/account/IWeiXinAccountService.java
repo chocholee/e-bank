@@ -1,8 +1,8 @@
-package cn.cloudwalk.ebank.core.domain.service.weixinaccount;
+package cn.cloudwalk.ebank.core.domain.service.weixin.account;
 
-import cn.cloudwalk.ebank.core.domain.model.weixinaccount.WeiXinAccountEntity;
-import cn.cloudwalk.ebank.core.domain.service.weixinaccount.command.WeiXinAccountCommand;
-import cn.cloudwalk.ebank.core.domain.service.weixinaccount.command.WeiXinAccountPaginationCommand;
+import cn.cloudwalk.ebank.core.domain.model.weixin.account.WeiXinAccountEntity;
+import cn.cloudwalk.ebank.core.domain.service.weixin.account.command.WeiXinAccountCommand;
+import cn.cloudwalk.ebank.core.domain.service.weixin.account.command.WeiXinAccountPaginationCommand;
 import cn.cloudwalk.ebank.core.repository.Pagination;
 import com.arm4j.weixin.exception.WeiXinRequestException;
 
@@ -22,6 +22,8 @@ public interface IWeiXinAccountService {
     WeiXinAccountEntity findById(String id);
 
     WeiXinAccountEntity findByAppId(String appId);
+
+    WeiXinAccountEntity findByUsername(String username);
 
     WeiXinAccountEntity save(WeiXinAccountCommand command);
 

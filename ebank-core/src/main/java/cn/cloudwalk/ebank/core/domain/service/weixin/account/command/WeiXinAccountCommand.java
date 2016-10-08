@@ -1,6 +1,6 @@
-package cn.cloudwalk.ebank.core.domain.service.weixinaccount.command;
+package cn.cloudwalk.ebank.core.domain.service.weixin.account.command;
 
-import cn.cloudwalk.ebank.core.domain.model.weixinaccount.WeiXinAccountEntityType;
+import cn.cloudwalk.ebank.core.domain.model.weixin.account.WeiXinAccountEntityType;
 import cn.cloudwalk.ebank.core.support.command.AbstractCommand;
 import org.hibernate.validator.constraints.NotBlank;
 

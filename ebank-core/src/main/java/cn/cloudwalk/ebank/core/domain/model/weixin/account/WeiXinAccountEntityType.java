@@ -1,4 +1,4 @@
-package cn.cloudwalk.ebank.core.domain.model.weixinaccount;
+package cn.cloudwalk.ebank.core.domain.model.weixin.account;
 
 /**
  * Created by liwenhe on 2016/9/30.

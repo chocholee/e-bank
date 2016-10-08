@@ -1,4 +1,4 @@
-package cn.cloudwalk.ebank.core.repository.weixinaccount;
+package cn.cloudwalk.ebank.core.repository.weixin.account;
 
 import cn.cloudwalk.ebank.core.repository.IHibernateRepository;
 
@@ -12,5 +12,7 @@ public interface IWeiXinAccountRepository<T, ID> extends IHibernateRepository<T,
     T findById(String id);
 
     T findByAppId(String appId);
+
+    T findByUsername(String username);
 
 }

@@ -1,12 +1,12 @@
-package cn.cloudwalk.ebank.core.domain.service.weixinaccount;
+package cn.cloudwalk.ebank.core.domain.service.weixin.account;
 
 import cn.cloudwalk.ebank.core.domain.model.user.UserEntity;
-import cn.cloudwalk.ebank.core.domain.model.weixinaccount.WeiXinAccountEntity;
+import cn.cloudwalk.ebank.core.domain.model.weixin.account.WeiXinAccountEntity;
 import cn.cloudwalk.ebank.core.domain.service.user.IUserService;
-import cn.cloudwalk.ebank.core.domain.service.weixinaccount.command.WeiXinAccountCommand;
-import cn.cloudwalk.ebank.core.domain.service.weixinaccount.command.WeiXinAccountPaginationCommand;
+import cn.cloudwalk.ebank.core.domain.service.weixin.account.command.WeiXinAccountCommand;
+import cn.cloudwalk.ebank.core.domain.service.weixin.account.command.WeiXinAccountPaginationCommand;
 import cn.cloudwalk.ebank.core.repository.Pagination;
-import cn.cloudwalk.ebank.core.repository.weixinaccount.IWeiXinAccountRepository;
+import cn.cloudwalk.ebank.core.repository.weixin.account.IWeiXinAccountRepository;
 import com.arm4j.weixin.exception.WeiXinRequestException;
 import com.arm4j.weixin.request.accesstoken.WeiXinAccessTokenRequest;
 import com.arm4j.weixin.request.accesstoken.WeiXinJsApiTicketAccessTokenRequest;
@@ -81,7 +81,7 @@ public class WeiXinAccountService implements IWeiXinAccountService {
         } else {
             long tokenDate  = entity.getAccessTokenTime().getTime();
             long nowDate    =  new Date().getTime();
-            if (tokenDate + 7200L >= nowDate) {
+            if (tokenDate + 7200L <= nowDate) {
                 String accessToken = WeiXinAccessTokenRequest
                         .request("client_credential", entity.getAppId(), entity.getAppSecret());
                 entity.setAccessToken(accessToken);
@@ -106,7 +106,7 @@ public class WeiXinAccountService implements IWeiXinAccountService {
         } else {
             long tokenDate  = entity.getJsApiTicketTime().getTime();
             long nowDate    =  new Date().getTime();
-            if (tokenDate + 7200L >= nowDate) {
+            if (tokenDate + 7200L <= nowDate) {
                 String accessToken = this.getAccessToken(appId);
                 String jsApiTicket = WeiXinJsApiTicketAccessTokenRequest.request(accessToken, "jsapi");
                 entity.setJsApiTicket(jsApiTicket);
@@ -125,6 +125,11 @@ public class WeiXinAccountService implements IWeiXinAccountService {
     @Override
     public WeiXinAccountEntity findByAppId(String appId) {
         return weiXinAccountRepository.findByAppId(appId);
+    }
+
+    @Override
+    public WeiXinAccountEntity findByUsername(String username) {
+        return weiXinAccountRepository.findByUsername(username);
     }
 
     @Override

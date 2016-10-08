@@ -1,9 +1,9 @@
-package cn.cloudwalk.ebank.web.controller.weixinaccount;
+package cn.cloudwalk.ebank.web.controller.weixin.account;
 
-import cn.cloudwalk.ebank.core.domain.model.weixinaccount.WeiXinAccountEntity;
-import cn.cloudwalk.ebank.core.domain.service.weixinaccount.IWeiXinAccountService;
-import cn.cloudwalk.ebank.core.domain.service.weixinaccount.command.WeiXinAccountCommand;
-import cn.cloudwalk.ebank.core.domain.service.weixinaccount.command.WeiXinAccountPaginationCommand;
+import cn.cloudwalk.ebank.core.domain.model.weixin.account.WeiXinAccountEntity;
+import cn.cloudwalk.ebank.core.domain.service.weixin.account.IWeiXinAccountService;
+import cn.cloudwalk.ebank.core.domain.service.weixin.account.command.WeiXinAccountCommand;
+import cn.cloudwalk.ebank.core.domain.service.weixin.account.command.WeiXinAccountPaginationCommand;
 import cn.cloudwalk.ebank.core.repository.Pagination;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
