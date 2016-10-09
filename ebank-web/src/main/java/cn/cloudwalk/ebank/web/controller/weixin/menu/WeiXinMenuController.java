@@ -43,6 +43,18 @@ public class WeiXinMenuController {
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public ModelAndView add(@ModelAttribute("menu") WeiXinMenuCommand command, RedirectAttributes redirectAttributes) {
+        List<WeiXinMenuEntity> parents = weiXinMenuService.findByParentIsNull();
+        // 微信一级菜单不能超过3个
+        if (parents.size() > 3) {
+            // TODO 抛异常
+        }
+        // 微信二级菜单不能超过5个
+        for (WeiXinMenuEntity entity : parents) {
+            List<WeiXinMenuEntity> children = weiXinMenuService.findByParentId(entity.getId());
+            if (children.size() > 5) {
+                // TODO 抛异常
+            }
+        }
         weiXinMenuService.save(command);
         return new ModelAndView("redirect:/weixin/menu/list");
     }

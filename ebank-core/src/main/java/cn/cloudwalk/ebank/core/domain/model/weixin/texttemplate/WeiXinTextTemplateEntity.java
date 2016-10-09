@@ -24,6 +24,18 @@ public class WeiXinTextTemplateEntity extends AbstractEntity {
 
     private WeiXinAccountEntity accountEntity;          // 关联公众号
 
+    public WeiXinTextTemplateEntity() {
+        super();
+    }
+
+    public WeiXinTextTemplateEntity(String name, String content, Date createdDate, WeiXinAccountEntity accountEntity) {
+        this();
+        this.name = name;
+        this.content = content;
+        this.createdDate = createdDate;
+        this.accountEntity = accountEntity;
+    }
+
     @Id
     @GenericGenerator(name = "weixin_text_template_entity_generator", strategy = "uuid")
     @GeneratedValue(generator = "weixin_text_template_entity_generator")

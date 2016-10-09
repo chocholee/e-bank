@@ -72,8 +72,9 @@
         <property name="authenticationManager" ref="authenticationManager"/>
         <property name="authenticationSuccessHandler">
             <bean class="org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler">
-                <property name="alwaysUseDefaultTargetUrl" value="true"/>
+                <property name="alwaysUseDefaultTargetUrl" value="false"/>
                 <property name="defaultTargetUrl" value="/logined"/>
+                <property name="useReferer" value="true"/>
             </bean>
         </property>
         <property name="authenticationFailureHandler">

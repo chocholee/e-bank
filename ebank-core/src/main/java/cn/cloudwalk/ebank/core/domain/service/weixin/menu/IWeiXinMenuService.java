@@ -25,7 +25,7 @@ public interface IWeiXinMenuService {
 
     WeiXinMenuEntity save(WeiXinMenuCommand command);
 
-//    WeiXinMenuEntity update();
+    WeiXinMenuEntity update(WeiXinMenuCommand command);
 
     void delete(String id);
 

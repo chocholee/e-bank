@@ -1,10 +1,13 @@
 package cn.cloudwalk.ebank.web.controller.authorize;
 
+import cn.cloudwalk.ebank.core.support.utils.CustomSecurityContextHolderUtil;
 import cn.cloudwalk.ebank.web.controller.shared.BaseController;
 import com.google.code.kaptcha.util.Config;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.web.WebAttributes;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -54,8 +57,20 @@ public class AuthorizeController extends BaseController {
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public ModelAndView login() {
-        return new ModelAndView("/login");
+    public ModelAndView login(HttpServletRequest request) {
+        try {
+            // 验证是否登录,如果登录,重定向至/logined
+            CustomSecurityContextHolderUtil.getPrincipal();
+            return new ModelAndView("redirect:/logined");
+        } catch (AccountExpiredException e) {
+            // 未登录时处理错误信息
+            String message = (String) request.getSession().getAttribute("message");
+            if (!StringUtils.isEmpty(message))
+                request.setAttribute("message", message);
+            return new ModelAndView("/login");
+        } finally {
+            request.getSession().removeAttribute("message");
+        }
     }
 
     @RequestMapping(value = "/logined", method = RequestMethod.GET)

@@ -1,6 +1,7 @@
-package cn.cloudwalk.ebank.core.support.security.utils;
+package cn.cloudwalk.ebank.core.support.utils;
 
 import cn.cloudwalk.ebank.core.support.security.CustomUserDetails;
+import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -16,7 +17,11 @@ public class CustomSecurityContextHolderUtil {
     }
 
     public static CustomUserDetails getPrincipal() {
-        return (CustomUserDetails) getSecurityContext().getAuthentication().getPrincipal();
+        if (getSecurityContext().getAuthentication().getPrincipal() instanceof CustomUserDetails) {
+            return (CustomUserDetails) getSecurityContext().getAuthentication().getPrincipal();
+        } else {
+            throw new AccountExpiredException("超时,请重新登录");
+        }
     }
 
     public static boolean hasRole(String role) {

@@ -1,12 +1,12 @@
-package cn.cloudwalk.ebank.core.domain.service.weixin.texttemplate;
+package cn.cloudwalk.ebank.core.domain.service.weixin.receive;
 
 import cn.cloudwalk.ebank.core.domain.model.weixin.account.WeiXinAccountEntity;
-import cn.cloudwalk.ebank.core.domain.model.weixin.texttemplate.WeiXinTextTemplateEntity;
+import cn.cloudwalk.ebank.core.domain.model.weixin.receive.WeiXinReceiveEntity;
 import cn.cloudwalk.ebank.core.domain.service.weixin.account.IWeiXinAccountService;
-import cn.cloudwalk.ebank.core.domain.service.weixin.texttemplate.command.WeiXinTextTemplateCommand;
-import cn.cloudwalk.ebank.core.domain.service.weixin.texttemplate.command.WeiXinTextTemplatePaginationCommand;
+import cn.cloudwalk.ebank.core.domain.service.weixin.receive.command.WeiXinReceiveCommand;
+import cn.cloudwalk.ebank.core.domain.service.weixin.receive.command.WeiXinReceivePaginationCommand;
 import cn.cloudwalk.ebank.core.repository.Pagination;
-import cn.cloudwalk.ebank.core.repository.weixin.texttemplate.IWeiXinTextTemplateRepository;
+import cn.cloudwalk.ebank.core.repository.weixin.receive.IWeiXinReceiveRepository;
 import cn.cloudwalk.ebank.core.support.exception.WeiXinAccountNotFoundException;
 import cn.cloudwalk.ebank.core.support.utils.CustomSecurityContextHolderUtil;
 import org.hibernate.criterion.Criterion;
@@ -26,16 +26,16 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Created by liwenhe on 2016/10/8.
+ * Created by liwenhe on 2016/10/9.
  *
  * @author 李文禾
  */
-@Service("weiXinTextTemplateService")
+@Service("weiXinReceiveService")
 @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-public class WeiXinTextTemplateService implements IWeiXinTextTemplateService {
+public class WeiXinReceiveService implements IWeiXinReceiveService {
 
     @Autowired
-    private IWeiXinTextTemplateRepository<WeiXinTextTemplateEntity, String> weiXinTextTemplateRepository;
+    private IWeiXinReceiveRepository<WeiXinReceiveEntity, String> weiXinReceiveRepository;
 
     @Autowired
     private IWeiXinAccountService weiXinAccountService;
@@ -44,61 +44,66 @@ public class WeiXinTextTemplateService implements IWeiXinTextTemplateService {
     private MessageSourceAccessor message;
 
     @Override
-    public Pagination<WeiXinTextTemplateEntity> pagination(WeiXinTextTemplatePaginationCommand command) {
+    public Pagination<WeiXinReceiveEntity> pagination(WeiXinReceivePaginationCommand command) {
         String username = CustomSecurityContextHolderUtil.getUsername();
         WeiXinAccountEntity accountEntity = weiXinAccountService.findByUsername(username);
 
         if (null != accountEntity) {
             // 添加查询条件
             List<Criterion> criterions = new ArrayList<>();
-            if (!StringUtils.isEmpty(command.getName())) {
-                criterions.add(Restrictions.like("name", command.getName(), MatchMode.ANYWHERE));
+            if (!StringUtils.isEmpty(command.getNickname())) {
+                criterions.add(Restrictions.like("nickname", command.getNickname(), MatchMode.ANYWHERE));
+            }
+            if (!StringUtils.isEmpty(command.getContent())) {
+                criterions.add(Restrictions.like("content", command.getContent(), MatchMode.ANYWHERE));
             }
             if (!CustomSecurityContextHolderUtil.hasRole("administrator"))
                 criterions.add(Restrictions.eq("accountEntity.id", accountEntity.getId()));
 
-            // 添加排序
+            // 添加排序条件
             List<Order> orders = new ArrayList<>();
             orders.add(Order.desc("createdDate"));
 
-            return weiXinTextTemplateRepository.pagination(command.getPage(), command.getPageSize(), criterions, orders);
+            return weiXinReceiveRepository.pagination(command.getPage(), command.getPageSize(), criterions, orders);
         } else {
-            return new Pagination<WeiXinTextTemplateEntity>(command.getPage(), command.getPageSize(), 0, Collections.EMPTY_LIST);
+            return new Pagination<WeiXinReceiveEntity>(command.getPage(), command.getPageSize(), 0, Collections.EMPTY_LIST);
         }
     }
 
     @Override
-    public WeiXinTextTemplateEntity save(WeiXinTextTemplateCommand command) {
+    public WeiXinReceiveEntity save(WeiXinReceiveCommand command) {
         String username = CustomSecurityContextHolderUtil.getUsername();
         WeiXinAccountEntity accountEntity = weiXinAccountService.findByUsername(username);
         if (null == accountEntity) {
-            throw new WeiXinAccountNotFoundException(message.getMessage("WeiXinTextTemplateService.WeiXinAccountNotFoundException"));
+            throw new WeiXinAccountNotFoundException(message.getMessage("WeiXinMenuService.WeiXinAccountNotFoundException"));
         }
 
-        WeiXinTextTemplateEntity entity = new WeiXinTextTemplateEntity(
-                command.getName(),
+        WeiXinReceiveEntity entity = new WeiXinReceiveEntity(
+                command.getMsgId(),
+                command.getMsgType(),
                 command.getContent(),
+                command.getFromUserName(),
+                command.getToUserName(),
+                command.getNickname(),
+                null,
+                false,
                 new Date(),
                 accountEntity
         );
 
-        weiXinTextTemplateRepository.save(entity);
+        weiXinReceiveRepository.save(entity);
         return entity;
     }
 
     @Override
-    public WeiXinTextTemplateEntity update(WeiXinTextTemplateCommand command) {
-        WeiXinTextTemplateEntity entity = weiXinTextTemplateRepository.getById(command.getId());
-        entity.setName(command.getName());
-        entity.setContent(command.getContent());
+    public void response(String id, String content) {
 
-        weiXinTextTemplateRepository.update(entity);
-        return entity;
     }
 
     @Override
     public void delete(String id) {
-        WeiXinTextTemplateEntity entity = weiXinTextTemplateRepository.getById(id);
-        weiXinTextTemplateRepository.delete(entity);
+        WeiXinReceiveEntity entity = weiXinReceiveRepository.getById(id);
+        weiXinReceiveRepository.delete(entity);
     }
+
 }

@@ -26,6 +26,7 @@
                 <value>classpath:messages</value>
                 <value>classpath:security-messages</value>
                 <value>classpath:command-messages</value>
+                <value>classpath:exception-messages</value>
             </list>
         </property>
     </bean>

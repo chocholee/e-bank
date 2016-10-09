@@ -76,4 +76,14 @@
             </props>
         </constructor-arg>
     </bean>
+
+    <bean id="exceptionResolver" class="cn.cloudwalk.ebank.web.controller.shared.support.CustomMappingExceptionResolver">
+        <property name="exceptionMappings">
+            <props>
+                <prop key="cn.cloudwalk.ebank.core.support.exception.WeiXinAccountNotFoundException">/login</prop>
+                <prop key="org.springframework.security.authentication.AccountExpiredException">/login</prop>
+            </props>
+        </property>
+        <property name="exceptionAttribute" value="message"/>
+    </bean>
 </beans>

@@ -7,7 +7,8 @@ import cn.cloudwalk.ebank.core.domain.service.weixin.menu.command.WeiXinMenuComm
 import cn.cloudwalk.ebank.core.domain.service.weixin.menu.command.WeiXinMenuPaginationCommand;
 import cn.cloudwalk.ebank.core.repository.Pagination;
 import cn.cloudwalk.ebank.core.repository.weixin.menu.IWeiXinMenuRepository;
-import cn.cloudwalk.ebank.core.support.security.utils.CustomSecurityContextHolderUtil;
+import cn.cloudwalk.ebank.core.support.exception.WeiXinAccountNotFoundException;
+import cn.cloudwalk.ebank.core.support.utils.CustomSecurityContextHolderUtil;
 import com.arm4j.weixin.exception.WeiXinRequestException;
 import com.arm4j.weixin.request.menu.WeiXinMenuCreateRequest;
 import com.arm4j.weixin.request.menu.entity.MenuButtonEntity;
@@ -20,6 +21,7 @@ import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,6 +45,9 @@ public class WeiXinMenuService implements IWeiXinMenuService {
 
     @Autowired
     private IWeiXinAccountService weiXinAccountService;
+
+    @Autowired
+    private MessageSourceAccessor message;
 
     @Override
     public Pagination<WeiXinMenuEntity> pagination(WeiXinMenuPaginationCommand command) {
@@ -144,7 +149,7 @@ public class WeiXinMenuService implements IWeiXinMenuService {
         String username = CustomSecurityContextHolderUtil.getUsername();
         WeiXinAccountEntity accountEntity = weiXinAccountService.findByUsername(username);
         if (null == accountEntity) {
-            throw new NullPointerException("公众号不能为空");
+            throw new WeiXinAccountNotFoundException(message.getMessage("WeiXinMenuService.WeiXinAccountNotFoundException"));
         }
 
         WeiXinMenuEntity parent = weiXinMenuRepository.getById(command.getParent());
@@ -161,6 +166,23 @@ public class WeiXinMenuService implements IWeiXinMenuService {
         );
 
         weiXinMenuRepository.save(entity);
+        return entity;
+    }
+
+    @Override
+    public WeiXinMenuEntity update(WeiXinMenuCommand command) {
+        WeiXinMenuEntity parent = weiXinMenuRepository.getById(command.getParent());
+        WeiXinMenuEntity entity = weiXinMenuRepository.getById(command.getId());
+        entity.setName(command.getName());
+        entity.setKey(command.getKey());
+        entity.setUrl(command.getUrl());
+        entity.setTemplateId(command.getTemplateId());
+        entity.setOrder(command.getOrder());
+        entity.setType(command.getType());
+        entity.setMsgType(command.getMsgType());
+        entity.setParent(parent);
+
+        weiXinMenuRepository.update(entity);
         return entity;
     }
 
