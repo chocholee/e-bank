@@ -1,4 +1,4 @@
-package cn.cloudwalk.ebank.core.repository.weixin;
+package cn.cloudwalk.ebank.core.domain.service.weixin;
 
 import cn.cloudwalk.ebank.core.domain.model.weixin.keyword.WeiXinKeywordEntity;
 import cn.cloudwalk.ebank.core.domain.model.weixin.newstemplate.WeiXinNewsItemsTemplateEntity;

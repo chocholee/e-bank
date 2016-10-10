@@ -2,7 +2,7 @@ package cn.cloudwalk.ebank.web.controller.weixin;
 
 import cn.cloudwalk.ebank.core.domain.model.weixin.account.WeiXinAccountEntity;
 import cn.cloudwalk.ebank.core.domain.service.weixin.account.IWeiXinAccountService;
-import cn.cloudwalk.ebank.core.repository.weixin.WeiXinService;
+import cn.cloudwalk.ebank.core.domain.service.weixin.WeiXinService;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
