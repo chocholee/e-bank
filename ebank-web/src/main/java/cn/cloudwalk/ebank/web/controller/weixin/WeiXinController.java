@@ -8,7 +8,6 @@ import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -61,8 +60,8 @@ public class WeiXinController {
     }
 
     @RequestMapping(value = "/weixin/{appId}", method = RequestMethod.POST)
-    public void weixin(@RequestBody String content, HttpServletResponse response) {
-        System.out.println(content);
+    public void weixin(HttpServletRequest request, HttpServletResponse response) {
+        weiXinService.core(request, response);
     }
 
 }

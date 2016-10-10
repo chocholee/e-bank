@@ -14,6 +14,8 @@ public interface IWeiXinTextTemplateService {
 
     Pagination<WeiXinTextTemplateEntity> pagination(WeiXinTextTemplatePaginationCommand command);
 
+    WeiXinTextTemplateEntity findById(String id);
+
     WeiXinTextTemplateEntity save(WeiXinTextTemplateCommand command);
 
     WeiXinTextTemplateEntity update(WeiXinTextTemplateCommand command);

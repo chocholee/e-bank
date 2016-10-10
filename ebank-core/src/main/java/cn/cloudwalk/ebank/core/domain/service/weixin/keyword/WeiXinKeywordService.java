@@ -61,8 +61,8 @@ public class WeiXinKeywordService implements IWeiXinKeywordService {
     }
 
     @Override
-    public WeiXinKeywordEntity findByKeyword(String keyword) {
-        return weiXinKeywordRepository.findByKeyword(keyword);
+    public WeiXinKeywordEntity findByKeyword(String accountId, String keyword) {
+        return weiXinKeywordRepository.findByKeyword(accountId, keyword);
     }
 
     @Override

@@ -9,6 +9,6 @@ import cn.cloudwalk.ebank.core.repository.IHibernateRepository;
  */
 public interface IWeiXinKeywordRepository<T, ID> extends IHibernateRepository<T, ID> {
 
-    T findByKeyword(String keyword);
+    T findByKeyword(String accountId, String keyword);
 
 }

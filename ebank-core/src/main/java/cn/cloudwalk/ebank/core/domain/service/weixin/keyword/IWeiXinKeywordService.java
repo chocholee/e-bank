@@ -13,7 +13,7 @@ public interface IWeiXinKeywordService {
 
     Pagination<WeiXinKeywordEntity> pagination(WeiXinKeywordPaginationCommand command);
 
-    WeiXinKeywordEntity findByKeyword(String keyword);
+    WeiXinKeywordEntity findByKeyword(String accountId, String keyword);
 
 //    WeiXinKeywordEntity save();
 

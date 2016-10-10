@@ -3,6 +3,7 @@ package cn.cloudwalk.ebank.core.repository.weixin.keyword;
 import cn.cloudwalk.ebank.core.domain.model.weixin.keyword.WeiXinKeywordEntity;
 import cn.cloudwalk.ebank.core.repository.AbstractHibernateRepository;
 import org.hibernate.Criteria;
+import org.hibernate.FetchMode;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
@@ -16,9 +17,12 @@ public class WeiXinKeywordRepository extends AbstractHibernateRepository<WeiXinK
         implements IWeiXinKeywordRepository<WeiXinKeywordEntity, String> {
 
     @Override
-    public WeiXinKeywordEntity findByKeyword(String keyword) {
+    public WeiXinKeywordEntity findByKeyword(String accountId, String keyword) {
         Criteria criteria = getSession().createCriteria(getPersistenceClass());
-        criteria.add(Restrictions.eq("keyword", keyword));
+        criteria.add(Restrictions.eq("keyword", keyword))
+                .add(Restrictions.eq("accountEntity.accountId", accountId))
+                .createAlias("accountEntity", "accountEntity")
+                .setFetchMode("accountEntity", FetchMode.JOIN);
         return (WeiXinKeywordEntity) criteria.uniqueResult();
     }
 

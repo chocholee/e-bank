@@ -68,6 +68,11 @@ public class WeiXinTextTemplateService implements IWeiXinTextTemplateService {
     }
 
     @Override
+    public WeiXinTextTemplateEntity findById(String id) {
+        return weiXinTextTemplateRepository.getById(id);
+    }
+
+    @Override
     public WeiXinTextTemplateEntity save(WeiXinTextTemplateCommand command) {
         String username = CustomSecurityContextHolderUtil.getUsername();
         WeiXinAccountEntity accountEntity = weiXinAccountService.findByUsername(username);

@@ -154,7 +154,7 @@ public class CustomWeiXinXMLProcessUtil {
             element.addAttribute("type", ArrayList.class.getName());
             Iterator iterator = ((JSONArray) o).iterator();
             while (iterator.hasNext()) {
-                Element child = element.addElement("value");
+                Element child = element.addElement("item");
                 Object o1 = iterator.next();
                 iteratorJSON(child, o1);
             }

@@ -78,6 +78,7 @@ public class WeiXinKeywordEntity extends AbstractEntity {
     }
 
     @Column(name = "msg_type")
+    @Enumerated(EnumType.STRING)
     public WeiXinKeywordEntityMsgType getMsgType() {
         return msgType;
     }
