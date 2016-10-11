@@ -72,8 +72,7 @@ public class WeiXinReceiveService implements IWeiXinReceiveService {
 
     @Override
     public WeiXinReceiveEntity save(WeiXinReceiveCommand command) {
-        String username = CustomSecurityContextHolderUtil.getUsername();
-        WeiXinAccountEntity accountEntity = weiXinAccountService.findByUsername(username);
+        WeiXinAccountEntity accountEntity = weiXinAccountService.findByAccountId(command.getToUserName());
         if (null == accountEntity) {
             throw new WeiXinAccountNotFoundException(message.getMessage("WeiXinMenuService.WeiXinAccountNotFoundException"));
         }

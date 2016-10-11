@@ -4,12 +4,18 @@ import cn.cloudwalk.ebank.core.domain.model.weixin.keyword.WeiXinKeywordEntity;
 import cn.cloudwalk.ebank.core.domain.model.weixin.newstemplate.WeiXinNewsItemsTemplateEntity;
 import cn.cloudwalk.ebank.core.domain.model.weixin.newstemplate.WeiXinNewsTemplateEntity;
 import cn.cloudwalk.ebank.core.domain.model.weixin.texttemplate.WeiXinTextTemplateEntity;
+import cn.cloudwalk.ebank.core.domain.service.weixin.account.IWeiXinAccountService;
 import cn.cloudwalk.ebank.core.domain.service.weixin.expandtemplate.IWeiXinExpandTemplateService;
 import cn.cloudwalk.ebank.core.domain.service.weixin.keyword.IWeiXinKeywordService;
 import cn.cloudwalk.ebank.core.domain.service.weixin.newstemplate.IWeiXinNewsItemsTemplateService;
 import cn.cloudwalk.ebank.core.domain.service.weixin.newstemplate.IWeiXinNewsTemplateService;
+import cn.cloudwalk.ebank.core.domain.service.weixin.receive.IWeiXinReceiveService;
+import cn.cloudwalk.ebank.core.domain.service.weixin.receive.command.WeiXinReceiveCommand;
 import cn.cloudwalk.ebank.core.domain.service.weixin.texttemplate.IWeiXinTextTemplateService;
 import cn.cloudwalk.ebank.core.support.utils.CustomWeiXinXMLProcessUtil;
+import com.arm4j.weixin.exception.WeiXinRequestException;
+import com.arm4j.weixin.request.user.WeiXinUserInfoGetRequest;
+import com.arm4j.weixin.request.user.entity.UserInfoEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +33,9 @@ import java.util.*;
 public class WeiXinService {
 
     @Autowired
+    private IWeiXinAccountService weiXinAccountService;
+
+    @Autowired
     private IWeiXinKeywordService weiXinKeywordService;
 
     @Autowired
@@ -40,6 +49,9 @@ public class WeiXinService {
 
     @Autowired
     private IWeiXinExpandTemplateService weiXinExpandTemplateService;
+
+    @Autowired
+    private IWeiXinReceiveService weiXinReceiveService;
 
     public void core(HttpServletRequest request, HttpServletResponse response) {
         WeiXinMessageAdapter adapter = new WeiXinMessageAdapter();
@@ -139,15 +151,31 @@ public class WeiXinService {
                         // 返回扩展消息
                         break;
                 }
-            } else {
-                // TODO 查询欢迎语表中数据
-            }
 
-            // 生成xml内容并返回给微信用户
-            String xml = CustomWeiXinXMLProcessUtil.toXML(responseMap);
-            writer.println(xml);
-            writer.flush();
-            writer.close();
+                // 生成xml内容并返回给微信用户
+                String xml = CustomWeiXinXMLProcessUtil.toXML(responseMap);
+                writer.println(xml);
+                writer.flush();
+                writer.close();
+            } else {
+                try {
+                    WeiXinReceiveCommand command = new WeiXinReceiveCommand();
+                    command.setMsgId((String) data.get("MsgId"));
+                    command.setContent((String) data.get("Content"));
+                    command.setMsgType((String) data.get("MsgType"));
+                    command.setFromUserName((String) data.get("FromUserName"));
+                    command.setToUserName((String) data.get("ToUserName"));
+
+                    String accessToken = weiXinAccountService.getAccessTokenByAccountId((String) data.get("ToUserName"));
+                    UserInfoEntity userInfoEntity = WeiXinUserInfoGetRequest.request(accessToken, (String) data.get("FromUserName"));
+                    command.setNickname(userInfoEntity.getNickname());
+
+                    weiXinReceiveService.save(command);
+                    writer.println("success");
+                } catch (WeiXinRequestException e) {
+                    writer.println("");
+                }
+            }
         }
 
         void processImage(Map<String, Object> data, PrintWriter writer) {

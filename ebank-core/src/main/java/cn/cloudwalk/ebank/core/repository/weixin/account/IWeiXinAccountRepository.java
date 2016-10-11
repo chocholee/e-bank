@@ -15,4 +15,6 @@ public interface IWeiXinAccountRepository<T, ID> extends IHibernateRepository<T,
 
     T findByUsername(String username);
 
+    T findByAccountId(String accountId);
+
 }

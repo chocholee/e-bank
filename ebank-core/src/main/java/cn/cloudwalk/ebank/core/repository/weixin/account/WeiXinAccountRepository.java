@@ -40,4 +40,13 @@ public class WeiXinAccountRepository extends AbstractHibernateRepository<WeiXinA
                 .createAlias("user", "user");
         return (WeiXinAccountEntity) criteria.uniqueResult();
     }
+
+    @Override
+    public WeiXinAccountEntity findByAccountId(String accountId) {
+        Criteria criteria = getSession().createCriteria(getPersistenceClass());
+        criteria.add(Restrictions.eq("accountId", accountId))
+                .setFetchMode("user", FetchMode.JOIN);
+        return (WeiXinAccountEntity) criteria.uniqueResult();
+    }
+
 }

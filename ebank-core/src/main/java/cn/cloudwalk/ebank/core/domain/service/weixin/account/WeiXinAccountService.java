@@ -93,6 +93,31 @@ public class WeiXinAccountService implements IWeiXinAccountService {
     }
 
     @Override
+    public String getAccessTokenByAccountId(String accountId) throws WeiXinRequestException {
+        // 判断accessToken是否空，为空时，获取accessToken并更新；
+        // 不为空时，判断是否失效，失效则更新accessToken
+        WeiXinAccountEntity entity = this.findByAccountId(accountId);
+        if (StringUtils.isEmpty(entity.getAccessToken())) {
+            String accessToken = WeiXinAccessTokenRequest
+                    .request("client_credential", entity.getAppId(), entity.getAppSecret());
+            entity.setAccessToken(accessToken);
+            entity.setAccessTokenTime(new Date());
+            weiXinAccountRepository.update(entity);
+        } else {
+            long tokenDate  = entity.getAccessTokenTime().getTime();
+            long nowDate    =  new Date().getTime();
+            if (tokenDate + 7200L <= nowDate) {
+                String accessToken = WeiXinAccessTokenRequest
+                        .request("client_credential", entity.getAppId(), entity.getAppSecret());
+                entity.setAccessToken(accessToken);
+                entity.setAccessTokenTime(new Date());
+                weiXinAccountRepository.update(entity);
+            }
+        }
+        return entity.getAccessToken();
+    }
+
+    @Override
     public String getJsApiTicket(String appId) throws WeiXinRequestException {
         // 判断jsApiTicket是否空，为空时，获取jsApiTicket并更新；
         // 不为空时，判断是否失效，失效则更新jsApiTicket
@@ -130,6 +155,11 @@ public class WeiXinAccountService implements IWeiXinAccountService {
     @Override
     public WeiXinAccountEntity findByUsername(String username) {
         return weiXinAccountRepository.findByUsername(username);
+    }
+
+    @Override
+    public WeiXinAccountEntity findByAccountId(String accountId) {
+        return weiXinAccountRepository.findByAccountId(accountId);
     }
 
     @Override

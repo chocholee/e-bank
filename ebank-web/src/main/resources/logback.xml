@@ -22,7 +22,7 @@
         <!--<appender-ref ref="file" />-->
     </root>
 
-    <logger name="org.springframework" level="warn"/>
+    <logger name="org.springframework" level="debug"/>
     <logger name="org.hibernate" level="warn"/>
     <logger name="org.apache" level="debug"/>
 </configuration>

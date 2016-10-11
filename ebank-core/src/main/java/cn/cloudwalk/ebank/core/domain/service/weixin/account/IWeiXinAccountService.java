@@ -17,6 +17,8 @@ public interface IWeiXinAccountService {
 
     String getAccessToken(String appId) throws WeiXinRequestException;
 
+    String getAccessTokenByAccountId(String accountId) throws WeiXinRequestException;
+
     String getJsApiTicket(String appId) throws WeiXinRequestException;
 
     WeiXinAccountEntity findById(String id);
@@ -24,6 +26,8 @@ public interface IWeiXinAccountService {
     WeiXinAccountEntity findByAppId(String appId);
 
     WeiXinAccountEntity findByUsername(String username);
+
+    WeiXinAccountEntity findByAccountId(String accountId);
 
     WeiXinAccountEntity save(WeiXinAccountCommand command);
 
