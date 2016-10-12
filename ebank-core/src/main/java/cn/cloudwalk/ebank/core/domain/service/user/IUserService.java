@@ -27,6 +27,10 @@ public interface IUserService {
 
     UserEntity update(UserEditCommand command);
 
+    UserEntity increaseLoginCount(String id);
+
+    void resetLoginCount(String id);
+
     void delete(String id);
 
     void lock(String id);

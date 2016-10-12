@@ -87,6 +87,7 @@ public class UserService implements IUserService {
         entity.setEmail(command.getEmail());
         entity.setStatus(UserEntityStatus.ENABLE);
         entity.setCreatedDate(new Date());
+        entity.setLoginCount(0);
         userRepository.save(entity);
         return entity;
     }
@@ -105,6 +106,21 @@ public class UserService implements IUserService {
     }
 
     @Override
+    public UserEntity increaseLoginCount(String id) {
+        UserEntity entity = this.findById(id);
+        entity.setLoginCount(entity.getLoginCount() + 1);
+        userRepository.update(entity);
+        return entity;
+    }
+
+    @Override
+    public void resetLoginCount(String id) {
+        UserEntity entity = this.findById(id);
+        entity.setLoginCount(0);
+        userRepository.update(entity);
+    }
+
+    @Override
     public void delete(String id) {
         UserEntity entity = this.findById(id);
         userRepository.delete(entity);
@@ -117,6 +133,9 @@ public class UserService implements IUserService {
                 (entity.getStatus() == UserEntityStatus.ENABLE)
                         ? UserEntityStatus.DISABLE
                         : UserEntityStatus.ENABLE);
+        if (entity.getStatus() == UserEntityStatus.ENABLE) {
+            entity.setLoginCount(0);
+        }
         entity.setUpdatedDate(new Date());
         userRepository.update(entity);
     }

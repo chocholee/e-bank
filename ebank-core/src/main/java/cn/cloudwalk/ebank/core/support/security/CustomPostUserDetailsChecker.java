@@ -28,5 +28,8 @@ public class CustomPostUserDetailsChecker implements UserDetailsChecker {
         command.setLastLoginDate(entity.getLoginDate());
         command.setLoginDate(new Date());
         userService.update(command);
+
+        // 重置登录次数
+        userService.resetLoginCount(entity.getId());
     }
 }

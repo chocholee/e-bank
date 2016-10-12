@@ -31,6 +31,8 @@ public class UserEntity extends AbstractEntity {
 
     private String              remark;                 // 备注
 
+    private Integer             loginCount;             // 登录次数
+
     private Date                loginDate;              // 登录时间
 
     private Date                lastLoginDate;          // 上次登录时间
@@ -50,8 +52,8 @@ public class UserEntity extends AbstractEntity {
     }
 
     public UserEntity(String username, String password, String salt, String realname, String phone, String email,
-                      String remark, Date loginDate, Date lastLoginDate, Date createdDate, Date updatedDate,
-                      UserEntityStatus status, UserEntity parent, Set<RoleEntity> roleEntities) {
+                      String remark, Integer loginCount, Date loginDate, Date lastLoginDate, Date createdDate,
+                      Date updatedDate, UserEntityStatus status, UserEntity parent, Set<RoleEntity> roleEntities) {
         this();
         this.username = username;
         this.password = password;
@@ -60,6 +62,7 @@ public class UserEntity extends AbstractEntity {
         this.phone = phone;
         this.email = email;
         this.remark = remark;
+        this.loginCount = loginCount;
         this.loginDate = loginDate;
         this.lastLoginDate = lastLoginDate;
         this.createdDate = createdDate;
@@ -116,6 +119,11 @@ public class UserEntity extends AbstractEntity {
     @Column(name = "remark")
     public String getRemark() {
         return remark;
+    }
+
+    @Column(name = "login_count")
+    public Integer getLoginCount() {
+        return loginCount;
     }
 
     @Column(name = "login_date")
@@ -187,6 +195,10 @@ public class UserEntity extends AbstractEntity {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public void setLoginCount(Integer loginCount) {
+        this.loginCount = loginCount;
     }
 
     public void setLoginDate(Date loginDate) {

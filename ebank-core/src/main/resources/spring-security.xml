@@ -57,6 +57,7 @@
         <property name="postAuthenticationChecks">
             <bean class="cn.cloudwalk.ebank.core.support.security.CustomPostUserDetailsChecker"/>
         </property>
+        <property name="loginCount" value="3"/>
     </bean>
 
     <!-- 密码解析器 -->
