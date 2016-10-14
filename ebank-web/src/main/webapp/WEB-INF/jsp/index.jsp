@@ -1,16 +1,10 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: liwenhe
-  Date: 2016/9/20
-  Time: 10:34
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
-  <head>
-    <title>$Title$</title>
-  </head>
-  <body>
-  $END$
-  </body>
-</html>
+<%@ taglib prefix="tmpl" uri="/jsp-templ.tld" %>
+
+<tmpl:override name="title">首页</tmpl:override>
+
+<tmpl:override name="rightBox">
+    <h1>Hello Kitty!!!</h1>
+</tmpl:override>
+
+<%@ include file="shared/decorator.jsp" %>

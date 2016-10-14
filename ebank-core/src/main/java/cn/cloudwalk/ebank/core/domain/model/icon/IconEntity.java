@@ -16,13 +16,30 @@ public class IconEntity extends AbstractEntity {
 
     private String          name;                       // 图标名称
 
-    private String          path;                       // 图标路径
+    private String          beforeHoverPath;            // hover之前图标路径
+
+    private String          afterHoverPath;             // hover之后图标路径
 
     private String          suffix;                     // 后缀
 
     private String          description;                // 描述
 
     private IconEntityType  type;                       // 图标类型
+
+    public IconEntity() {
+        super();
+    }
+
+    public IconEntity(String name, String beforeHoverPath, String afterHoverPath, String suffix,
+                      String description, IconEntityType type) {
+        this();
+        this.name = name;
+        this.beforeHoverPath = beforeHoverPath;
+        this.afterHoverPath = afterHoverPath;
+        this.suffix = suffix;
+        this.description = description;
+        this.type = type;
+    }
 
     @Id
     @GenericGenerator(name = "icon_entity_generator", strategy = "uuid")
@@ -43,9 +60,14 @@ public class IconEntity extends AbstractEntity {
         return name;
     }
 
-    @Column(name = "path")
-    public String getPath() {
-        return path;
+    @Column(name = "before_hover_path")
+    public String getBeforeHoverPath() {
+        return beforeHoverPath;
+    }
+
+    @Column(name = "after_hover_path")
+    public String getAfterHoverPath() {
+        return afterHoverPath;
     }
 
     @Column(name = "suffix")
@@ -68,8 +90,12 @@ public class IconEntity extends AbstractEntity {
         this.name = name;
     }
 
-    public void setPath(String path) {
-        this.path = path;
+    public void setBeforeHoverPath(String beforeHoverPath) {
+        this.beforeHoverPath = beforeHoverPath;
+    }
+
+    public void setAfterHoverPath(String afterHoverPath) {
+        this.afterHoverPath = afterHoverPath;
     }
 
     public void setSuffix(String suffix) {

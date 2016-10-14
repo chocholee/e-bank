@@ -115,6 +115,12 @@
         </dependency>
         <!-- servlet -->
 
+        <!-- https://mvnrepository.com/artifact/javax.servlet.jsp/javax.servlet.jsp-api -->
+        <dependency>
+            <groupId>javax.servlet.jsp</groupId>
+            <artifactId>javax.servlet.jsp-api</artifactId>
+        </dependency>
+
         <!-- https://mvnrepository.com/artifact/com.github.axet/kaptcha -->
         <dependency>
             <groupId>com.github.axet</groupId>

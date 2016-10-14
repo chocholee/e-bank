@@ -21,7 +21,7 @@
         <security:intercept-url pattern="/captcha" access="permitAll"/>
 
         <!-- 表单登录 -->
-        <security:access-denied-handler error-page="/login"/>
+        <security:access-denied-handler error-page="/forbidden"/>
         <security:form-login login-page="/login"/>
 
         <!-- 退出及session管理 -->

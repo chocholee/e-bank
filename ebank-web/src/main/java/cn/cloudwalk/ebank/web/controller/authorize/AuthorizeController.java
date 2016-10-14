@@ -80,7 +80,12 @@ public class AuthorizeController extends BaseController {
 
     @RequestMapping(value = "/login_failure")
     public ModelAndView loginFailure(HttpSession session, RedirectAttributes redirectAttributes) {
-        Exception ex = (Exception) session.getAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
+        Exception ex = null;
+        if (session.getAttribute(WebAttributes.AUTHENTICATION_EXCEPTION) != null) {
+            ex = (Exception) session.getAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
+        } else if (session.getAttribute(WebAttributes.ACCESS_DENIED_403) != null) {
+            ex = (Exception) session.getAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
+        }
         String errorMsg = (null != ex) ? ex.getMessage() : null;
         redirectAttributes.addFlashAttribute("message", errorMsg);
         return new ModelAndView("redirect:/login");

@@ -1,10 +1,14 @@
 package cn.cloudwalk.ebank.core.domain.service.function;
 
 import cn.cloudwalk.ebank.core.domain.model.function.FunctionEntity;
+import cn.cloudwalk.ebank.core.domain.model.function.FunctionEntityType;
+import cn.cloudwalk.ebank.core.domain.model.icon.IconEntity;
 import cn.cloudwalk.ebank.core.domain.service.function.command.FunctionCommand;
 import cn.cloudwalk.ebank.core.domain.service.function.command.FunctionPaginationCommand;
+import cn.cloudwalk.ebank.core.domain.service.icon.IIconService;
 import cn.cloudwalk.ebank.core.repository.Pagination;
 import cn.cloudwalk.ebank.core.repository.function.IFunctionRepository;
+import org.hibernate.FetchMode;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
@@ -16,7 +20,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by liwenhe on 2016/9/21.
@@ -29,6 +35,9 @@ public class FunctionService implements IFunctionService {
 
     @Autowired
     private IFunctionRepository<FunctionEntity, String> functionRepository;
+
+    @Autowired
+    private IIconService iconService;
 
     @Override
     public Pagination<FunctionEntity> pagination(FunctionPaginationCommand command) {
@@ -55,22 +64,77 @@ public class FunctionService implements IFunctionService {
     }
 
     @Override
+    public List<FunctionEntity> findByIconId(String iconId) {
+        // 添加查询条件
+        List<Criterion> criterions = new ArrayList<>();
+        criterions.add(Restrictions.eq("iconEntity.id", iconId));
+
+        // 添加排序
+        List<Order> orders = new ArrayList<>();
+        orders.add(Order.asc("order"));
+
+        // 添加fetch mode
+        Map<String, FetchMode> fetchModeMap = new HashMap<>();
+        fetchModeMap.put("iconEntity", FetchMode.JOIN);
+
+        return functionRepository.findAll(criterions, orders, fetchModeMap);
+    }
+
+    @Override
+    public List<FunctionEntity> findForFirstMenu() {
+        // 添加查询条件
+        List<Criterion> criterions = new ArrayList<>();
+        criterions.add(Restrictions.eq("type", FunctionEntityType.FIRST));
+
+        // 添加排序
+        List<Order> orders = new ArrayList<>();
+        orders.add(Order.asc("order"));
+
+        // 添加fetch mode
+        Map<String, FetchMode> fetchModeMap = new HashMap<>();
+        fetchModeMap.put("iconEntity", FetchMode.JOIN);
+        fetchModeMap.put("roleEntities", FetchMode.JOIN);
+
+        return functionRepository.findAll(criterions, orders, fetchModeMap);
+    }
+
+    @Override
+    public List<FunctionEntity> findByParentId(String parentId) {
+        // 添加查询条件
+        List<Criterion> criterions = new ArrayList<>();
+        criterions.add(Restrictions.eq("parent.id", parentId));
+
+        // 添加排序
+        List<Order> orders = new ArrayList<>();
+        orders.add(Order.asc("order"));
+
+        // 添加fetch mode
+        Map<String, FetchMode> fetchModeMap = new HashMap<>();
+        fetchModeMap.put("iconEntity", FetchMode.JOIN);
+        fetchModeMap.put("parent", FetchMode.JOIN);
+        fetchModeMap.put("roleEntities", FetchMode.JOIN);
+
+        return functionRepository.findAll(criterions, orders, fetchModeMap);
+    }
+
+    @Override
     public FunctionEntity findById(String id) {
         return functionRepository.findById(id);
     }
 
     @Override
     public FunctionEntity save(FunctionCommand command) {
+        IconEntity iconEntity = iconService.findById(command.getIconId());
         FunctionEntity parent = this.findById(command.getParent().getId());
         FunctionEntity entity = new FunctionEntity(
                 command.getName(),
                 command.getCode(),
                 command.getUri(),
-                command.getIconId(),
                 command.getDescription(),
                 command.getOrder(),
                 command.getType(),
                 parent,
+                iconEntity,
                 null
         );
         functionRepository.save(entity);

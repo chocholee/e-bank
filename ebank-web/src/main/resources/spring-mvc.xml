@@ -10,6 +10,10 @@
        http://www.springframework.org/schema/mvc
        http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
+    <bean id="localeResolver" class="org.springframework.web.servlet.i18n.FixedLocaleResolver">
+        <property name="defaultLocale" value="zh"/>
+    </bean>
+
     <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
         <property name="providerClass" value="org.hibernate.validator.HibernateValidator"/>
         <property name="validationMessageSource" ref="messageSource"/>
@@ -85,7 +89,7 @@
         </constructor-arg>
     </bean>
 
-    <bean id="exceptionResolver" class="cn.cloudwalk.ebank.web.controller.shared.support.CustomMappingExceptionResolver">
+    <bean id="exceptionResolver" class="cn.cloudwalk.ebank.web.controller.shared.support.handler.CustomMappingHandlerExceptionResolver">
         <property name="exceptionMappings">
             <props>
                 <prop key="cn.cloudwalk.ebank.core.support.exception.WeiXinAccountNotFoundException">/login</prop>
@@ -94,4 +98,20 @@
         </property>
         <property name="exceptionAttribute" value="message"/>
     </bean>
+
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <mvc:exclude-mapping path="/login"/>
+            <mvc:exclude-mapping path="/logout"/>
+            <mvc:exclude-mapping path="/captcha"/>
+            <mvc:exclude-mapping path="/logined"/>
+            <mvc:exclude-mapping path="/login_failure"/>
+            <mvc:exclude-mapping path="/resources/**"/>
+            <mvc:exclude-mapping path="/forbidden"/>
+            <mvc:exclude-mapping path="/page_404"/>
+            <mvc:exclude-mapping path="/page_500"/>
+            <bean class="cn.cloudwalk.ebank.web.controller.shared.support.interceptor.CustomMenuInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
 </beans>

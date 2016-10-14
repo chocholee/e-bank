@@ -1,4 +1,4 @@
-package cn.cloudwalk.ebank.web.controller.shared.support;
+package cn.cloudwalk.ebank.web.controller.shared.support.handler;
 
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -13,7 +13,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author 李文禾
  */
-public class CustomMappingExceptionResolver extends SimpleMappingExceptionResolver {
+public class CustomMappingHandlerExceptionResolver extends SimpleMappingExceptionResolver {
 
     private String exceptionAttribute = DEFAULT_EXCEPTION_ATTRIBUTE;
 

@@ -62,6 +62,22 @@
         <url-pattern>*</url-pattern>
     </filter-mapping>
 
+    <jsp-config>
+        <taglib>
+            <taglib-uri>/jsp-templ.tld</taglib-uri>
+            <taglib-location>/WEB-INF/tld/jsp-tmpl.tld</taglib-location>
+        </taglib>
+    </jsp-config>
+
+    <error-page>
+        <error-code>404</error-code>
+        <location>/page_404</location>
+    </error-page>
+    <error-page>
+        <error-code>500</error-code>
+        <location>/page_500</location>
+    </error-page>
+
     <welcome-file-list>
         <welcome-file>/</welcome-file>
     </welcome-file-list>

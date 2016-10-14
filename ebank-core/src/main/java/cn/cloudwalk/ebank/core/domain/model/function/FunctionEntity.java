@@ -1,5 +1,6 @@
 package cn.cloudwalk.ebank.core.domain.model.function;
 
+import cn.cloudwalk.ebank.core.domain.model.icon.IconEntity;
 import cn.cloudwalk.ebank.core.domain.model.role.RoleEntity;
 import cn.cloudwalk.ebank.core.support.entity.AbstractEntity;
 import org.hibernate.annotations.GenericGenerator;
@@ -22,8 +23,6 @@ public class FunctionEntity extends AbstractEntity {
 
     private String              uri;                    // 功能标识
 
-    private String              iconId;                 // 功能图标
-
     private String              description;            // 功能描述
 
     private Integer             order;                  // 功能排序
@@ -32,23 +31,25 @@ public class FunctionEntity extends AbstractEntity {
 
     private FunctionEntity      parent;                 // 关联父资源
 
+    private IconEntity          iconEntity;             // 图标
+
     private Set<RoleEntity>     roleEntities;           // 关联角色
 
     public FunctionEntity() {
         super();
     }
 
-    public FunctionEntity(String name, String code, String uri, String iconId, String description, Integer order,
-                          FunctionEntityType type, FunctionEntity parent, Set<RoleEntity> roleEntities) {
+    public FunctionEntity(String name, String code, String uri, String description, Integer order, FunctionEntityType type,
+                          FunctionEntity parent, IconEntity iconEntity, Set<RoleEntity> roleEntities) {
         this();
         this.name = name;
         this.code = code;
         this.uri = uri;
-        this.iconId = iconId;
         this.description = description;
         this.order = order;
         this.type = type;
         this.parent = parent;
+        this.iconEntity = iconEntity;
         this.roleEntities = roleEntities;
     }
 
@@ -81,11 +82,6 @@ public class FunctionEntity extends AbstractEntity {
         return uri;
     }
 
-    @Column(name = "icon_id")
-    public String getIconId() {
-        return iconId;
-    }
-
     @Column(name = "description")
     public String getDescription() {
         return description;
@@ -108,6 +104,12 @@ public class FunctionEntity extends AbstractEntity {
         return parent;
     }
 
+    @OneToOne
+    @JoinColumn(name = "icon", referencedColumnName = "id")
+    public IconEntity getIconEntity() {
+        return iconEntity;
+    }
+
     @ManyToMany(mappedBy = "functionEntities", cascade = CascadeType.ALL)
     public Set<RoleEntity> getRoleEntities() {
         return roleEntities;
@@ -125,10 +127,6 @@ public class FunctionEntity extends AbstractEntity {
         this.uri = uri;
     }
 
-    public void setIconId(String iconId) {
-        this.iconId = iconId;
-    }
-
     public void setDescription(String description) {
         this.description = description;
     }
@@ -143,6 +141,10 @@ public class FunctionEntity extends AbstractEntity {
 
     public void setParent(FunctionEntity parent) {
         this.parent = parent;
+    }
+
+    public void setIconEntity(IconEntity iconEntity) {
+        this.iconEntity = iconEntity;
     }
 
     public void setRoleEntities(Set<RoleEntity> roleEntities) {

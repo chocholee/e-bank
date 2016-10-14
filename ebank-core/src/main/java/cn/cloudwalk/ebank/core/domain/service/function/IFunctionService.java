@@ -18,6 +18,12 @@ public interface IFunctionService {
 
     List<FunctionEntity> findAll();
 
+    List<FunctionEntity> findByIconId(String iconId);
+
+    List<FunctionEntity> findForFirstMenu();
+
+    List<FunctionEntity> findByParentId(String parentId);
+
     FunctionEntity findById(String id);
 
     FunctionEntity save(FunctionCommand command);
