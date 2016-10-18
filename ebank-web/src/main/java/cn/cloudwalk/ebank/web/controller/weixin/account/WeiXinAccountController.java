@@ -29,9 +29,9 @@ public class WeiXinAccountController {
     private IWeiXinAccountService weiXinAccountService;
 
     @RequestMapping("/list")
-    public ModelAndView pagination(WeiXinAccountPaginationCommand command) {
+    public ModelAndView pagination(@ModelAttribute("account") WeiXinAccountPaginationCommand command) {
         Pagination<WeiXinAccountEntity> pagination = weiXinAccountService.pagination(command);
-        return new ModelAndView("/weixinaccount/list", "pagination", pagination);
+        return new ModelAndView("/weixin/account/list", "pagination", pagination);
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.GET)
@@ -65,6 +65,12 @@ public class WeiXinAccountController {
         }
         weiXinAccountService.update(command);
         return new ModelAndView("redirect:/weixin/account/list");
+    }
+
+    @RequestMapping(value = "/view/{id}", method = RequestMethod.GET)
+    public ModelAndView view(@PathVariable String id) {
+        WeiXinAccountEntity account = weiXinAccountService.findById(id);
+        return new ModelAndView("/weixin/account/view", "account", account);
     }
 
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)

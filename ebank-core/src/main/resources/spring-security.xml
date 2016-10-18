@@ -11,6 +11,11 @@
     <security:http pattern="/favicon.ico" security="none"/>
     <security:http use-expressions="true" authentication-manager-ref="authenticationManager"
                    access-decision-manager-ref="accessDecisionManager">
+
+        <security:headers defaults-disabled="false">
+            <security:frame-options policy="SAMEORIGIN"/>
+        </security:headers>
+
         <!-- 自定义filter -->
         <security:custom-filter ref="rememberMeFilter" position="REMEMBER_ME_FILTER"/>
         <security:custom-filter ref="authenticationFilterWithCaptcha" before="FORM_LOGIN_FILTER"/>

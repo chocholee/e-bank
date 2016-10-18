@@ -22,7 +22,7 @@ public class BlockTag extends TagSupport {
      */
     @Override
     public int doStartTag() throws JspException {
-        return getOverriedContent() == null ? EVAL_BODY_INCLUDE : SKIP_BODY;
+        return getOverrideContent() == null ? EVAL_BODY_INCLUDE : SKIP_BODY;
     }
 
     /**
@@ -30,20 +30,20 @@ public class BlockTag extends TagSupport {
      */
     @Override
     public int doEndTag() throws JspException {
-        String overriedContent = getOverriedContent();
-        if(overriedContent == null) {
+        String overrideContent = getOverrideContent();
+        if(overrideContent == null) {
             return EVAL_PAGE;
         }
 
         try {
-            pageContext.getOut().write(overriedContent);
+            pageContext.getOut().write(overrideContent);
         } catch (IOException e) {
-            throw new JspException("write overridedContent occer IOException,block name:" + name, e);
+            throw new JspException("write overrideContent occer IOException,block name:" + name, e);
         }
         return EVAL_PAGE;
     }
 
-    private String getOverriedContent() {
+    private String getOverrideContent() {
         String varName = TagUtils.getOverrideVariableName(name);
         return (String) pageContext.getRequest().getAttribute(varName);
     }

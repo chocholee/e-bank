@@ -20,9 +20,9 @@ public class WeiXinAccountEntity extends AbstractEntity {
 
     private String                  token;                  // 公众号token
 
-    private String                  number;                 // 公众号
+    private String                  number;                 // 公众号微信号
 
-    private String                  accountId;              // 公众号微信号
+    private String                  accountId;              // 公众号微信号(原始ID)
 
     private String                  appId;                  // 公众号appId
 

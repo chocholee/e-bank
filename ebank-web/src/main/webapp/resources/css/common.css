@@ -1,8 +1,20 @@
-*{margin:0;padding:0;}
+*{margin:0;padding:0;font-size:14px}
 .left{float:left;}
 .right{float:right;}
 a{text-decoration:none;color:#000;}
+li{list-style:none;}
 body{background:#e6e6e6;font-family:"微软雅黑";}
+img {border: 0}
+.clearfix{clear:both;}
+/*margin*/
+.ml-5 {margin-left: 5px}
+.ml-10 {margin-left: 10px}
+.ml-15 {margin-left: 15px}
+.ml-20 {margin-left: 20px}
+.mr-5 {margin-right: 5px}
+.mr-10 {margin-right: 10px}
+.mr-15 {margin-right: 15px}
+.mr-20 {margin-right: 20px}
 /*顶部*/
 .top{position:fixed;top:0;width:100%;z-index:100;}
 .line{width:100%;height:1px;background:#dedede;}
@@ -18,22 +30,13 @@ body{background:#e6e6e6;font-family:"微软雅黑";}
 /*主体内容*/
 #content{margin:20px auto;width:73%;height:auto;box-sizing:border-box;border-top:1px solid #dedede;border-right:1px solid #dedede;margin-top:89px;position:relative;}
 #leftbox{width:200px;height:865px;background:#fff;border-left:1px solid #dedede;border-bottom:1px solid #dedede;box-sizing:border-box;}
-#rightbox{height:865px;width:auto;box-sizing:border-box;background:#fff;position:absolute;left:200px;top:0;right:0;bottom:0;overflow-y:auto;ovrflow-x:auto;border-left:1px solid #ccc;
+#rightbox{overflow:hidden;height:865px;width:auto;box-sizing:border-box;background:#fff;position:absolute;left:200px;top:0;right:0;bottom:0;border-left:1px solid #ccc;
 	border-bottom:1px solid #dedede;border-right:1px solid #dedede;padding:0 33px;}
 /*左侧菜单*/
 #leftbox ul li {width:100%;list-style:none;line-height:42px;font-size:16px;text-align:left;}
 #leftbox>ul>li>a{width:100%;background:url(../images/ico_lower.png) 95% center no-repeat;display:block;height:42px;line-height:42px;position:relative;}
 #leftbox ul li a> img{float:left;margin-left:22px;}
 #leftbox ul li>a>span{height:42px;line-height:42px;display:block;float:left;position:absolute;left:51px;top:0;}
-.one{background:url(../images/ico_Monitor_n.png) 22px 12px no-repeat;}
-.two{background:url(../images/ico_Gear_n.png) 22px 12px no-repeat;}
-.three{background:url(../images/ico_head_n.png) 22px 12px no-repeat;}
-.four{background:url(../images/ico_Pie-chart_n.png) 22px 12px no-repeat;}
-.five{background:url(../images/ico_bell_n.png) 22px 12px no-repeat;}
-.six{background:url(../images/ico_heart_n.png) 22px 12px no-repeat;}
-.seven{background:url(../images/ico_Bubble_n.png) 22px 12px no-repeat;}
-.eight{background:url(../images/ico_database_n.png) 22px 12px no-repeat;}
-.eight{background:url(../images/ico_database_n.png) 22px 12px no-repeat;}
 #leftbox ul  img{margin-right:13px;margin-top:12px;}
 #leftbox ul li a{cursor:pointer;}
 #leftbox ul li ul li{padding:0;height:42px;line-height:42px;padding-left:54px;text-indent:1em;box-sizing:border-box;}
@@ -42,3 +45,28 @@ body{background:#e6e6e6;font-family:"微软雅黑";}
 #leftbox>ul>li>.current{background:url(../images/ico_up.png) 95% center no-repeat;background-color:#d82929;}
 #leftbox ul li ul li a{width:100%;}
 .active{color:#dc1818;}
+/*右侧*/
+.title{height:55px;line-height: 55px;text-align: left;font-size:18px;}
+.greyLine{background:#ccc;width:100%;height:1px;}
+.button{background:#f8f8f8;height:30px;display:block;border-radius:4px;box-shadow:0 1px 1px rgba(0,0,0,.2);line-height: 30px; padding:0 10px;border:1px solid rgba(0,0,0,0);}
+.button:hover{border:1px solid rgba(238,105,105,0.6);}
+.button img{margin:6px 10px 0 0;float:left;border:0;}
+.button-wrapper{height:70px;width:100%;}
+.button-wrapper ul{height:30px;padding:20px 0;}
+.button-group{display:inline-block;}
+.button-group-wrapper{line-height:70px;}
+/*表单*/
+.form-inline .form-group {display:inline-block;margin-left: 20px;line-height:70px;}
+.form-group label{text-align: right;margin-right:10px;display:inline-block;}
+.form-control{height:30px;border:1px solid #e6e6e6;outline:0;padding:0 10px;}
+.form-group .button{display:inline-block;}
+/*table*/
+.table{border-bottom:1px solid #e6e6e6;border-left:1px solid #e6e6e6;border-right:1px solid #e6e6e6;width:100%;}
+.table th,.table td{border-top:1px solid #e6e6e6;height:50px;width:1%;}
+.table th{font-weight:normal;}
+.table td{text-align:center;white-space: nowrap;padding: 0 20px;}
+.table th{background:#f0f0f0;}
+.table tr:hover{background:#f0f0f0;}
+.table td img{margin:0 4px;}
+.table td a{cursor:pointer;}
+.table .last-td{line-height:0;}

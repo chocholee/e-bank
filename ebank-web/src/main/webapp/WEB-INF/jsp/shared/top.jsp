@@ -12,3 +12,4 @@
     </div>
     <div class="line"></div>
 </div>
+<div class="clearfix"></div>
