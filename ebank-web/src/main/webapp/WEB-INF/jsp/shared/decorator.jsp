@@ -9,6 +9,7 @@
     <meta name="author" content="云从科技">
     <title><tmpl:block name="title"/></title>
     <link href="${pageContext.request.contextPath}/resources/css/common.css" rel="stylesheet" type="text/css"/>
+    <link href="${pageContext.request.contextPath}/resources/css/dropkick.css" rel="stylesheet" type="text/css" />
     <tmpl:block name="page_css"/>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/plugins/jquery.min.js"></script>
 </head>
@@ -23,6 +24,7 @@
         </div>
     </div>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/plugins/jquery.nicescroll.min.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/plugins/jquery.dropkick-min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/menubar.js"></script>
     <script>
         $(function () {

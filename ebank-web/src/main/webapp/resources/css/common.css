@@ -70,3 +70,14 @@ img {border: 0}
 .table td img{margin:0 4px;}
 .table td a{cursor:pointer;}
 .table .last-td{line-height:0;}
+/*分页*/
+.page{margin-top:15px;height:35px;}
+.page .tipNum{margin-top:8px;}
+.page .prevIcon,.page .nextIcon {display:block;width:35px;height:35px;}
+.page .prevIcon{background:url(../images/btn_previous_n.png);}
+.page .nextIcon{background:url(../images/btn_next_n.png);}
+.page .prevIcon:hover{background:url(../images/btn_previous_h.png);}
+.page .nextIcon:hover{background:url(../images/btn_next_h.png);}
+.page .prevent a{cursor:not-allowed;}
+.page .prevent .prevIcon:hover{background:url(../images/btn_previous_n.png);}
+.page .prevent .nextIcon:hover{background:url(../images/btn_next_n.png);}

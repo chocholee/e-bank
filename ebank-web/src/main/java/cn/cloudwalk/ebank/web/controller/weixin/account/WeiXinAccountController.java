@@ -5,14 +5,15 @@ import cn.cloudwalk.ebank.core.domain.service.weixin.account.IWeiXinAccountServi
 import cn.cloudwalk.ebank.core.domain.service.weixin.account.command.WeiXinAccountCommand;
 import cn.cloudwalk.ebank.core.domain.service.weixin.account.command.WeiXinAccountPaginationCommand;
 import cn.cloudwalk.ebank.core.repository.Pagination;
+import cn.cloudwalk.ebank.web.controller.shared.AlertMessage;
+import cn.cloudwalk.ebank.web.controller.shared.BaseController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -23,7 +24,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
  */
 @Controller
 @RequestMapping("/weixin/account")
-public class WeiXinAccountController {
+public class WeiXinAccountController extends BaseController {
+
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private IWeiXinAccountService weiXinAccountService;
@@ -53,18 +56,26 @@ public class WeiXinAccountController {
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
     public ModelAndView edit(@ModelAttribute("account") WeiXinAccountCommand command) {
         WeiXinAccountEntity account = weiXinAccountService.findById(command.getId());
-        return new ModelAndView("/weixinaccount/edit", "account", account);
+        return new ModelAndView("/weixin/account/edit", "account", account);
     }
 
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.POST)
-    public ModelAndView edit(@Validated @ModelAttribute("account") WeiXinAccountCommand command,
-                             BindingResult bindingResult,
-                             RedirectAttributes redirectAttributes) {
+    @ResponseBody
+    public AlertMessage edit(@Validated @ModelAttribute("account") WeiXinAccountCommand command,
+                             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("/weixinaccount/edit");
+            return new AlertMessage(AlertMessage.Type.ERROR, null, bindingResult.getFieldErrors());
         }
-        weiXinAccountService.update(command);
-        return new ModelAndView("redirect:/weixin/account/list");
+
+        try {
+            weiXinAccountService.update(command);
+            return new AlertMessage(AlertMessage.Type.SUCCESS,
+                    getMessageSourceAccessor().getMessage("WeiXinAccountController.edit.success"));
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return new AlertMessage(AlertMessage.Type.ERROR,
+                    getMessageSourceAccessor().getMessage("WeiXinAccountController.edit.error"));
+        }
     }
 
     @RequestMapping(value = "/view/{id}", method = RequestMethod.GET)
@@ -74,9 +85,17 @@ public class WeiXinAccountController {
     }
 
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
-    public ModelAndView delete(@PathVariable String id) {
-        weiXinAccountService.delete(id);
-        return new ModelAndView("redirect:/weixin/account/list");
+    @ResponseBody
+    public AlertMessage delete(@PathVariable String id) {
+        try {
+            weiXinAccountService.delete(id);
+            return new AlertMessage(AlertMessage.Type.SUCCESS,
+                    getMessageSourceAccessor().getMessage("WeiXinAccountController.delete.success"));
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return new AlertMessage(AlertMessage.Type.ERROR,
+                    getMessageSourceAccessor().getMessage("WeiXinAccountController.delete.error"));
+        }
     }
 
 }

@@ -143,7 +143,7 @@ public class AbstractHibernateRepository<T, ID extends Serializable> implements 
 
         int count = queryCount.list().size();
         List<T> list = query.setFirstResult((page - 1) * pageSize)
-                .setFetchSize(pageSize)
+                .setMaxResults(pageSize)
                 .list();
 
         return new Pagination(page, pageSize, count, list);

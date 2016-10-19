@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="tmpl" uri="/jsp-templ.tld" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt_rt" %>
 
 <tmpl:override name="title">微信公众号</tmpl:override>
 
@@ -71,36 +72,44 @@
                 <th>创建日期</th>
                 <th>操作</th>
             </tr>
-            <c:forEach var="account" items="${pagination.data}">
-                <tr>
-                    <td><input type="checkbox" value="${account.id}"></td>
-                    <td>${account.name}</td>
-                        <%--<td>${account.token}</td>--%>
-                    <td>${account.number}</td>
-                    <td>${account.accountId}</td>
-                    <td>${account.appId}</td>
-                    <td>${account.appSecret}</td>
-                    <td>${account.email}</td>
-                    <td>${account.description}</td>
-                    <td>${account.type.name}</td>
-                    <td>
-                        <c:if test="${account.user ne null}">
-                            ${account.user.username}
-                        </c:if>
-                    </td>
-                    <td>${account.createdDate}</td>
-                    <td class="last-td">
-                        <a href="javascript:view('${pageContext.request.contextPath}/weixin/account/view/${account.id}')"><img
-                                src="${pageContext.request.contextPath}/resources/images/eye.png" alt="查看"></a>
-                        <a href="/weixin/account/edit/${account.id}"><img
-                                src="${pageContext.request.contextPath}/resources/images/edit.png" alt="编辑"></a>
-                        <a href="/weixin/account/delete/${account.id}"><img
-                                src="${pageContext.request.contextPath}/resources/images/btn_delete_n.png" alt="删除"></a>
-                    </td>
-                </tr>
-            </c:forEach>
+            <c:if test="${pagination ne null && pagination.data ne null}">
+                <c:forEach var="account" items="${pagination.data}">
+                    <tr>
+                        <td><input type="checkbox" value="${account.id}"></td>
+                        <td>${account.name}</td>
+                            <%--<td>${account.token}</td>--%>
+                        <td>${account.number}</td>
+                        <td>${account.accountId}</td>
+                        <td>${account.appId}</td>
+                        <td>${account.appSecret}</td>
+                        <td>${account.email}</td>
+                        <td>${account.description}</td>
+                        <td>${account.type.name}</td>
+                        <td>
+                            <c:if test="${account.user ne null}">
+                                ${account.user.username}
+                            </c:if>
+                        </td>
+                        <td>${account.createdDate}</td>
+                        <td class="last-td">
+                            <a href="javascript:view('${pageContext.request.contextPath}/weixin/account/view/${account.id}')"><img
+                                    src="${pageContext.request.contextPath}/resources/images/eye.png" alt="查看"></a>
+                            <a href="javascript:edit('${pageContext.request.contextPath}/weixin/account/edit/${account.id}')"><img
+                                    src="${pageContext.request.contextPath}/resources/images/edit.png" alt="编辑"></a>
+                            <a href="javascript:deleted('${pageContext.request.contextPath}/weixin/account/delete/${account.id}')"><img
+                                    src="${pageContext.request.contextPath}/resources/images/btn_delete_n.png" alt="删除"></a>
+                        </td>
+                    </tr>
+                </c:forEach>
+            </c:if>
         </table>
     </div>
+
+    <%-- 引入分页 --%>
+    <jsp:include page="../../shared/pagination.jsp" flush="true">
+        <jsp:param name="pagination" value="${pagination}"/>
+        <jsp:param name="paginationURL" value="${pageContext.request.contextPath}/weixin/account/list?name=${account.name}&appId=${account.appId}"/>
+    </jsp:include>
 </tmpl:override>
 
 <tmpl:override name="page_script">
@@ -108,6 +117,7 @@
     <script>
         $(function () {
             $("#table").niceScroll({cursorborder: "none", horizrailenabled: true});
+            $('.select').dropkick();
         });
 
         function view(url) {
@@ -118,17 +128,38 @@
                 shade: [0.5],
                 area: ['600px', '600px'],
                 content: url,
+                maxmin: false
+            });
+        }
+
+        function edit(url) {
+            layer.open({
+                type: 2,
+                title: '编辑',
+                shadeClose: true,
+                shade: [0.5],
+                area: ['600px', '600px'],
+                content: url,
                 maxmin: false,
                 btn: ["确定"],
-                yes: function(index, layero){
-                    var body = layer.getChildFrame('body', index);
-                    var iframeWin = window[layero.find('iframe')[0]['name']];
-                    console.log(iframeWin)
-//                    iframeWin.hello();
-                },
-                end: function () {
-                    alert("hahahaha1111")
+                yes: function(index, cLayer){
+                    var iframeWin = window[cLayer.find('iframe')[0]['name']];
+                    iframeWin.edit();
                 }
+            });
+        }
+
+        function deleted(url) {
+            layer.alert("真的要删除该记录吗?", {title: "警告"}, function () {
+                $.get(url, function (result) {
+                    if (result.type === "SUCCESS") {
+                        layer.msg(result.message, {
+                            time: 500
+                        }, function(){
+                            window.location.reload();
+                        });
+                    }
+                });
             });
         }
     </script>

@@ -59,15 +59,17 @@
             </tr>
         </table>
     </div>
-    <button type="button" onclick="close1()">button</button>
 </tmpl:override>
+
 <tmpl:override name="page_script">
-    <script>
-        function close1() {
-            var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
-            parent.layer.close(index); //再执行关闭
-        }
-    </script>
+    <c:if test="${account eq null}">
+        <script>
+            var parentIndex = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+            parent.layer.alert('记录不存在', {title: "警告"}, function () {
+                parent.layer.closeAll(); //再执行关闭所有层
+            });
+        </script>
+    </c:if>
 </tmpl:override>
 
 <%@ include file="../../shared/decorator.jsp" %>
