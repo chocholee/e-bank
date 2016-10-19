@@ -98,4 +98,18 @@ public class WeiXinAccountController extends BaseController {
         }
     }
 
+    @RequestMapping(value = "/token/{id}", method = RequestMethod.GET)
+    @ResponseBody
+    public AlertMessage token(@PathVariable String id) {
+        try {
+            weiXinAccountService.token(id);
+            return new AlertMessage(AlertMessage.Type.SUCCESS,
+                    getMessageSourceAccessor().getMessage("WeiXinAccountController.token.success"));
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return new AlertMessage(AlertMessage.Type.ERROR,
+                    getMessageSourceAccessor().getMessage("WeiXinAccountController.token.error"));
+        }
+    }
+
 }

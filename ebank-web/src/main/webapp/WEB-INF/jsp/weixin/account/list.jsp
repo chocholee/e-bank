@@ -14,15 +14,17 @@
     <div class="button-wrapper">
         <div class="left button-group-wrapper">
             <div class="button-group mr-20">
-                <a href="${pageContext.request.contextPath}/weixin/account/add" class="button">
+                <a href="javascript:add('${pageContext.request.contextPath}/weixin/account/add');" class="button">
                     <img src="${pageContext.request.contextPath}/resources/images/btn_add_n.png" height="18" width="18"
                          alt="添加">
                     <span>添加</span>
                 </a>
             </div>
             <div class="button-group">
-                <a href="${pageContext.request.contextPath}/weixin/account/reset" class="button">
-                    <img src="${pageContext.request.contextPath}/resources/images/btn_Reset_n.png" height="18" width="18"
+                <a href="javascript:token('${pageContext.request.contextPath}/weixin/account/token');"
+                   class="button">
+                    <img src="${pageContext.request.contextPath}/resources/images/btn_Reset_n.png" height="18"
+                         width="18"
                          alt="重置微信Token">
                     <span>重置微信Token</span>
                 </a>
@@ -96,7 +98,7 @@
                                     src="${pageContext.request.contextPath}/resources/images/eye.png" alt="查看"></a>
                             <a href="javascript:edit('${pageContext.request.contextPath}/weixin/account/edit/${account.id}')"><img
                                     src="${pageContext.request.contextPath}/resources/images/edit.png" alt="编辑"></a>
-                            <a href="javascript:deleted('${pageContext.request.contextPath}/weixin/account/delete/${account.id}')"><img
+                            <a href="javascript:remove('${pageContext.request.contextPath}/weixin/account/delete/${account.id}')"><img
                                     src="${pageContext.request.contextPath}/resources/images/btn_delete_n.png" alt="删除"></a>
                         </td>
                     </tr>
@@ -132,6 +134,10 @@
             });
         }
 
+        function add(url) {
+
+        }
+
         function edit(url) {
             layer.open({
                 type: 2,
@@ -149,18 +155,38 @@
             });
         }
 
-        function deleted(url) {
+        function remove(url) {
             layer.alert("真的要删除该记录吗?", {title: "警告"}, function () {
                 $.get(url, function (result) {
-                    if (result.type === "SUCCESS") {
-                        layer.msg(result.message, {
-                            time: 500
-                        }, function(){
-                            window.location.reload();
-                        });
-                    }
+                    layer.alert(result.message, function () {
+                        window.location.reload();
+                    });
                 });
             });
+        }
+
+        function token(url) {
+            var checkboxes = $("#table").find("input[type=checkbox]");
+            var checkCount = 0;
+            var checkbox   = undefined;
+            $.each(checkboxes, function () {
+                var checked = $(this).is(":checked");
+                if (checked == true) {
+                    checkCount ++;
+                    checkbox = this;
+                }
+            });
+            if (checkCount != 1) {
+                layer.alert("请择一条记录进行操作!")
+                return false;
+            } else {
+                url = url + "/" + $(checkbox).val();
+                $.get(url, function (result) {
+                    layer.alert(result.message, function () {
+                        window.location.reload();
+                    });
+                });
+            }
         }
     </script>
 </tmpl:override>

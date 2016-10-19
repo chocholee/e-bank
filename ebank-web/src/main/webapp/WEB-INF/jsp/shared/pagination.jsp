@@ -7,7 +7,7 @@
     <form id="pageForm" action="${param.paginationURL}">
         <div class="page right">
                 <%-- 分页显示数目 --%>
-            <select name="pageSize" class="select left mr-10">
+            <select name="pageSize" class="pagination-select select left mr-10">
                 <option value="10" <c:if test="${pagination.pageSize == 10}">selected</c:if>>显示10条</option>
                 <option value="20" <c:if test="${pagination.pageSize == 20}">selected</c:if>>显示20条</option>
                 <option value="30" <c:if test="${pagination.pageSize == 30}">selected</c:if>>显示30条</option>
@@ -39,7 +39,7 @@
             </c:choose>
 
                 <%-- 加载分页 --%>
-            <select name="page" class="select left mr-10">
+            <select name="page" class="pagination-select select left mr-10">
                 <fmt:formatNumber var="totalPage"
                                   value="${pagination.count / pagination.pageSize + (pagination.count % pagination.pageSize == 0 ? 0 : 0.5)}"
                                   pattern="#"/>
@@ -85,8 +85,10 @@
                 </c:otherwise>
             </c:choose>
         </div>
+
+        <%-- js --%>
         <script>
-            $(".select").on("change", function () {
+            $(".pagination-select").on("change", function () {
                 var request;
                 var action = $("#pageForm").attr("action");
                 if (action.indexOf("?") != -1) {

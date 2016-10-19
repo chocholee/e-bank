@@ -205,4 +205,11 @@ public class WeiXinAccountService implements IWeiXinAccountService {
         WeiXinAccountEntity entity = this.findById(id);
         weiXinAccountRepository.delete(entity);
     }
+
+    @Override
+    public void token(String id) throws WeiXinRequestException {
+        WeiXinAccountEntity entity = this.findById(id);
+        getAccessToken(entity.getAppId());
+        getJsApiTicket(entity.getAppId());
+    }
 }

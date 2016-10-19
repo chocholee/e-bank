@@ -109,12 +109,10 @@
                 function tips(message) {
                     var parentIndex = parent.layer.getFrameIndex(window.name);
                     var parentWindow = parent.window;
-                    parent.layer.msg(message, {
-                        time: 800
-                    }, function(){
+                    parent.layer.alert(message, function(){
                         parentWindow.location.reload();
+                        parent.layer.closeAll();
                     });
-                    parent.layer.close(parentIndex);
                 }
 
                 function edit() {
