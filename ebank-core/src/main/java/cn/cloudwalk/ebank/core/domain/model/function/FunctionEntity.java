@@ -17,17 +17,17 @@ import java.util.Set;
 @Table(name = "function")
 public class FunctionEntity extends AbstractEntity {
 
-    private String              name;                   // 功能名称
+    private String              name;                   // 名称
 
-    private String              code;                   // 功能编码
+    private String              code;                   // 编码
 
-    private String              uri;                    // 功能标识
+    private String              uri;                    // 标识
 
-    private String              description;            // 功能描述
+    private String              description;            // 描述
 
-    private Integer             order;                  // 功能排序
+    private Integer             order;                  // 排序
 
-    private FunctionEntityType  type;                   // 功能类型
+    private FunctionEntityType  type;                   // 类型
 
     private FunctionEntity      parent;                 // 关联父资源
 

@@ -3,8 +3,7 @@ package cn.cloudwalk.ebank.web.controller.function;
 import cn.cloudwalk.ebank.core.domain.model.function.FunctionEntity;
 import cn.cloudwalk.ebank.core.domain.service.function.IFunctionService;
 import cn.cloudwalk.ebank.core.domain.service.function.command.FunctionCommand;
-import cn.cloudwalk.ebank.core.domain.service.function.command.FunctionPaginationCommand;
-import cn.cloudwalk.ebank.core.repository.Pagination;
+import cn.cloudwalk.ebank.web.controller.shared.AlertMessage;
 import cn.cloudwalk.ebank.web.controller.shared.BaseController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,14 +12,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by liwenhe on 2016/9/29.
@@ -37,10 +33,53 @@ public class FunctionController extends BaseController {
     private IFunctionService functionService;
 
     @RequestMapping("/list")
-    public ModelAndView list(FunctionPaginationCommand command) {
-        // TODO session
-        Pagination<FunctionEntity> pagination = functionService.pagination(command);
-        return new ModelAndView("/function/list", "pagination", pagination);
+    public ModelAndView list() {
+        return new ModelAndView("/function/list");
+    }
+
+    @RequestMapping("/dataset")
+    @ResponseBody
+    public List<Map<String, Object>> dataset() {
+        List<Map<String, Object>> dataset = new ArrayList<>();
+        // 查找一级菜单
+        List<FunctionEntity> firstMenus = functionService.findForFirstMenu();
+        for (FunctionEntity first : firstMenus) {
+            Map<String, Object> firstMenuMap = new HashMap<>();
+            firstMenuMap.put("id", first.getId());
+            firstMenuMap.put("name", first.getName());
+            firstMenuMap.put("order", first.getOrder());
+            firstMenuMap.put("icon", (null != first.getIconEntity()) ? first.getIconEntity().getBeforeHoverPath() : null);
+
+            // 查找二级菜单
+            List<Map<String, Object>> secondMenuList = new ArrayList<>();
+            List<FunctionEntity> secondMenus = functionService.findByParentId(first.getId());
+            for (FunctionEntity second : secondMenus) {
+                Map<String, Object> secondMenuMap = new HashMap<>();
+                secondMenuMap.put("id", second.getId());
+                secondMenuMap.put("name", second.getName());
+                secondMenuMap.put("order", second.getOrder());
+                secondMenuMap.put("icon", (null != second.getIconEntity()) ? second.getIconEntity().getBeforeHoverPath() : null);
+
+                // 查找三级菜单
+                List<Map<String, Object>> thirdMenuList = new ArrayList<>();
+                List<FunctionEntity> thirdMenus = functionService.findByParentId(second.getId());
+                for (FunctionEntity third : thirdMenus) {
+                    Map<String, Object> thirdMenuMap = new HashMap<>();
+                    thirdMenuMap.put("id", third.getId());
+                    thirdMenuMap.put("name", third.getName());
+                    thirdMenuMap.put("order", third.getOrder());
+                    thirdMenuMap.put("icon", (null != third.getIconEntity()) ? third.getIconEntity().getBeforeHoverPath() : null);
+                    thirdMenuList.add(thirdMenuMap);
+                }
+                // 组装三级菜单数据至二级菜单中
+                secondMenuMap.put("children", thirdMenuList);
+                secondMenuList.add(secondMenuMap);
+            }
+            // 组装二级菜单数据至一级菜单中
+            firstMenuMap.put("children", secondMenuList);
+            dataset.add(firstMenuMap);
+        }
+        return dataset;
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.GET)
@@ -72,15 +111,23 @@ public class FunctionController extends BaseController {
 
     // TODO update
 
+    @RequestMapping(value = "/view/{id}", method = RequestMethod.GET)
+    public ModelAndView view(@PathVariable String id) {
+        FunctionEntity entity = functionService.findById(id);
+        return new ModelAndView("/function/view", "function", entity);
+    }
+
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
-    public ModelAndView delete(@PathVariable String id, RedirectAttributes redirectAttributes) {
-        // TODO
+    @ResponseBody
+    public AlertMessage delete(@PathVariable String id) {
         try {
             functionService.delete(id);
-            return new ModelAndView("redirect:/function/list");
+            return new AlertMessage(AlertMessage.Type.SUCCESS,
+                    getMessageSourceAccessor().getMessage("default.delete.success.message"));
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
-            return null;
+            return new AlertMessage(AlertMessage.Type.ERROR,
+                    getMessageSourceAccessor().getMessage("default.delete.failure.message"));
         }
     }
 

@@ -8,9 +8,11 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="author" content="云从科技">
     <title><tmpl:block name="title"/></title>
+    <%-- css --%>
     <link href="${pageContext.request.contextPath}/resources/css/common.css" rel="stylesheet" type="text/css"/>
     <link href="${pageContext.request.contextPath}/resources/css/dropkick.css" rel="stylesheet" type="text/css" />
     <tmpl:block name="page_css"/>
+    <%-- js --%>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/plugins/jquery.min.js"></script>
 </head>
 <body>
@@ -22,34 +24,12 @@
         <div id="rightbox" class="left">
             <tmpl:block name="rightBox"/>
         </div>
+        <div class="clearfix"></div>
     </div>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/plugins/layer/layer.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/plugins/jquery.nicescroll.min.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/plugins/jquery.dropkick-min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/menubar.js"></script>
-    <script>
-        $(function () {
-            $("#rightBox").niceScroll({cursorborder: "none", horizrailenabled: true});
-        });
-
-        function search() {
-            $("#form1").submit();
-        }
-
-        function reset() {
-            var formElements = $("#form1").find("input,select");
-            $.each(formElements, function () {
-                switch (this.nodeName.toLowerCase()) {
-                    case "input":
-                        $(this).val("");
-                        break;
-                    case "select":
-                        $(this).find("option:first").attr('selected', 'selected');
-                        break;
-                }
-            });
-            search();
-        }
-    </script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/common.js"></script>
 </tmpl:block>
 <tmpl:block name="page_script"/>
 </body>

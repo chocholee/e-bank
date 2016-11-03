@@ -60,12 +60,12 @@ public class RoleService implements IRoleService {
 
     @Override
     public RoleEntity save(RoleCommand command) {
-        RoleEntity parent = this.findById(command.getParent().getId());
+//        RoleEntity parent = this.findById(command.getParent().getId());
         RoleEntity entity = new RoleEntity(
                 command.getName(),
                 command.getDescription(),
                 command.getOrder(),
-                parent,
+                null,
                 null
         );
         roleRepository.save(entity);
@@ -75,11 +75,11 @@ public class RoleService implements IRoleService {
     @Override
     public RoleEntity update(RoleCommand command) {
         RoleEntity entity = this.findById(command.getId());
-        RoleEntity parent = this.findById(command.getParent().getId());
+//        RoleEntity parent = this.findById(command.getParent().getId());
         entity.setName(command.getName());
         entity.setDescription(command.getDescription());
         entity.setOrder(command.getOrder());
-        entity.setParent(parent);
+//        entity.setParent(parent);
         roleRepository.update(entity);
         return entity;
     }

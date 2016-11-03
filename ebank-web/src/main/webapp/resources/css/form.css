@@ -1,0 +1,6 @@
+body{width:550px;margin:0 auto !important;background-color: inherit;}
+.block{margin:20px 0;padding:20px;border:1px solid #e6e6e6;}
+.red-star{background:url(../images/red_start.png) no-repeat 100% 12.5px;}
+.layui-form-item {margin-bottom:10px;}
+.layui-input-block{margin-left:120px !important;}
+.layui-form-label {width: 90px !important;}

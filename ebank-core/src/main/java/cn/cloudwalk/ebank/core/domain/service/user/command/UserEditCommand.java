@@ -14,9 +14,6 @@ public class UserEditCommand extends AbstractCommand {
 
     private String id;
 
-    @NotBlank(message = "{UserEditCommand.username.NotBlank}")
-    private String username;
-
     private String realname;
 
     private String phone;
@@ -33,10 +30,6 @@ public class UserEditCommand extends AbstractCommand {
 
     public String getId() {
         return id;
-    }
-
-    public String getUsername() {
-        return username;
     }
 
     public String getRealname() {
@@ -69,10 +62,6 @@ public class UserEditCommand extends AbstractCommand {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public void setRealname(String realname) {

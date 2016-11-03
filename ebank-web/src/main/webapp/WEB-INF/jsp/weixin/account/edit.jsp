@@ -6,137 +6,96 @@
 <tmpl:override name="title">编辑微信公众号</tmpl:override>
 
 <tmpl:override name="page_css">
-    <link href="${pageContext.request.contextPath}/resources/css/weixin-account.css" rel="stylesheet" type="text/css"/>
+    <link href="${pageContext.request.contextPath}/resources/css/form.css" rel="stylesheet" type="text/css">
+    <link href="${pageContext.request.contextPath}/resources/js/plugins/layui/css/layui.css" rel="stylesheet" type="text/css">
 </tmpl:override>
 
 <tmpl:override name="body">
-    <div style="overflow:hidden;width:auto;box-sizing:border-box;background:#fff;border-left:1px solid #ccc;
-	    border-bottom:1px solid #dedede;border-right:1px solid #dedede;padding:0 33px;">
-        <span class="title">微信公众号</span>
-        <form id="form1" action="/weixin/account/edit/${account.id}" method="post">
-            <table class="table" cellspacing="0">
-                <tr>
-                    <td class="first-td">公众号名称</td>
-                    <td>
-                        <input class="form-control" type="text" name="name" value="${account.name}">
-                    </td>
-                </tr>
-                <tr>
-                    <td class="first-td">公众号Token</td>
-                    <td>
-                        <input class="form-control" type="text" name="token" value="${account.token}">
-                    </td>
-                </tr>
-                <tr>
-                    <td class="first-td">公众号微信号</td>
-                    <td>
-                        <input class="form-control" type="text" name="number" value="${account.number}">
-                    </td>
-                </tr>
-                <tr>
-                    <td class="first-td">公众号微信号(原始ID)</td>
-                    <td>
-                        <input class="form-control" type="text" name="accountId" value="${account.accountId}">
-                    </td>
-                </tr>
-                <tr>
-                    <td class="first-td">公众号appId</td>
-                    <td>
-                        <input class="form-control" type="text" name="appId" value="${account.appId}">
-                    </td>
-                </tr>
-                <tr>
-                    <td class="first-td">公众号appSecret</td>
-                    <td>
-                        <input class="form-control" type="text" name="appSecret" value="${account.appSecret}">
-                    </td>
-                </tr>
-                <tr>
-                    <td class="first-td">公众号email</td>
-                    <td>
-                        <input class="form-control" type="text" name="email" value="${account.email}">
-                    </td>
-                </tr>
-                <tr>
-                    <td class="first-td">公众号描述</td>
-                    <td>
-                        <input class="form-control" type="text" name="description" value="${account.description}">
-                    </td>
-                </tr>
-                <tr>
-                    <td class="first-td">公众号类型</td>
-                    <td>
-                        <c:if test="${account.type ne null}">
-                            <select class="form-control" name="type" id="type">
-                                <option value="">请选择</option>
-                                <c:choose>
-                                    <c:when test="${account.type eq 'SERVICE'}">
-                                        <option value="SERVICE" selected>服务号</option>
-                                        <option value="SUBSCRIPTION">订阅号</option>
-                                        <option value="ENTERPRISE">企业号</option>
-                                    </c:when>
-                                    <c:when test="${account.type eq 'SUBSCRIPTION'}">
-                                        <option value="SERVICE">服务号</option>
-                                        <option value="SUBSCRIPTION" selected>订阅号</option>
-                                        <option value="ENTERPRISE">企业号</option>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <option value="SERVICE">服务号</option>
-                                        <option value="SUBSCRIPTION">订阅号</option>
-                                        <option value="ENTERPRISE" selected>企业号</option>
-                                    </c:otherwise>
-                                </c:choose>
-                            </select>
-                        </c:if>
-                    </td>
-                </tr>
-            </table>
+    <div class="block">
+        <form class="layui-form" action="${pageContext.request.contextPath}/weixin/account/edit/${account.id}" method="post">
+            <div class="layui-form-item">
+                <label class="layui-form-label">名称</label>
+                <div class="layui-input-block">
+                    <input type="text" name="name" lay-verify="required" autocomplete="off" class="layui-input"
+                           value="${account.name}">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">Token</label>
+                <div class="layui-input-block">
+                    <input type="text" name="token" lay-verify="required" autocomplete="off" class="layui-input"
+                           value="${account.token}">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">微信号</label>
+                <div class="layui-input-block">
+                    <input type="text" name="number" lay-verify="required" autocomplete="off" class="layui-input"
+                           value="${account.number}">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">原始ID</label>
+                <div class="layui-input-block">
+                    <input type="text" name="accountId" lay-verify="required" autocomplete="off" class="layui-input"
+                           value="${account.accountId}">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">AppId</label>
+                <div class="layui-input-block">
+                    <input type="text" name="appId" lay-verify="required" autocomplete="off" class="layui-input"
+                           value="${account.appId}">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">AppSecret</label>
+                <div class="layui-input-block">
+                    <input type="text" name="appSecret" lay-verify="required" autocomplete="off" class="layui-input"
+                           value="${account.appSecret}">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">Email</label>
+                <div class="layui-input-block">
+                    <input type="text" name="email" lay-verify="required" autocomplete="off" class="layui-input"
+                           value="${account.email}">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">描述</label>
+                <div class="layui-input-block">
+                    <input type="text" name="description" lay-verify="required" autocomplete="off" class="layui-input"
+                           value="${account.description}">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">类型</label>
+                <div class="layui-input-block">
+                    <c:if test="${account.type ne null}">
+                        <select lay-verify="required" name="type" id="type">
+                            <option value="">请选择</option>
+                            <option value="SERVICE" <c:if test="${account.type eq 'SERVICE'}">selected</c:if>>服务号</option>
+                            <option value="SUBSCRIPTION" <c:if test="${account.type eq 'SUBSCRIPTION'}">selected</c:if>>订阅号</option>
+                            <option value="ENTERPRISE" <c:if test="${account.type eq 'ENTERPRISE'}">selected</c:if>>企业号</option>
+                        </select>
+                    </c:if>
+                </div>
+            </div>
         </form>
     </div>
 </tmpl:override>
 <tmpl:override name="page_script">
-    <c:choose>
-        <c:when test="${account eq null}">
-            <script>
-                var parentIndex = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
-                parent.layer.alert('记录不存在', {title: "警告"}, function () {
-                    parent.layer.closeAll(); //再执行关闭所有层
-                });
-            </script>
-        </c:when>
-        <c:otherwise>
-            <script>
-                function tips(message) {
-                    var parentIndex = parent.layer.getFrameIndex(window.name);
-                    var parentWindow = parent.window;
-                    parent.layer.alert(message, function(){
-                        parentWindow.location.reload();
-                        parent.layer.closeAll();
-                    });
-                }
-
-                function edit() {
-                    var form = $("#form1");
-                    $.ajax({
-                        url: form.attr("action"),
-                        type: form.attr("method"),
-                        data: form.serialize(),
-                        success: function (result) {
-                            if (result.type === "SUCCESS") {
-                                tips(result.message);
-                            } else {
-                                if (result.data !== null && result.data !== undefined) {
-                                    // TODO 显示错误信息
-                                } else {
-                                    tips(result.message);
-                                }
-                            }
-                        }
-                    });
-                }
-            </script>
-        </c:otherwise>
-    </c:choose>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/plugins/layui/layui.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/submit.js"></script>
+    <%-- 判断页面是否存在记录 --%>
+    <c:if test="${account eq null}">
+        <script>
+            parent.layer.alert('记录不存在', {title: "警告"}, function () {
+                parent.layer.closeAll(); //再执行关闭所有层
+            });
+        </script>
+    </c:if>
 </tmpl:override>
 
 <%@ include file="../../shared/decorator.jsp" %>

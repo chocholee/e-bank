@@ -56,7 +56,7 @@ public class RoleEntity extends AbstractEntity {
         return super.getVersion();
     }
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", nullable = false, unique = true)
     public String getName() {
         return name;
     }

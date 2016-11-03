@@ -102,7 +102,7 @@
     <mvc:interceptors>
         <mvc:interceptor>
             <mvc:mapping path="/"/>
-            <mvc:mapping path="/weixin/account/list"/>
+            <mvc:mapping path="/**/list"/>
             <bean class="cn.cloudwalk.ebank.web.controller.shared.support.interceptor.CustomMenuInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>

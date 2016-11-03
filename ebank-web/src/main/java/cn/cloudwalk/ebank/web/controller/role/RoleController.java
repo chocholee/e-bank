@@ -8,18 +8,17 @@ import cn.cloudwalk.ebank.core.domain.service.role.command.RoleCommand;
 import cn.cloudwalk.ebank.core.domain.service.role.command.RolePaginationCommand;
 import cn.cloudwalk.ebank.core.repository.Pagination;
 import cn.cloudwalk.ebank.core.support.security.CustomFilterInvocationSecurityMetadataSource;
+import cn.cloudwalk.ebank.web.controller.shared.AlertMessage;
 import cn.cloudwalk.ebank.web.controller.shared.BaseController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -46,83 +45,75 @@ public class RoleController extends BaseController {
     private CustomFilterInvocationSecurityMetadataSource securityMetadataSource;
 
     @RequestMapping("/list")
-    public ModelAndView list(RolePaginationCommand command) {
-        // TODO session
+    public ModelAndView list(@ModelAttribute("role") RolePaginationCommand command) {
         Pagination<RoleEntity> pagination = roleService.pagination(command);
         return new ModelAndView("/role/list", "pagination", pagination);
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.GET)
     public ModelAndView add(@ModelAttribute("role") RoleCommand command, Model model) {
-        // TODO session
-        List<RoleEntity> roleEntities = roleService.findAll();
-        model.addAttribute("roles", roleEntities);
         return new ModelAndView("/role/add");
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public ModelAndView add(@Validated @ModelAttribute("role") RoleCommand command,
-                            BindingResult bindingResult,
-                            RedirectAttributes redirectAttributes) {
-        // TODO session
+    @ResponseBody
+    public AlertMessage add(@Validated @ModelAttribute("role") RoleCommand command,
+                            BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            List<RoleEntity> roleEntities = roleService.findAll();
-            return new ModelAndView("/role/add", "roles", roleEntities);
+            return new AlertMessage(AlertMessage.Type.ERROR, null, bindingResult.getFieldErrors());
         }
 
         try {
             roleService.save(command);
-            return new ModelAndView("redirect:/role/list");
+            return new AlertMessage(AlertMessage.Type.SUCCESS,
+                    getMessageSourceAccessor().getMessage("default.add.success.message"));
+        } catch (DataIntegrityViolationException e) {
+            logger.error(e.getMessage(), e);
+            return new AlertMessage(AlertMessage.Type.ERROR,
+                    getMessageSourceAccessor().getMessage("default.not.unique.message"));
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
-            return null;
+            return new AlertMessage(AlertMessage.Type.ERROR,
+                    getMessageSourceAccessor().getMessage("default.add.failure.message"));
         }
     }
 
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
-    public ModelAndView edit(@ModelAttribute("role") RoleCommand command,
-                             Model model,
-                             RedirectAttributes redirectAttributes) {
-        // TODO session
-        List<RoleEntity> roleEntities = roleService.findAll();
+    public ModelAndView edit(@ModelAttribute("role") RoleCommand command) {
         RoleEntity entity = roleService.findById(command.getId());
-        if (null == entity) {
-            return new ModelAndView("redirect:/role/list");
-        } else {
-            model.addAttribute("role", entity);
-            model.addAttribute("roles", roleEntities);
-            return new ModelAndView("/role/edit");
-        }
+        return new ModelAndView("/role/edit", "role", entity);
     }
 
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.POST)
-    public ModelAndView edit(@Validated @ModelAttribute("role") RoleCommand command,
-                             BindingResult bindingResult,
-                             RedirectAttributes redirectAttributes) {
-        // TODO session
+    @ResponseBody
+    public AlertMessage edit(@Validated @ModelAttribute("role") RoleCommand command,
+                             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            List<RoleEntity> roleEntities = roleService.findAll();
-            return new ModelAndView("/role/add", "roles", roleEntities);
+            return new AlertMessage(AlertMessage.Type.ERROR, null, bindingResult.getFieldErrors());
         }
 
         try {
             roleService.update(command);
-            return new ModelAndView("redirect:/role/list");
+            return new AlertMessage(AlertMessage.Type.SUCCESS,
+                    getMessageSourceAccessor().getMessage("default.edit.success.message"));
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
-            return null;
+            return new AlertMessage(AlertMessage.Type.ERROR,
+                    getMessageSourceAccessor().getMessage("default.edit.failure.message"));
         }
     }
 
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
-    public ModelAndView delete(@PathVariable String id, RedirectAttributes redirectAttributes) {
-        // TODO
+    @ResponseBody
+    public AlertMessage delete(@PathVariable String id) {
         try {
             roleService.delete(id);
-            return new ModelAndView("redirect:/role/list");
+            return new AlertMessage(AlertMessage.Type.SUCCESS,
+                    getMessageSourceAccessor().getMessage("default.delete.success.message"));
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
-            return null;
+            return new AlertMessage(AlertMessage.Type.ERROR,
+                    getMessageSourceAccessor().getMessage("default.delete.failure.message"));
         }
     }
 

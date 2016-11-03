@@ -17,6 +17,8 @@ public interface IUserService {
 
     Pagination<UserEntity> pagination(UserPaginationCommand command);
 
+    Pagination<UserEntity> paginationWithoutSelf(UserPaginationCommand command);
+
     List<UserEntity> findAll();
 
     UserEntity findById(String id);

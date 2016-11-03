@@ -5,6 +5,7 @@ import org.hibernate.FetchMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -38,6 +39,11 @@ public class AbstractHibernateRepository<T, ID extends Serializable> implements 
     @Override
     public List<T> findAll() {
         return getSession().createCriteria(getPersistenceClass()).list();
+    }
+
+    @Override
+    public List<T> findAll(DetachedCriteria dc) {
+        return dc.getExecutableCriteria(getSession()).list();
     }
 
     @Override

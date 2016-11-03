@@ -1,62 +1,105 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: liwenhe
-  Date: 2016/9/28
-  Time: 14:28
-  To change this template use File | Settings | File Templates.
---%>
+<%--suppress ALL --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
+<%@ taglib prefix="tmpl" uri="/jsp-templ.tld" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<html>
-<head>
-    <title>用户创建</title>
-</head>
-<body>
-<form:form action="/user/add" method="post" modelAttribute="user">
-    <div>
-        <form:label path="username">用户名</form:label>
-        <form:input path="username"/>
-        <form:errors path="username"/>
+
+<tmpl:override name="title">新增用户</tmpl:override>
+
+<tmpl:override name="page_css">
+    <link href="${pageContext.request.contextPath}/resources/css/form.css" rel="stylesheet" type="text/css">
+    <link href="${pageContext.request.contextPath}/resources/js/plugins/layui/css/layui.css" rel="stylesheet" type="text/css">
+</tmpl:override>
+
+<tmpl:override name="body">
+    <div class="block">
+        <form class="layui-form" action="${pageContext.request.contextPath}/user/add" method="post">
+            <div class="layui-form-item">
+                <label class="layui-form-label red-star">用户名</label>
+                <div class="layui-input-block">
+                    <input type="text" name="username" lay-verify="required" autocomplete="off" class="layui-input"
+                           value="${user.username}">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label red-star">密码</label>
+                <div class="layui-input-block">
+                    <input type="password" name="password" lay-verify="required" autocomplete="off" class="layui-input"
+                           value="${user.password}">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">真实姓名</label>
+                <div class="layui-input-block">
+                    <input type="text" name="realname" autocomplete="off" class="layui-input"
+                           value="${user.realname}">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">手机号码</label>
+                <div class="layui-input-block">
+                    <input type="text" name="phone" autocomplete="off" class="layui-input"
+                           value="${user.phone}">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">邮箱</label>
+                <div class="layui-input-block">
+                    <input type="text" name="email" autocomplete="off" class="layui-input"
+                           value="${user.email}">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">备注</label>
+                <div class="layui-input-block">
+                    <input type="text" name="remark" autocomplete="off" class="layui-input"
+                           value="${user.remark}">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" id="select-parent-user" type="button">选择父用户</button>
+                </div>
+            </div>
+        </form>
     </div>
-    <div>
-        <form:label path="password">密码</form:label>
-        <form:password path="password"/>
-        <form:errors path="password"/>
-    </div>
-    <div>
-        <form:label path="realname">真实姓名</form:label>
-        <form:input path="realname"/>
-    </div>
-    <div>
-        <form:label path="phone">手机号码</form:label>
-        <form:input path="phone"/>
-    </div>
-    <div>
-        <form:label path="email">邮箱</form:label>
-        <form:input path="email"/>
-    </div>
-    <div>
-        <form:label path="remark">备注</form:label>
-        <form:input id="remark" path="remark"/>
-    </div>
-    <div>
-        <label for="parentId">父用户</label>
-        <select name="parent.id" id="parentId">
-            <option value="">请选择</option>
-            <c:forEach var="tmpUser" items="${users}">
-                <c:choose>
-                    <c:when test="${user.parent ne null && tmpUser.id == user.parent.id}">
-                        <option value="${tmpUser.id}" selected>${tmpUser.username}</option>
-                    </c:when>
-                    <c:otherwise>
-                        <option value="${tmpUser.id}">${tmpUser.username}</option>
-                    </c:otherwise>
-                </c:choose>
-            </c:forEach>
-        </select>
-    </div>
-    <input type="submit" value="创建">
-</form:form>
-</body>
-</html>
+</tmpl:override>
+
+<tmpl:override name="page_script">
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/plugins/layui/layui.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/submit.js"></script>
+    <script type="text/javascript">
+        $("#select-parent-user").on("click", function () {
+            var _this = this;
+            parent.layer.open({
+                type: 2,
+                title: "选择父用户",
+                shadeClose: true,
+                shade: [0.5],
+                area: ['800px', '500px'],
+                content: "${pageContext.request.contextPath}/user/parent/list",
+                maxmin: false,
+                btn: ["确定"],
+                yes: function (index, cLayer) {
+                    var user = { id: undefined, username: undefined };
+                    var iframeWin = parent.window[cLayer.find('iframe')[0]['name']];
+                    iframeWin.select(user);
+                    var inputHidden = "<input type='hidden' name='parent.id' value='" + user.id + "'>";
+                    var inputShow   = "<input type='text' class='layui-input' value='" + user.username + "' disabled>";
+                    var div         = "<div class='layui-form-item'>"
+                                    + "<label class='layui-form-label'>父用户</label>"
+                                    + "<div class='layui-input-block'>"
+                                    + inputHidden
+                                    + inputShow
+                                    + "</div>"
+                                    + "</div>";
+                    if ($("input[name='parent.id']").length != 0) {
+                        $("input[name='parent.id']").parents(".layui-form-item").remove();
+                    }
+                    $(_this).parents(".layui-form-item").before(div);
+                }
+            });
+        });
+    </script>
+</tmpl:override>
+
+<%@ include file="../shared/decorator.jsp" %>

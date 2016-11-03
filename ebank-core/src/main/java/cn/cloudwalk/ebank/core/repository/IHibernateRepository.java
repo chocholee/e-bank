@@ -2,6 +2,7 @@ package cn.cloudwalk.ebank.core.repository;
 
 import org.hibernate.FetchMode;
 import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 
 import java.util.List;
@@ -15,6 +16,8 @@ import java.util.Map;
 public interface IHibernateRepository<T, ID> {
 
     List<T> findAll();
+
+    List<T> findAll(DetachedCriteria dc);
 
     List<T> findAll(List<Criterion> criterions, List<Order> orders, Map<String, FetchMode> fetchModeMap);
 

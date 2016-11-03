@@ -1,49 +1,46 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: liwenhe
-  Date: 2016/9/28
-  Time: 14:28
-  To change this template use File | Settings | File Templates.
---%>
+<%--suppress ALL --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
+<%@ taglib prefix="tmpl" uri="/jsp-templ.tld" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<html>
-<head>
-    <title>角色创建</title>
-</head>
-<body>
-<form:form action="/role/edit/${role.id}" method="post" modelAttribute="role">
-    <div>
-        <form:label path="name">名称</form:label>
-        <form:input path="name"/>
-        <form:errors path="name"/>
+
+<tmpl:override name="title">编辑角色</tmpl:override>
+
+<tmpl:override name="page_css">
+    <link href="${pageContext.request.contextPath}/resources/css/form.css" rel="stylesheet" type="text/css">
+    <link href="${pageContext.request.contextPath}/resources/js/plugins/layui/css/layui.css" rel="stylesheet" type="text/css">
+</tmpl:override>
+
+<tmpl:override name="body">
+    <div class="block">
+        <form class="layui-form" action="${pageContext.request.contextPath}/role/edit/${role.id}" method="post">
+            <div class="layui-form-item">
+                <label class="layui-form-label red-star">名称</label>
+                <div class="layui-input-block">
+                    <input type="text" name="name" lay-verify="required" autocomplete="off" class="layui-input"
+                           value="${role.name}">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">描述</label>
+                <div class="layui-input-block">
+                    <input type="text" name="description" autocomplete="off" class="layui-input"
+                           value="${role.description}">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">排序</label>
+                <div class="layui-input-block">
+                    <input type="text" name="order" autocomplete="off" class="layui-input"
+                           value="${role.order}">
+                </div>
+            </div>
+        </form>
     </div>
-    <div>
-        <form:label path="description">描述</form:label>
-        <form:input path="description"/>
-    </div>
-    <div>
-        <form:label path="order">排序</form:label>
-        <form:input path="order"/>
-    </div>
-    <div>
-        <label for="parentId">父角色</label>
-        <select name="parent.id" id="parentId">
-            <option value="">请选择</option>
-            <c:forEach var="tmpRole" items="${roles}">
-                <c:choose>
-                    <c:when test="${role.parent ne null && tmpRole.id == role.parent.id}">
-                        <option value="${tmpRole.id}" selected>${tmpRole.name}</option>
-                    </c:when>
-                    <c:otherwise>
-                        <option value="${tmpRole.id}">${tmpRole.name}</option>
-                    </c:otherwise>
-                </c:choose>
-            </c:forEach>
-        </select>
-    </div>
-    <input type="submit" value="创建">
-</form:form>
-</body>
-</html>
+</tmpl:override>
+
+<tmpl:override name="page_script">
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/plugins/layui/layui.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/submit.js"></script>
+</tmpl:override>
+
+<%@ include file="../shared/decorator.jsp" %>

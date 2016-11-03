@@ -14,7 +14,7 @@
     <div class="button-wrapper">
         <div class="left button-group-wrapper">
             <div class="button-group mr-20">
-                <a href="javascript:add('${pageContext.request.contextPath}/weixin/account/add');" class="button">
+                <a href="javascript:_add('${pageContext.request.contextPath}/weixin/account/add', '新增', '600px', '600px');" class="button">
                     <img src="${pageContext.request.contextPath}/resources/images/btn_add_n.png" height="18" width="18"
                          alt="添加">
                     <span>添加</span>
@@ -31,7 +31,7 @@
             </div>
         </div>
         <div class="right">
-            <form id="form1" class="form-inline" role="form" action="/weixin/account/list">
+            <form class="form-inline" role="form" action="${pageContext.request.contextPath}/weixin/account/list">
                 <div class="form-group">
                     <label>公众号名称</label>
                     <input name="name" type="text" class="form-control" value="${account.name}">
@@ -41,15 +41,20 @@
                     <input name="appId" type="text" class="form-control" value="${account.appId}">
                 </div>
                 <div class="form-group">
-                    <a href="javascript:search();" class="button"><img
+                    <a href="javascript:void(0);" onclick="_search(this)" class="button"><img
                             src="${pageContext.request.contextPath}/resources/images/btn_search_n.png" alt="查询"
-                            height="18" width="18"><span>查询</span></a>
+                            height="18"
+                            width="18">
+                        <span>查询</span>
+                    </a>
                 </div>
                 <div class="form-group">
-                    <a href="javascript:reset();" class="button"><img
+                    <a href="javascript:void(0);" onclick="_reset(this)" class="button"><img
                             src="${pageContext.request.contextPath}/resources/images/btn_Reset_n.png" alt="重置"
                             height="18"
-                            width="18"><span>重置</span></a>
+                            width="18">
+                        <span>重置</span>
+                    </a>
                 </div>
             </form>
         </div>
@@ -61,15 +66,15 @@
         <table class="table" cellspacing="0">
             <tr>
                 <th></th>
-                <th>公众号名称</th>
-                    <%--<th>公众号token</th>--%>
-                <th>公众号微信号</th>
-                <th>公众号微信号(原始ID)</th>
-                <th>公众号appId</th>
-                <th>公众号appSecret</th>
-                <th>公众号email</th>
-                <th>公众号描述</th>
-                <th>公众号类型</th>
+                <th>名称</th>
+                    <%--<th>token</th>--%>
+                <th>微信号</th>
+                <th>原始ID</th>
+                <th>AppId</th>
+                <th>AppSecret</th>
+                <th>Email</th>
+                <th>描述</th>
+                <th>类型</th>
                 <th>关联用户</th>
                 <th>创建日期</th>
                 <th>操作</th>
@@ -94,12 +99,15 @@
                         </td>
                         <td>${account.createdDate}</td>
                         <td class="last-td">
-                            <a href="javascript:view('${pageContext.request.contextPath}/weixin/account/view/${account.id}')"><img
-                                    src="${pageContext.request.contextPath}/resources/images/eye.png" alt="查看"></a>
-                            <a href="javascript:edit('${pageContext.request.contextPath}/weixin/account/edit/${account.id}')"><img
-                                    src="${pageContext.request.contextPath}/resources/images/edit.png" alt="编辑"></a>
-                            <a href="javascript:remove('${pageContext.request.contextPath}/weixin/account/delete/${account.id}')"><img
-                                    src="${pageContext.request.contextPath}/resources/images/btn_delete_n.png" alt="删除"></a>
+                            <a href="javascript:_view('${pageContext.request.contextPath}/weixin/account/view/${account.id}', '查看', '600px', '600px')" title="查看">
+                                <img src="${pageContext.request.contextPath}/resources/images/eye.png">
+                            </a>
+                            <a href="javascript:_edit('${pageContext.request.contextPath}/weixin/account/edit/${account.id}', '编辑', '600px', '600px')" title="编辑">
+                                <img src="${pageContext.request.contextPath}/resources/images/edit.png">
+                            </a>
+                            <a href="javascript:_delete('${pageContext.request.contextPath}/weixin/account/delete/${account.id}')" title="删除">
+                                <img src="${pageContext.request.contextPath}/resources/images/btn_delete_n.png">
+                            </a>
                         </td>
                     </tr>
                 </c:forEach>
@@ -115,64 +123,17 @@
 </tmpl:override>
 
 <tmpl:override name="page_script">
-    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/plugins/layer/layer.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/plugins/jquery.dropkick-min.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/pagination.js"></script>
     <script>
-        $(function () {
-            $("#table").niceScroll({cursorborder: "none", horizrailenabled: true});
-            $('.select').dropkick();
-        });
-
-        function view(url) {
-            layer.open({
-                type: 2,
-                title: '查看',
-                shadeClose: true,
-                shade: [0.5],
-                area: ['600px', '600px'],
-                content: url,
-                maxmin: false
-            });
-        }
-
-        function add(url) {
-
-        }
-
-        function edit(url) {
-            layer.open({
-                type: 2,
-                title: '编辑',
-                shadeClose: true,
-                shade: [0.5],
-                area: ['600px', '600px'],
-                content: url,
-                maxmin: false,
-                btn: ["确定"],
-                yes: function(index, cLayer){
-                    var iframeWin = window[cLayer.find('iframe')[0]['name']];
-                    iframeWin.edit();
-                }
-            });
-        }
-
-        function remove(url) {
-            layer.alert("真的要删除该记录吗?", {title: "警告"}, function () {
-                $.get(url, function (result) {
-                    layer.alert(result.message, function () {
-                        window.location.reload();
-                    });
-                });
-            });
-        }
-
         function token(url) {
             var checkboxes = $("#table").find("input[type=checkbox]");
             var checkCount = 0;
-            var checkbox   = undefined;
+            var checkbox = undefined;
             $.each(checkboxes, function () {
                 var checked = $(this).is(":checked");
                 if (checked == true) {
-                    checkCount ++;
+                    checkCount++;
                     checkbox = this;
                 }
             });

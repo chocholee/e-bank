@@ -9,6 +9,7 @@ import cn.cloudwalk.ebank.core.domain.service.user.command.UserEditCommand;
 import cn.cloudwalk.ebank.core.domain.service.user.command.UserPaginationCommand;
 import cn.cloudwalk.ebank.core.repository.Pagination;
 import cn.cloudwalk.ebank.core.repository.user.IUserRepository;
+import cn.cloudwalk.ebank.core.support.utils.CustomSecurityContextHolderUtil;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
@@ -56,6 +57,28 @@ public class UserService implements IUserService {
     }
 
     @Override
+    public Pagination<UserEntity> paginationWithoutSelf(UserPaginationCommand command) {
+        // 添加查寻条件
+        List<Criterion> criterions = new ArrayList<>();
+        if (!StringUtils.isEmpty(command.getUsername())) {
+            criterions.add(Restrictions.like("username", command.getUsername(), MatchMode.ANYWHERE));
+        }
+
+        // 不包括自身
+        if (!StringUtils.isEmpty(command.getId())) {
+            criterions.add(Restrictions.ne("id", command.getId()));
+        } else {
+            criterions.add(Restrictions.ne("username", CustomSecurityContextHolderUtil.getUsername()));
+        }
+
+        // 添加排序
+        List<Order> orders = new ArrayList<>();
+        orders.add(Order.desc("createdDate"));
+
+        return userRepository.pagination(command.getPage(), command.getPageSize(), criterions, orders);
+    }
+
+    @Override
     public List<UserEntity> findAll() {
         return userRepository.findAll();
     }
@@ -88,6 +111,13 @@ public class UserService implements IUserService {
         entity.setStatus(UserEntityStatus.ENABLE);
         entity.setCreatedDate(new Date());
         entity.setLoginCount(0);
+
+        // 查找父用户
+        if (null != command.getParent() && !StringUtils.isEmpty(command.getParent().getId())) {
+            UserEntity parent = this.findById(command.getParent().getId());
+            entity.setParent(parent);
+        }
+
         userRepository.save(entity);
         return entity;
     }
@@ -101,6 +131,13 @@ public class UserService implements IUserService {
         entity.setEmail(command.getEmail());
         entity.setRemark(command.getRemark());
         entity.setUpdatedDate(new Date());
+
+        // 查找父用户
+        if (null != command.getParent() && !StringUtils.isEmpty(command.getParent().getId())) {
+            UserEntity parent = this.findById(command.getParent().getId());
+            entity.setParent(parent);
+        }
+
         userRepository.update(entity);
         return entity;
     }

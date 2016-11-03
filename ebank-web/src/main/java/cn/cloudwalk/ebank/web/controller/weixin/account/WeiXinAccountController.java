@@ -39,18 +39,26 @@ public class WeiXinAccountController extends BaseController {
 
     @RequestMapping(value = "/add", method = RequestMethod.GET)
     public ModelAndView add(@ModelAttribute("account") WeiXinAccountCommand command) {
-        return new ModelAndView("/weixinaccount/add");
+        return new ModelAndView("/weixin/account/add");
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public ModelAndView add(@Validated @ModelAttribute("account") WeiXinAccountCommand command,
-                            BindingResult bindingResult,
-                            RedirectAttributes redirectAttributes) {
+    @ResponseBody
+    public AlertMessage add(@Validated @ModelAttribute("account") WeiXinAccountCommand command,
+                            BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("/weixinaccount/add");
+            return new AlertMessage(AlertMessage.Type.ERROR, null, bindingResult.getFieldErrors());
         }
-        weiXinAccountService.save(command);
-        return new ModelAndView("redirect:/weixin/account/list");
+
+        try {
+            weiXinAccountService.save(command);
+            return new AlertMessage(AlertMessage.Type.SUCCESS,
+                    getMessageSourceAccessor().getMessage("default.add.success.message"));
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return new AlertMessage(AlertMessage.Type.ERROR,
+                    getMessageSourceAccessor().getMessage("default.add.failure.message"));
+        }
     }
 
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
@@ -70,11 +78,11 @@ public class WeiXinAccountController extends BaseController {
         try {
             weiXinAccountService.update(command);
             return new AlertMessage(AlertMessage.Type.SUCCESS,
-                    getMessageSourceAccessor().getMessage("WeiXinAccountController.edit.success"));
+                    getMessageSourceAccessor().getMessage("default.edit.success.message"));
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             return new AlertMessage(AlertMessage.Type.ERROR,
-                    getMessageSourceAccessor().getMessage("WeiXinAccountController.edit.error"));
+                    getMessageSourceAccessor().getMessage("default.edit.failure.message"));
         }
     }
 
@@ -90,11 +98,11 @@ public class WeiXinAccountController extends BaseController {
         try {
             weiXinAccountService.delete(id);
             return new AlertMessage(AlertMessage.Type.SUCCESS,
-                    getMessageSourceAccessor().getMessage("WeiXinAccountController.delete.success"));
+                    getMessageSourceAccessor().getMessage("default.delete.success.message"));
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             return new AlertMessage(AlertMessage.Type.ERROR,
-                    getMessageSourceAccessor().getMessage("WeiXinAccountController.delete.error"));
+                    getMessageSourceAccessor().getMessage("default.delete.failure.message"));
         }
     }
 
