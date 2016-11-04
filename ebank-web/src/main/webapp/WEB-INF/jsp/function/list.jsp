@@ -101,7 +101,7 @@
             },
             renderColumns: function(event, data) {
                 var node = data.node, $tdList = $(node.tr).find(">td");
-                $tdList.eq(0).find(".fancytree-title").text(node.data.name);
+//                $tdList.eq(0).find(".fancytree-title").text(node.data.name);
                 $tdList.eq(1).text(node.data.order);
                 var operateElem =  "<a class='mr-5' href=\"javascript:_view('${pageContext.request.contextPath}/function/view/" + node.data.id + "', '查看', '600px', '450px');\" title='查看'>" +
                                             "<img src='${pageContext.request.contextPath}/resources/images/eye.png'>" +

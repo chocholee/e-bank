@@ -40,34 +40,34 @@ CREATE TABLE `cloudwalk_function` (
 -- ----------------------------
 -- Records of cloudwalk_function
 -- ----------------------------
-INSERT INTO `cloudwalk_function` VALUES ('4028a8c457d05fe80157d07f37630002', '', '基础设置', '基础设置', '1000', 'FIRST', '', '0', null, null);
-INSERT INTO `cloudwalk_function` VALUES ('4028a8c457d05fe80157d07f74020003', '', '用户管理', '用户管理', '2000', 'FIRST', '', '0', null, null);
-INSERT INTO `cloudwalk_function` VALUES ('4028a8c457d05fe80157d07fa7130004', '', '微信统计', '微信统计', '3000', 'FIRST', '', '0', null, null);
-INSERT INTO `cloudwalk_function` VALUES ('4028a8c457d05fe80157d07fd58f0005', '', '高级功能', '高级功能', '4000', 'FIRST', '', '0', null, null);
-INSERT INTO `cloudwalk_function` VALUES ('4028a8c457d05fe80157d0800cdb0006', '', '消息管理', '消息管理', '5000', 'FIRST', '', '0', null, null);
-INSERT INTO `cloudwalk_function` VALUES ('4028a8c457d05fe80157d08036eb0007', '', '系统管理', '系统管理', '6000', 'FIRST', '', '0', null, null);
-INSERT INTO `cloudwalk_function` VALUES ('4028a8c457d05fe80157d0812b860008', '', '公众账号管理', '公众账号管理', '1010', 'SECOND', '/weixin/account/list', '0', '4028a8c457d05fe80157d07f37630002', null);
-INSERT INTO `cloudwalk_function` VALUES ('4028a8c457d05fe80157d081742d0009', '', '关注欢迎语', '关注欢迎语', '1020', 'SECOND', '', '0', '4028a8c457d05fe80157d07f37630002', null);
-INSERT INTO `cloudwalk_function` VALUES ('4028a8c457d05fe80157d081b3fe000a', '', '关键字管理', '关键字管理', '1030', 'SECOND', '', '0', '4028a8c457d05fe80157d07f37630002', null);
-INSERT INTO `cloudwalk_function` VALUES ('4028a8c457d05fe80157d08208aa000b', '', '自定义菜单', '自定义菜单', '1040', 'SECOND', '', '0', '4028a8c457d05fe80157d07f37630002', null);
-INSERT INTO `cloudwalk_function` VALUES ('4028a8c457d05fe80157d0828d21000c', '', '微信用户', '微信用户', '2010', 'SECOND', '', '0', '4028a8c457d05fe80157d07f74020003', null);
-INSERT INTO `cloudwalk_function` VALUES ('4028a8c457d05fe80157d082df57000d', '', '微信分组', '微信分组', '2020', 'SECOND', '', '0', '4028a8c457d05fe80157d07f74020003', null);
-INSERT INTO `cloudwalk_function` VALUES ('4028a8c457d05fe80157d083301e000e', '', '用户分析', '用户分析', '3010', 'SECOND', '', '0', '4028a8c457d05fe80157d07fa7130004', null);
-INSERT INTO `cloudwalk_function` VALUES ('4028a8c457d05fe80157d0835e20000f', '', '图文分析', '图文分析', '3020', 'SECOND', '', '0', '4028a8c457d05fe80157d07fa7130004', null);
-INSERT INTO `cloudwalk_function` VALUES ('4028a8c457d05fe80157d08386660010', '', '消息分析', '消息分析', '3030', 'SECOND', '', '0', '4028a8c457d05fe80157d07fa7130004', null);
-INSERT INTO `cloudwalk_function` VALUES ('4028a8c457d05fe80157d083b8700011', '', '接口分析', '接口分析', '3040', 'SECOND', '', '0', '4028a8c457d05fe80157d07fa7130004', null);
-INSERT INTO `cloudwalk_function` VALUES ('4028a8c457d05fe80157d0851b720012', '', '接受消息', '接受消息', '4010', 'SECOND', '', '0', '4028a8c457d05fe80157d07fd58f0005', null);
-INSERT INTO `cloudwalk_function` VALUES ('4028a8c457d05fe80157d0857bd70013', '', '微信二维码', '微信二维码', '4020', 'SECOND', '', '0', '4028a8c457d05fe80157d07fd58f0005', null);
-INSERT INTO `cloudwalk_function` VALUES ('4028a8c457d05fe80157d085af310014', '', '微信场景', '微信场景', '4030', 'SECOND', '', '0', '4028a8c457d05fe80157d07fd58f0005', null);
-INSERT INTO `cloudwalk_function` VALUES ('4028a8c457d05fe80157d085deb70015', '', '扩展接口', '扩展接口', '4040', 'SECOND', '', '0', '4028a8c457d05fe80157d07fd58f0005', null);
-INSERT INTO `cloudwalk_function` VALUES ('4028a8c457d05fe80157d086418e0016', '', '文本消息', '文本消息', '5010', 'SECOND', '', '0', '4028a8c457d05fe80157d0800cdb0006', null);
-INSERT INTO `cloudwalk_function` VALUES ('4028a8c457d05fe80157d0867a6e0017', '', '图文消息', '图文消息', '5020', 'SECOND', '', '0', '4028a8c457d05fe80157d0800cdb0006', null);
-INSERT INTO `cloudwalk_function` VALUES ('4028a8c457d05fe80157d086b3c10018', '', '微信群发', '微信群发', '5030', 'SECOND', '', '0', '4028a8c457d05fe80157d0800cdb0006', null);
-INSERT INTO `cloudwalk_function` VALUES ('4028a8c457d05fe80157d086f3cb0019', '', '用户管理', '用户管理', '6010', 'SECOND', '/user/list', '0', '4028a8c457d05fe80157d08036eb0007', null);
-INSERT INTO `cloudwalk_function` VALUES ('4028a8c457d05fe80157d087327d001a', '', '角色管理', '角色管理', '6020', 'SECOND', '/role/list', '0', '4028a8c457d05fe80157d08036eb0007', null);
-INSERT INTO `cloudwalk_function` VALUES ('4028a8c457d05fe80157d0875dbe001b', '', '菜单管理', '菜单管理', '6030', 'SECOND', '/function/list', '0', '4028a8c457d05fe80157d08036eb0007', null);
-INSERT INTO `cloudwalk_function` VALUES ('4028a8c457d05fe80157d0878d56001c', '', '数据字典', '数据字典', '6040', 'SECOND', '', '0', '4028a8c457d05fe80157d08036eb0007', null);
-INSERT INTO `cloudwalk_function` VALUES ('4028a8c457d05fe80157d087cd08001d', '', '图标管理', '图标管理', '6050', 'SECOND', '', '0', '4028a8c457d05fe80157d08036eb0007', null);
+INSERT INTO `cloudwalk_function` VALUES ('4028a8c457d05fe80157d07f37630002', '', '基础设置', '基础设置', '1000', 'FIRST', '', null, null);
+INSERT INTO `cloudwalk_function` VALUES ('4028a8c457d05fe80157d07f74020003', '', '用户管理', '用户管理', '2000', 'FIRST', '', null, null);
+INSERT INTO `cloudwalk_function` VALUES ('4028a8c457d05fe80157d07fa7130004', '', '微信统计', '微信统计', '3000', 'FIRST', '', null, null);
+INSERT INTO `cloudwalk_function` VALUES ('4028a8c457d05fe80157d07fd58f0005', '', '高级功能', '高级功能', '4000', 'FIRST', '', null, null);
+INSERT INTO `cloudwalk_function` VALUES ('4028a8c457d05fe80157d0800cdb0006', '', '消息管理', '消息管理', '5000', 'FIRST', '', null, null);
+INSERT INTO `cloudwalk_function` VALUES ('4028a8c457d05fe80157d08036eb0007', '', '系统管理', '系统管理', '6000', 'FIRST', '', null, null);
+INSERT INTO `cloudwalk_function` VALUES ('4028a8c457d05fe80157d0812b860008', '', '公众账号管理', '公众账号管理', '1010', 'SECOND', '/weixin/account/list', '4028a8c457d05fe80157d07f37630002', null);
+INSERT INTO `cloudwalk_function` VALUES ('4028a8c457d05fe80157d081742d0009', '', '关注欢迎语', '关注欢迎语', '1020', 'SECOND', '', '4028a8c457d05fe80157d07f37630002', null);
+INSERT INTO `cloudwalk_function` VALUES ('4028a8c457d05fe80157d081b3fe000a', '', '关键字管理', '关键字管理', '1030', 'SECOND', '', '4028a8c457d05fe80157d07f37630002', null);
+INSERT INTO `cloudwalk_function` VALUES ('4028a8c457d05fe80157d08208aa000b', '', '自定义菜单', '自定义菜单', '1040', 'SECOND', '', '4028a8c457d05fe80157d07f37630002', null);
+INSERT INTO `cloudwalk_function` VALUES ('4028a8c457d05fe80157d0828d21000c', '', '微信用户', '微信用户', '2010', 'SECOND', '', '4028a8c457d05fe80157d07f74020003', null);
+INSERT INTO `cloudwalk_function` VALUES ('4028a8c457d05fe80157d082df57000d', '', '微信分组', '微信分组', '2020', 'SECOND', '', '4028a8c457d05fe80157d07f74020003', null);
+INSERT INTO `cloudwalk_function` VALUES ('4028a8c457d05fe80157d083301e000e', '', '用户分析', '用户分析', '3010', 'SECOND', '', '4028a8c457d05fe80157d07fa7130004', null);
+INSERT INTO `cloudwalk_function` VALUES ('4028a8c457d05fe80157d0835e20000f', '', '图文分析', '图文分析', '3020', 'SECOND', '', '4028a8c457d05fe80157d07fa7130004', null);
+INSERT INTO `cloudwalk_function` VALUES ('4028a8c457d05fe80157d08386660010', '', '消息分析', '消息分析', '3030', 'SECOND', '', '4028a8c457d05fe80157d07fa7130004', null);
+INSERT INTO `cloudwalk_function` VALUES ('4028a8c457d05fe80157d083b8700011', '', '接口分析', '接口分析', '3040', 'SECOND', '', '4028a8c457d05fe80157d07fa7130004', null);
+INSERT INTO `cloudwalk_function` VALUES ('4028a8c457d05fe80157d0851b720012', '', '接受消息', '接受消息', '4010', 'SECOND', '', '4028a8c457d05fe80157d07fd58f0005', null);
+INSERT INTO `cloudwalk_function` VALUES ('4028a8c457d05fe80157d0857bd70013', '', '微信二维码', '微信二维码', '4020', 'SECOND', '', '4028a8c457d05fe80157d07fd58f0005', null);
+INSERT INTO `cloudwalk_function` VALUES ('4028a8c457d05fe80157d085af310014', '', '微信场景', '微信场景', '4030', 'SECOND', '', '4028a8c457d05fe80157d07fd58f0005', null);
+INSERT INTO `cloudwalk_function` VALUES ('4028a8c457d05fe80157d085deb70015', '', '扩展接口', '扩展接口', '4040', 'SECOND', '', '4028a8c457d05fe80157d07fd58f0005', null);
+INSERT INTO `cloudwalk_function` VALUES ('4028a8c457d05fe80157d086418e0016', '', '文本消息', '文本消息', '5010', 'SECOND', '', '4028a8c457d05fe80157d0800cdb0006', null);
+INSERT INTO `cloudwalk_function` VALUES ('4028a8c457d05fe80157d0867a6e0017', '', '图文消息', '图文消息', '5020', 'SECOND', '', '4028a8c457d05fe80157d0800cdb0006', null);
+INSERT INTO `cloudwalk_function` VALUES ('4028a8c457d05fe80157d086b3c10018', '', '微信群发', '微信群发', '5030', 'SECOND', '', '4028a8c457d05fe80157d0800cdb0006', null);
+INSERT INTO `cloudwalk_function` VALUES ('4028a8c457d05fe80157d086f3cb0019', '', '用户管理', '用户管理', '6010', 'SECOND', '/user/list', '4028a8c457d05fe80157d08036eb0007', null);
+INSERT INTO `cloudwalk_function` VALUES ('4028a8c457d05fe80157d087327d001a', '', '角色管理', '角色管理', '6020', 'SECOND', '/role/list', '4028a8c457d05fe80157d08036eb0007', null);
+INSERT INTO `cloudwalk_function` VALUES ('4028a8c457d05fe80157d0875dbe001b', '', '菜单管理', '菜单管理', '6030', 'SECOND', '/function/list', '4028a8c457d05fe80157d08036eb0007', null);
+INSERT INTO `cloudwalk_function` VALUES ('4028a8c457d05fe80157d0878d56001c', '', '数据字典', '数据字典', '6040', 'SECOND', '', '4028a8c457d05fe80157d08036eb0007', null);
+INSERT INTO `cloudwalk_function` VALUES ('4028a8c457d05fe80157d087cd08001d', '', '图标管理', '图标管理', '6050', 'SECOND', '', '4028a8c457d05fe80157d08036eb0007', null);
 
 -- ----------------------------
 -- Table structure for cloudwalk_icon

@@ -67,11 +67,11 @@
                             <a href="javascript:_edit('${pageContext.request.contextPath}/role/edit/${role.id}', '编辑', '600px', '340px')" title="编辑">
                                 <img src="${pageContext.request.contextPath}/resources/images/edit.png" alt="编辑">
                             </a>
-                            <a href="javascript:_delete('${pageContext.request.contextPath}/role/delete/${role.id}')">
-                                <img src="${pageContext.request.contextPath}/resources/images/btn_delete_n.png" alt="删除" title="删除">
+                            <a href="javascript:_delete('${pageContext.request.contextPath}/role/delete/${role.id}')" title="删除">
+                                <img src="${pageContext.request.contextPath}/resources/images/btn_delete_n.png" alt="删除">
                             </a>
-                            <a href="javascript:authorize('${pageContext.request.contextPath}/role/authorize/${role.id}')">
-                                <img src="${pageContext.request.contextPath}/resources/images/btn_user_n.png" alt="授权" title="授权">
+                            <a href="javascript:_edit('${pageContext.request.contextPath}/role/authorize/${role.id}', '角色授权', '800px', '500px')" title="授权">
+                                <img src="${pageContext.request.contextPath}/resources/images/btn_user_n.png" alt="授权">
                             </a>
                         </td>
                     </tr>

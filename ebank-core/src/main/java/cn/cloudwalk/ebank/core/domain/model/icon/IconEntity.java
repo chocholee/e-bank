@@ -1,7 +1,6 @@
 package cn.cloudwalk.ebank.core.domain.model.icon;
 
 import cn.cloudwalk.ebank.core.support.entity.AbstractEntity;
-import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 
@@ -39,20 +38,6 @@ public class IconEntity extends AbstractEntity {
         this.suffix = suffix;
         this.description = description;
         this.type = type;
-    }
-
-    @Id
-    @GenericGenerator(name = "icon_entity_generator", strategy = "uuid")
-    @GeneratedValue(generator = "icon_entity_generator")
-    @Override
-    public String getId() {
-        return super.getId();
-    }
-
-    @Version
-    @Override
-    public Integer getVersion() {
-        return super.getVersion();
     }
 
     @Column(name = "name")

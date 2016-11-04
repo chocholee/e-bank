@@ -3,9 +3,9 @@ package cn.cloudwalk.ebank.core.domain.model.function;
 import cn.cloudwalk.ebank.core.domain.model.icon.IconEntity;
 import cn.cloudwalk.ebank.core.domain.model.role.RoleEntity;
 import cn.cloudwalk.ebank.core.support.entity.AbstractEntity;
-import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -33,14 +33,14 @@ public class FunctionEntity extends AbstractEntity {
 
     private IconEntity          iconEntity;             // 图标
 
-    private Set<RoleEntity>     roleEntities;           // 关联角色
+    private List<RoleEntity> roleEntities;              // 关联角色
 
     public FunctionEntity() {
         super();
     }
 
     public FunctionEntity(String name, String code, String uri, String description, Integer order, FunctionEntityType type,
-                          FunctionEntity parent, IconEntity iconEntity, Set<RoleEntity> roleEntities) {
+                          FunctionEntity parent, IconEntity iconEntity, List<RoleEntity> roleEntities) {
         this();
         this.name = name;
         this.code = code;
@@ -51,20 +51,6 @@ public class FunctionEntity extends AbstractEntity {
         this.parent = parent;
         this.iconEntity = iconEntity;
         this.roleEntities = roleEntities;
-    }
-
-    @Id
-    @GenericGenerator(name = "function_entity_generator", strategy = "uuid")
-    @GeneratedValue(generator = "function_entity_generator")
-    @Override
-    public String getId() {
-        return super.getId();
-    }
-
-    @Version
-    @Override
-    public Integer getVersion() {
-        return super.getVersion();
     }
 
     @Column(name = "name", nullable = false)
@@ -111,7 +97,7 @@ public class FunctionEntity extends AbstractEntity {
     }
 
     @ManyToMany(mappedBy = "functionEntities", cascade = CascadeType.ALL)
-    public Set<RoleEntity> getRoleEntities() {
+    public List<RoleEntity> getRoleEntities() {
         return roleEntities;
     }
 
@@ -147,7 +133,7 @@ public class FunctionEntity extends AbstractEntity {
         this.iconEntity = iconEntity;
     }
 
-    public void setRoleEntities(Set<RoleEntity> roleEntities) {
+    public void setRoleEntities(List<RoleEntity> roleEntities) {
         this.roleEntities = roleEntities;
     }
 }

@@ -5,6 +5,14 @@
 
 <tmpl:override name="title">微信公众号</tmpl:override>
 
+<tmpl:override name="page_css">
+    <link href="${pageContext.request.contextPath}/resources/js/plugins/layui/css/layui.css" rel="stylesheet" type="text/css">
+    <style type="text/css">
+        .layui-form-switch { margin-top: 0; }
+        .layui-form-onswitch:before { padding-right: 16px; }
+    </style>
+</tmpl:override>
+
 <tmpl:override name="rightBox">
     <%-- 标题 --%>
     <span class="title">微信公众号</span>
@@ -33,11 +41,11 @@
         <div class="right">
             <form class="form-inline" role="form" action="${pageContext.request.contextPath}/weixin/account/list">
                 <div class="form-group">
-                    <label>公众号名称</label>
+                    <label>名称</label>
                     <input name="name" type="text" class="form-control" value="${account.name}">
                 </div>
                 <div class="form-group">
-                    <label>公众号appId</label>
+                    <label>AppId</label>
                     <input name="appId" type="text" class="form-control" value="${account.appId}">
                 </div>
                 <div class="form-group">
@@ -70,11 +78,12 @@
                     <%--<th>token</th>--%>
                 <th>微信号</th>
                 <th>原始ID</th>
-                <th>AppId</th>
-                <th>AppSecret</th>
+                <%--<th>AppId</th>--%>
+                <%--<th>AppSecret</th>--%>
                 <th>Email</th>
                 <th>描述</th>
                 <th>类型</th>
+                <th>授权状态</th>
                 <th>关联用户</th>
                 <th>创建日期</th>
                 <th>操作</th>
@@ -87,11 +96,16 @@
                             <%--<td>${account.token}</td>--%>
                         <td>${account.number}</td>
                         <td>${account.accountId}</td>
-                        <td>${account.appId}</td>
-                        <td>${account.appSecret}</td>
+                        <%--<td>${account.appId}</td>--%>
+                        <%--<td>${account.appSecret}</td>--%>
                         <td>${account.email}</td>
                         <td>${account.description}</td>
                         <td>${account.type.name}</td>
+                        <td>
+                            <div class="layui-unselect layui-form-switch <c:if test="${account.status eq 'AUTHORIZED'}">layui-form-onswitch</c:if>">
+                                <i></i>
+                            </div>
+                        </td>
                         <td>
                             <c:if test="${account.user ne null}">
                                 ${account.user.username}

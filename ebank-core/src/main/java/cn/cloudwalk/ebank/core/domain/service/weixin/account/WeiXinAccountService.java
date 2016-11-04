@@ -2,6 +2,7 @@ package cn.cloudwalk.ebank.core.domain.service.weixin.account;
 
 import cn.cloudwalk.ebank.core.domain.model.user.UserEntity;
 import cn.cloudwalk.ebank.core.domain.model.weixin.account.WeiXinAccountEntity;
+import cn.cloudwalk.ebank.core.domain.model.weixin.account.WeiXinAccountEntityStatus;
 import cn.cloudwalk.ebank.core.domain.service.user.IUserService;
 import cn.cloudwalk.ebank.core.domain.service.weixin.account.command.WeiXinAccountCommand;
 import cn.cloudwalk.ebank.core.domain.service.weixin.account.command.WeiXinAccountPaginationCommand;
@@ -176,6 +177,7 @@ public class WeiXinAccountService implements IWeiXinAccountService {
                 command.getDescription(),
                 new Date(),
                 command.getType(),
+                WeiXinAccountEntityStatus.UNAUTHORIZED,
                 userEntity
         );
         weiXinAccountRepository.save(entity);
@@ -198,6 +200,13 @@ public class WeiXinAccountService implements IWeiXinAccountService {
         entity.setUser(userEntity);
         weiXinAccountRepository.update(entity);
         return entity;
+    }
+
+    @Override
+    public void authorize(String id, WeiXinAccountEntityStatus status) {
+        WeiXinAccountEntity entity = this.findById(id);
+        entity.setStatus(status);
+        weiXinAccountRepository.update(entity);
     }
 
     @Override

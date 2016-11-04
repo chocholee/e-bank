@@ -1,5 +1,10 @@
 package cn.cloudwalk.ebank.core.support.entity;
 
+import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
 
 /**
@@ -7,25 +12,20 @@ import java.io.Serializable;
  *
  * @author 李文禾
  */
+@MappedSuperclass
 public abstract class AbstractEntity implements Serializable {
 
-    private String id;
+    protected String id;
 
-    private Integer version;
-
+    @Id
+    @GenericGenerator(name = "entity_generator", strategy = "uuid")
+    @GeneratedValue(generator = "entity_generator")
     public String getId() {
         return id;
-    }
-
-    public Integer getVersion() {
-        return version;
     }
 
     public void setId(String id) {
         this.id = id;
     }
 
-    public void setVersion(Integer version) {
-        this.version = version;
-    }
 }

@@ -92,7 +92,7 @@ public class RoleService implements IRoleService {
 
     @Override
     public void authorize(String id, String[] functionIds) {
-        Set<FunctionEntity> functionEntities = new HashSet<>();
+        List<FunctionEntity> functionEntities = new ArrayList<>();
         if (null != functionIds) {
             for (String functionId : functionIds) {
                 FunctionEntity functionEntity = functionService.findById(functionId);

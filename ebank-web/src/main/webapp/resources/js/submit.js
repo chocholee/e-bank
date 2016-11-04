@@ -9,7 +9,7 @@ layui.use('form', function(){
         $.ajax({
             url:  this.action,
             type: this.method,
-            data: data.field,
+            data: $(this).serialize(),
             success: function (result) {
                 if (result.type === "SUCCESS") {
                     tips(result.message);
@@ -25,7 +25,7 @@ layui.use('form', function(){
                     }
                 }
             }
-        })
+        });
         return false;
     });
 

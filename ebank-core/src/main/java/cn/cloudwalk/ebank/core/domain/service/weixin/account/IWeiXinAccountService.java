@@ -1,6 +1,7 @@
 package cn.cloudwalk.ebank.core.domain.service.weixin.account;
 
 import cn.cloudwalk.ebank.core.domain.model.weixin.account.WeiXinAccountEntity;
+import cn.cloudwalk.ebank.core.domain.model.weixin.account.WeiXinAccountEntityStatus;
 import cn.cloudwalk.ebank.core.domain.service.weixin.account.command.WeiXinAccountCommand;
 import cn.cloudwalk.ebank.core.domain.service.weixin.account.command.WeiXinAccountPaginationCommand;
 import cn.cloudwalk.ebank.core.repository.Pagination;
@@ -32,6 +33,8 @@ public interface IWeiXinAccountService {
     WeiXinAccountEntity save(WeiXinAccountCommand command);
 
     WeiXinAccountEntity update(WeiXinAccountCommand command);
+
+    void authorize(String id, WeiXinAccountEntityStatus status);
 
     void delete(String id);
 

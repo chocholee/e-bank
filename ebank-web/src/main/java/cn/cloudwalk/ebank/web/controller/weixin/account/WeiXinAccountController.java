@@ -112,11 +112,11 @@ public class WeiXinAccountController extends BaseController {
         try {
             weiXinAccountService.token(id);
             return new AlertMessage(AlertMessage.Type.SUCCESS,
-                    getMessageSourceAccessor().getMessage("WeiXinAccountController.token.success"));
+                    getMessageSourceAccessor().getMessage("WeiXinAccountController.token.success.message"));
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             return new AlertMessage(AlertMessage.Type.ERROR,
-                    getMessageSourceAccessor().getMessage("WeiXinAccountController.token.error"));
+                    getMessageSourceAccessor().getMessage("WeiXinAccountController.token.failure.message"));
         }
     }
 

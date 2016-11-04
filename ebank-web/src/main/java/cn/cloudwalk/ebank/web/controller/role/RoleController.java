@@ -2,7 +2,6 @@ package cn.cloudwalk.ebank.web.controller.role;
 
 import cn.cloudwalk.ebank.core.domain.model.function.FunctionEntity;
 import cn.cloudwalk.ebank.core.domain.model.role.RoleEntity;
-import cn.cloudwalk.ebank.core.domain.service.function.IFunctionService;
 import cn.cloudwalk.ebank.core.domain.service.role.IRoleService;
 import cn.cloudwalk.ebank.core.domain.service.role.command.RoleCommand;
 import cn.cloudwalk.ebank.core.domain.service.role.command.RolePaginationCommand;
@@ -12,16 +11,16 @@ import cn.cloudwalk.ebank.web.controller.shared.AlertMessage;
 import cn.cloudwalk.ebank.web.controller.shared.BaseController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -39,9 +38,6 @@ public class RoleController extends BaseController {
     private IRoleService roleService;
 
     @Autowired
-    private IFunctionService functionService;
-
-    @Autowired
     private CustomFilterInvocationSecurityMetadataSource securityMetadataSource;
 
     @RequestMapping("/list")
@@ -51,7 +47,7 @@ public class RoleController extends BaseController {
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.GET)
-    public ModelAndView add(@ModelAttribute("role") RoleCommand command, Model model) {
+    public ModelAndView add(@ModelAttribute("role") RoleCommand command) {
         return new ModelAndView("/role/add");
     }
 
@@ -117,30 +113,35 @@ public class RoleController extends BaseController {
         }
     }
 
-    @RequestMapping(value = "/authorize/{id}", method = RequestMethod.GET)
-    public ModelAndView authorize(@PathVariable String id, Model model) {
-        // TODO
-        List<FunctionEntity> functionEntities = functionService.findAll();
-        RoleEntity entity = roleService.findById(id);
-        if (null == entity) {
-            return new ModelAndView("redirect:/role/list");
-        } else {
-            model.addAttribute("role", entity);
-            model.addAttribute("functions", functionEntities);
-            return new ModelAndView("/role/authorize");
+    @RequestMapping(value = "/functions/{roleId}", method = RequestMethod.GET)
+    @ResponseBody
+    public List<FunctionEntity> roleFunctions(@PathVariable String roleId) {
+        RoleEntity role = roleService.findById(roleId);
+        List<FunctionEntity> functionEntities = new ArrayList<>();
+        for (FunctionEntity function : role.getFunctionEntities()) {
+            FunctionEntity tmpFunction = new FunctionEntity();
+            BeanUtils.copyProperties(function, tmpFunction, "parent", "iconEntity", "roleEntities");
+            functionEntities.add(tmpFunction);
         }
+        return functionEntities;
+    }
+
+    @RequestMapping(value = "/authorize/{id}", method = RequestMethod.GET)
+    public ModelAndView authorize(@PathVariable String id) {
+        return new ModelAndView("/role/authorize", "id", id);
     }
 
     @RequestMapping(value = "/authorize/{id}", method = RequestMethod.POST)
-    public ModelAndView authorize(@PathVariable String id, String[] functionIds, RedirectAttributes redirectAttributes) {
-        // TODO
+    @ResponseBody
+    public AlertMessage authorize(@PathVariable String id, String[] functionIds) {
         try {
             roleService.authorize(id, functionIds);
-            redirectAttributes.addAttribute("id", id);
-            return new ModelAndView("redirect:/role/authorize/{id}");
+            return new AlertMessage(AlertMessage.Type.SUCCESS,
+                    getMessageSourceAccessor().getMessage("default.edit.success.message"));
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
-            return null;
+            return new AlertMessage(AlertMessage.Type.ERROR,
+                    getMessageSourceAccessor().getMessage("default.edit.failure.message"));
         } finally {
             securityMetadataSource.init();
         }

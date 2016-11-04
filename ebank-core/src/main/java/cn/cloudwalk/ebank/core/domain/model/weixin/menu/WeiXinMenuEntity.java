@@ -2,7 +2,6 @@ package cn.cloudwalk.ebank.core.domain.model.weixin.menu;
 
 import cn.cloudwalk.ebank.core.domain.model.weixin.account.WeiXinAccountEntity;
 import cn.cloudwalk.ebank.core.support.entity.AbstractEntity;
-import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 
@@ -50,20 +49,6 @@ public class WeiXinMenuEntity extends AbstractEntity {
         this.msgType = msgType;
         this.parent = parent;
         this.accountEntity = accountEntity;
-    }
-
-    @Id
-    @GenericGenerator(name = "weixin_menu_entity_generator", strategy = "uuid")
-    @GeneratedValue(generator = "weixin_menu_entity_generator")
-    @Override
-    public String getId() {
-        return super.getId();
-    }
-
-    @Version
-    @Override
-    public Integer getVersion() {
-        return super.getVersion();
     }
 
     @Column(name = "name")

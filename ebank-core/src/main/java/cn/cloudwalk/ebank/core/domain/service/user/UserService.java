@@ -179,7 +179,7 @@ public class UserService implements IUserService {
 
     @Override
     public void authorize(String id, String[] roleIds) {
-        Set<RoleEntity> roleEntities = new HashSet<>();
+        List<RoleEntity> roleEntities = new ArrayList<>();
         if (null != roleIds) {
             for (String roleId : roleIds) {
                 RoleEntity roleEntity = roleService.findById(roleId);

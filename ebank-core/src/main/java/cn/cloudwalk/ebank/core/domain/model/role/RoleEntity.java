@@ -3,10 +3,9 @@ package cn.cloudwalk.ebank.core.domain.model.role;
 import cn.cloudwalk.ebank.core.domain.model.function.FunctionEntity;
 import cn.cloudwalk.ebank.core.domain.model.user.UserEntity;
 import cn.cloudwalk.ebank.core.support.entity.AbstractEntity;
-import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.util.List;
 
 /**
  * Created by liwenhe on 2016/9/21.
@@ -25,35 +24,21 @@ public class RoleEntity extends AbstractEntity {
 
     private RoleEntity          parent;                 // 父角色
 
-    private Set<UserEntity>     userEntities;           // 关联用户
+    private List<UserEntity> userEntities;              // 关联用户
 
-    private Set<FunctionEntity> functionEntities;       // 关联资源
+    private List<FunctionEntity> functionEntities;      // 关联资源
 
     public RoleEntity() {
         super();
     }
 
-    public RoleEntity(String name, String description, Integer order, RoleEntity parent, Set<FunctionEntity> functionEntities) {
+    public RoleEntity(String name, String description, Integer order, RoleEntity parent, List<FunctionEntity> functionEntities) {
         this();
         this.name = name;
         this.description = description;
         this.order = order;
         this.parent = parent;
         this.functionEntities = functionEntities;
-    }
-
-    @Id
-    @GenericGenerator(name = "role_entity_generator", strategy = "uuid")
-    @GeneratedValue(generator = "role_entity_generator")
-    @Override
-    public String getId() {
-        return super.getId();
-    }
-
-    @Version
-    @Override
-    public Integer getVersion() {
-        return super.getVersion();
     }
 
     @Column(name = "name", nullable = false, unique = true)
@@ -79,7 +64,7 @@ public class RoleEntity extends AbstractEntity {
 
     @ManyToMany(mappedBy = "roleEntities",
             cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH, CascadeType.MERGE})
-    public Set<UserEntity> getUserEntities() {
+    public List<UserEntity> getUserEntities() {
         return userEntities;
     }
 
@@ -90,7 +75,7 @@ public class RoleEntity extends AbstractEntity {
             inverseJoinColumns =
             @JoinColumn(name = "function_id", referencedColumnName = "id")
     )
-    public Set<FunctionEntity> getFunctionEntities() {
+    public List<FunctionEntity> getFunctionEntities() {
         return functionEntities;
     }
 
@@ -110,11 +95,11 @@ public class RoleEntity extends AbstractEntity {
         this.parent = parent;
     }
 
-    public void setUserEntities(Set<UserEntity> userEntities) {
+    public void setUserEntities(List<UserEntity> userEntities) {
         this.userEntities = userEntities;
     }
 
-    public void setFunctionEntities(Set<FunctionEntity> functionEntities) {
+    public void setFunctionEntities(List<FunctionEntity> functionEntities) {
         this.functionEntities = functionEntities;
     }
 }

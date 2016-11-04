@@ -1,6 +1,7 @@
 package cn.cloudwalk.ebank.web.controller.weixin;
 
 import cn.cloudwalk.ebank.core.domain.model.weixin.account.WeiXinAccountEntity;
+import cn.cloudwalk.ebank.core.domain.model.weixin.account.WeiXinAccountEntityStatus;
 import cn.cloudwalk.ebank.core.domain.service.weixin.account.IWeiXinAccountService;
 import cn.cloudwalk.ebank.core.domain.service.weixin.WeiXinService;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -48,6 +49,7 @@ public class WeiXinController {
             if (sign.equals(signature)) {
                 response.setCharacterEncoding("UTF-8");
                 response.getWriter().write(echostr);
+                weiXinAccountService.authorize(account.getId(), WeiXinAccountEntityStatus.AUTHORIZED);
             } else {
                 response.setCharacterEncoding("UTF-8");
                 response.getWriter().write("微信加密签名验证失败!");

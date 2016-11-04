@@ -68,6 +68,14 @@
                 </div>
             </div>
             <div class="layui-form-item">
+                <label class="layui-form-label">授权状态</label>
+                <div class="layui-input-block">
+                    <div class="layui-unselect layui-form-switch <c:if test="${account.status eq 'AUTHORIZED'}">layui-form-onswitch</c:if>">
+                        <i></i>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
                 <label class="layui-form-label">创建日期</label>
                 <div class="layui-input-block">
                     <input type="text" name="title" lay-verify="required" autocomplete="off" readonly class="layui-input" value="${account.createdDate}">

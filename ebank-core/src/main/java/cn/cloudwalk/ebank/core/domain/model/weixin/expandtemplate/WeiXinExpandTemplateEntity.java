@@ -2,7 +2,6 @@ package cn.cloudwalk.ebank.core.domain.model.weixin.expandtemplate;
 
 import cn.cloudwalk.ebank.core.domain.model.weixin.account.WeiXinAccountEntity;
 import cn.cloudwalk.ebank.core.support.entity.AbstractEntity;
-import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 
@@ -37,20 +36,6 @@ public class WeiXinExpandTemplateEntity extends AbstractEntity {
         this.description = description;
         this.classname = classname;
         this.accountEntity = accountEntity;
-    }
-
-    @Id
-    @GenericGenerator(name = "weixin_expand_template_entity_generator", strategy = "uuid")
-    @GeneratedValue(generator = "weixin_expand_template_entity_generator")
-    @Override
-    public String getId() {
-        return super.getId();
-    }
-
-    @Version
-    @Override
-    public Integer getVersion() {
-        return super.getVersion();
     }
 
     @Column(name = "name")

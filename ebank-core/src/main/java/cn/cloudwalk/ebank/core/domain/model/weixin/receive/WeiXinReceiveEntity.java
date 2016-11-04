@@ -2,7 +2,6 @@ package cn.cloudwalk.ebank.core.domain.model.weixin.receive;
 
 import cn.cloudwalk.ebank.core.domain.model.weixin.account.WeiXinAccountEntity;
 import cn.cloudwalk.ebank.core.support.entity.AbstractEntity;
-import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -54,20 +53,6 @@ public class WeiXinReceiveEntity extends AbstractEntity {
         this.isResponse = isResponse;
         this.createdDate = createdDate;
         this.accountEntity = accountEntity;
-    }
-
-    @Id
-    @GenericGenerator(name = "weixin_receive_entity_generator", strategy = "uuid")
-    @GeneratedValue(generator = "weixin_receive_entity_generator")
-    @Override
-    public String getId() {
-        return super.getId();
-    }
-
-    @Version
-    @Override
-    public Integer getVersion() {
-        return super.getVersion();
     }
 
     @Column(name = "msg_id")

@@ -2,11 +2,10 @@ package cn.cloudwalk.ebank.core.domain.model.user;
 
 import cn.cloudwalk.ebank.core.domain.model.role.RoleEntity;
 import cn.cloudwalk.ebank.core.support.entity.AbstractEntity;
-import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 /**
  * Created by liwenhe on 2016/9/21.
@@ -45,7 +44,7 @@ public class UserEntity extends AbstractEntity {
 
     private UserEntity          parent;                 // 父用户
 
-    private Set<RoleEntity>     roleEntities;           // 关联角色
+    private List<RoleEntity> roleEntities;              // 关联角色
 
     public UserEntity() {
         super();
@@ -53,7 +52,7 @@ public class UserEntity extends AbstractEntity {
 
     public UserEntity(String username, String password, String salt, String realname, String phone, String email,
                       String remark, Integer loginCount, Date loginDate, Date lastLoginDate, Date createdDate,
-                      Date updatedDate, UserEntityStatus status, UserEntity parent, Set<RoleEntity> roleEntities) {
+                      Date updatedDate, UserEntityStatus status, UserEntity parent, List<RoleEntity> roleEntities) {
         this();
         this.username = username;
         this.password = password;
@@ -70,20 +69,6 @@ public class UserEntity extends AbstractEntity {
         this.status = status;
         this.parent = parent;
         this.roleEntities = roleEntities;
-    }
-
-    @Id
-    @GenericGenerator(name = "user_entity_generator", strategy = "uuid")
-    @GeneratedValue(generator = "user_entity_generator")
-    @Override
-    public String getId() {
-        return super.getId();
-    }
-
-    @Version
-    @Override
-    public Integer getVersion() {
-        return super.getVersion();
     }
 
     @Column(name = "username", nullable = false, unique = true)
@@ -165,7 +150,7 @@ public class UserEntity extends AbstractEntity {
             inverseJoinColumns =
             @JoinColumn(name = "role_id", referencedColumnName = "id")
     )
-    public Set<RoleEntity> getRoleEntities() {
+    public List<RoleEntity> getRoleEntities() {
         return roleEntities;
     }
 
@@ -225,7 +210,7 @@ public class UserEntity extends AbstractEntity {
         this.parent = parent;
     }
 
-    public void setRoleEntities(Set<RoleEntity> roleEntities) {
+    public void setRoleEntities(List<RoleEntity> roleEntities) {
         this.roleEntities = roleEntities;
     }
 }
