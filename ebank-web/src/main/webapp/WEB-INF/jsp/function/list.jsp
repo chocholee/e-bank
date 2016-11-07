@@ -19,7 +19,14 @@
     <div class="greyLine"></div>
     <div class="button-wrapper">
         <div class="left button-group-wrapper ">
-            <div class="button-group mr-12">
+            <div class="button-group">
+                <a href="javascript:_add('${pageContext.request.contextPath}/user/add', '新增', '600px', '550px');" class="button">
+                    <img src="${pageContext.request.contextPath}/resources/images/btn_add_n.png" height="18" width="18"
+                         alt="添加">
+                    <span>添加</span>
+                </a>
+            </div>
+            <div class="button-group">
                 <a href="javascript:void(0);" class="button" id="expand">
                     <img src="${pageContext.request.contextPath}/resources/images/ico_nav_Monitor_h.png" height="18"
                          width="18" alt="">

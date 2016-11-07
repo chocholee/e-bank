@@ -132,6 +132,10 @@ public class UserService implements IUserService {
         entity.setRemark(command.getRemark());
         entity.setUpdatedDate(new Date());
 
+        // 登陆日期
+        if (null != command.getLoginDate()) entity.setLoginDate(command.getLoginDate());
+        if (null != command.getLastLoginDate()) entity.setLastLoginDate(command.getLastLoginDate());
+
         // 查找父用户
         if (null != command.getParent() && !StringUtils.isEmpty(command.getParent().getId())) {
             UserEntity parent = this.findById(command.getParent().getId());

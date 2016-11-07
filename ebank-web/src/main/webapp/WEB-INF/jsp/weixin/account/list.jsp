@@ -21,7 +21,7 @@
     <%-- 条件查询及按钮操作区域 --%>
     <div class="button-wrapper">
         <div class="left button-group-wrapper">
-            <div class="button-group mr-20">
+            <div class="button-group">
                 <a href="javascript:_add('${pageContext.request.contextPath}/weixin/account/add', '新增', '600px', '600px');" class="button">
                     <img src="${pageContext.request.contextPath}/resources/images/btn_add_n.png" height="18" width="18"
                          alt="添加">

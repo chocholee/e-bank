@@ -56,7 +56,7 @@ img {border: 0}
 .button-group{display:inline-block;}
 .button-group-wrapper{line-height:70px;}
 /*表单*/
-.form-inline .form-group {display:inline-block;margin-left: 20px;line-height:70px;}
+.form-inline .form-group {display:inline-block;line-height:70px;}
 .form-group label{text-align: right;margin-right:10px;display:inline-block;}
 .form-control{height:30px;border:1px solid #e6e6e6;outline:0;padding:0 10px;}
 .form-group .button{display:inline-block;}

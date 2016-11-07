@@ -25,6 +25,10 @@ public class CustomPostUserDetailsChecker implements UserDetailsChecker {
         UserEntity entity = userService.findByUsername(user.getUsername());
         UserEditCommand command = new UserEditCommand();
         command.setId(entity.getId());
+        command.setRealname(entity.getRealname());
+        command.setPhone(entity.getPhone());
+        command.setEmail(entity.getEmail());
+        command.setRemark(entity.getRemark());
         command.setLastLoginDate(entity.getLoginDate());
         command.setLoginDate(new Date());
         userService.update(command);

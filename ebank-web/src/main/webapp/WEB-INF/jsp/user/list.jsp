@@ -63,8 +63,6 @@
                 <th>用户名</th>
                 <th>真实姓名</th>
                 <th>父用户</th>
-                <th>登录日期</th>
-                <th>上次登录日期</th>
                 <th>创建日期</th>
                 <th>更新日期</th>
                 <th>状态</th>
@@ -76,8 +74,6 @@
                         <td>${user.username}</td>
                         <td>${user.realname}</td>
                         <td><c:if test="${user.parent ne null}">${user.parent.username}</c:if></td>
-                        <td>${user.loginDate}</td>
-                        <td>${user.lastLoginDate}</td>
                         <td>${user.createdDate}</td>
                         <td>${user.updatedDate}</td>
                         <td>
