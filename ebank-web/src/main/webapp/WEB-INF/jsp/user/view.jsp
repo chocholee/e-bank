@@ -114,39 +114,6 @@
             });
         </script>
     </c:if>
-    <script type="text/javascript">
-        $("#select-parent-user").on("click", function () {
-            var _this = this;
-            parent.layer.open({
-                type: 2,
-                title: "选择父用户",
-                shadeClose: true,
-                shade: [0.5],
-                area: ['800px', '500px'],
-                content: "${pageContext.request.contextPath}/user/parent/list",
-                maxmin: false,
-                btn: ["确定"],
-                yes: function (index, cLayer) {
-                    var user = { id: undefined, username: undefined };
-                    var iframeWin = parent.window[cLayer.find('iframe')[0]['name']];
-                    iframeWin.select(user);
-                    var inputHidden = "<input type='hidden' name='parent.id' value='" + user.id + "'>";
-                    var inputShow   = "<input type='text' class='layui-input' value='" + user.username + "' disabled>";
-                    var div         = "<div class='layui-form-item'>"
-                            + "<label class='layui-form-label'>父用户</label>"
-                            + "<div class='layui-input-block'>"
-                            + inputHidden
-                            + inputShow
-                            + "</div>"
-                            + "</div>";
-                    if ($("input[name='parent.id']").length != 0) {
-                        $("input[name='parent.id']").parents(".layui-form-item").remove();
-                    }
-                    $(_this).parents(".layui-form-item").before(div);
-                }
-            });
-        });
-    </script>
 </tmpl:override>
 
 <%@ include file="../shared/decorator.jsp" %>

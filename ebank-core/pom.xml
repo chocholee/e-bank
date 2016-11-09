@@ -168,6 +168,12 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload -->
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>com.arm4j.weixin</groupId>
             <artifactId>arm4j-weixin</artifactId>

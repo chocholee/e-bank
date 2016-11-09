@@ -18,8 +18,6 @@ public class FunctionCommand extends AbstractCommand {
     @NotBlank(message = "{FunctionCommand.name.NotBlank}")
     private String              name;                   // 功能名称
 
-    private String              code;                   // 功能编码
-
     private String              uri;                    // 功能标识
 
     private String              iconId;                 // 功能图标
@@ -39,10 +37,6 @@ public class FunctionCommand extends AbstractCommand {
 
     public String getName() {
         return name;
-    }
-
-    public String getCode() {
-        return code;
     }
 
     public String getUri() {
@@ -75,10 +69,6 @@ public class FunctionCommand extends AbstractCommand {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
     }
 
     public void setUri(String uri) {

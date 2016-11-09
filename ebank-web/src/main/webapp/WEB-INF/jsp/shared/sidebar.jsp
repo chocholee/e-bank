@@ -16,9 +16,10 @@
                         <a href="javascript:void(0);">
                             <c:choose>
                                 <c:when test="${firstFunc.iconEntity ne null}">
-                                    <img src="${pageContext.request.contextPath}${firstFunc.iconEntity.beforeHoverPath}"
-                                         data-src-before="${pageContext.request.contextPath}${firstFunc.iconEntity.beforeHoverPath}"
-                                         data-src-after="${pageContext.request.contextPath}${firstFunc.iconEntity.afterHoverPath}">
+                                    <img src="${iconHost}/${firstFunc.iconEntity.beforeHoverPath}"
+                                         data-src-before="${iconHost}/${firstFunc.iconEntity.beforeHoverPath}"
+                                         data-src-after="${iconHost}/${firstFunc.iconEntity.afterHoverPath}" width="18"
+                                         height="18">
                                 </c:when>
                                 <c:otherwise>
                                     <img src="" data-src-before="" data-src-after="">
@@ -38,9 +39,10 @@
                         <a href="${firstFunc.uri}">
                             <c:choose>
                                 <c:when test="${firstFunc.iconEntity ne null}">
-                                    <img src="${pageContext.request.contextPath}${firstFunc.iconEntity.beforeHoverPath}"
-                                         data-src-before="${pageContext.request.contextPath}${firstFunc.iconEntity.beforeHoverPath}"
-                                         data-src-after="${pageContext.request.contextPath}${firstFunc.iconEntity.afterHoverPath}">
+                                    <img src="${iconHost}/${firstFunc.iconEntity.beforeHoverPath}"
+                                         data-src-before="${iconHost}/${firstFunc.iconEntity.beforeHoverPath}"
+                                         data-src-after="${iconHost}/${firstFunc.iconEntity.afterHoverPath}" width="18"
+                                         height="18">
                                 </c:when>
                                 <c:otherwise>
                                     <img src="" data-src-before="" data-src-after="">

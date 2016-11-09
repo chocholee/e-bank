@@ -10,10 +10,14 @@
        http://www.springframework.org/schema/mvc
        http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
+    <!-- 配置资源 -->
+    <context:property-placeholder file-encoding="utf-8" location="classpath:upload.properties"/>
+
     <bean id="localeResolver" class="org.springframework.web.servlet.i18n.FixedLocaleResolver">
         <property name="defaultLocale" value="zh"/>
     </bean>
 
+    <!-- 配置hibernate验证 -->
     <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
         <property name="providerClass" value="org.hibernate.validator.HibernateValidator"/>
         <property name="validationMessageSource" ref="messageSource"/>
@@ -66,6 +70,7 @@
     <mvc:resources mapping="/resources/css/**" location="/resources/css/"/>
     <mvc:resources mapping="/resources/images/**" location="/resources/images/"/>
     <mvc:resources mapping="/resources/js/**" location="/resources/js/"/>
+    <mvc:resources mapping="/upload/**" location="/resources/upload/"/>
 
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/WEB-INF/jsp/"/>

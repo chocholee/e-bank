@@ -82,7 +82,7 @@
                 yes: function (index, cLayer) {
                     var user = { id: undefined, username: undefined };
                     var iframeWin = parent.window[cLayer.find('iframe')[0]['name']];
-                    iframeWin.select(user);
+                    var result = iframeWin.select(user);
                     var inputHidden = "<input type='hidden' name='parent.id' value='" + user.id + "'>";
                     var inputShow   = "<input type='text' class='layui-input' value='" + user.username + "' disabled>";
                     var div         = "<div class='layui-form-item'>"
@@ -95,7 +95,7 @@
                     if ($("input[name='parent.id']").length != 0) {
                         $("input[name='parent.id']").parents(".layui-form-item").remove();
                     }
-                    $(_this).parents(".layui-form-item").before(div);
+                    if (result) $(_this).parents(".layui-form-item").before(div);
                 }
             });
         });

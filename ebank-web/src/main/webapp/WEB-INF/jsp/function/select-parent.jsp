@@ -3,7 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt_rt" %>
 
-<tmpl:override name="title">角色授权</tmpl:override>
+<tmpl:override name="title">父菜单</tmpl:override>
 
 <tmpl:override name="page_css">
     <link href="${pageContext.request.contextPath}/resources/js/plugins/layui/css/layui.css" rel="stylesheet" type="text/css">
@@ -70,40 +70,18 @@
             source: {
                 url: "${pageContext.request.contextPath}/function/dataset"
             },
-            postProcess: function (event, data) {
-                $.get("${pageContext.request.contextPath}/role/functions/${id}", function (result) {
-                    data.node.visit(function (node) {
-                        node.title = node.data.name;
-                        $.each(result, function () {
-                            if (node.data.id == this.id) {
-                                node.setSelected(true);
-                                return false;
-                            }
-                        });
-                    });
-                    data.tree.render({deep:true});
-                });
-            },
             renderColumns: function(event, data) {
                 var node = data.node, $tdList = $(node.tr).find(">td");
 
                 // 初始化title
                 $tdList.eq(0).find(".fancytree-title").text(node.data.name);
 
-                // 判断checkbox是否选中
-                if (node.isSelected()) {
-                    $tdList.eq(0)
-                            .find(".fancytree-expander")
-                            .after( "<span class='fancytree-checkbox'>" +
-                                    "<input style='display: none;' type='checkbox' name='functionIds' value='" + node.data.id + "' checked='checked'>" +
-                                    "</span>" );
-                } else {
-                    $tdList.eq(0)
-                            .find(".fancytree-expander")
-                            .after( "<span class='fancytree-checkbox'>" +
-                                    "<input style='display: none;' type='checkbox' name='functionIds' value='" + node.data.id + "'>" +
-                                    "</span>" );
-                }
+                $tdList.eq(0)
+                        .find(".fancytree-expander")
+                        .after( "<span class='fancytree-checkbox'>" +
+                                "<input style='display: none;' type='checkbox' name='functionId' value='" + node.data.id + "'>" +
+                                "<input type='hidden' name='functionType' value='" + node.data.type + "'>" +
+                                "</span>" );
 
                 // 展开
                 node.setExpanded(node.isSelected());
@@ -113,11 +91,26 @@
             },
             select: function (event, data) {
                 if (data.targetType == "checkbox") {
-                    $(data.node.tr).find("input[name=functionIds]").attr("checked", data.node.selected);
+                    $(data.node.tr).find("input[name=functionId]").attr("checked", data.node.selected);
                     if (data.node.selected) data.node.setExpanded(data.node.selected);
                 }
             }
         });
+
+        var select = function (_function) {
+            var index = parent.layer.getFrameIndex(window.name);
+            if ($("input[name=functionId]").filter(":checked").length != 1) {
+                parent.layer.alert("请择一条记录进行操作!")
+                return false;
+            } else {
+                _function.id = $("input[name=functionId]").filter(":checked").val();
+                _function.type = $("input[name=functionId]").filter(":checked").siblings("input").val();
+                _function.name = $("input[name=functionId]").filter(":checked")
+                        .parents(".fancytree-checkbox").siblings(".fancytree-title").text();
+                parent.layer.close(index);
+                return true;
+            }
+        }
     </script>
 </tmpl:override>
 

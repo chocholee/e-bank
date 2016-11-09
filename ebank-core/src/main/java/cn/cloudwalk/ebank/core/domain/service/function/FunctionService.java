@@ -125,10 +125,12 @@ public class FunctionService implements IFunctionService {
     @Override
     public FunctionEntity save(FunctionCommand command) {
         IconEntity iconEntity = iconService.findById(command.getIconId());
-        FunctionEntity parent = this.findById(command.getParent().getId());
+        FunctionEntity parent = null;
+        if (null != command.getParent() && !StringUtils.isEmpty(command.getParent().getId())) {
+            parent = this.findById(command.getParent().getId());
+        }
         FunctionEntity entity = new FunctionEntity(
                 command.getName(),
-                command.getCode(),
                 command.getUri(),
                 command.getDescription(),
                 command.getOrder(),
@@ -143,7 +145,21 @@ public class FunctionService implements IFunctionService {
 
     @Override
     public FunctionEntity update(FunctionCommand command) {
-        return null;
+        IconEntity iconEntity = iconService.findById(command.getIconId());
+        FunctionEntity entity = findById(command.getId());
+        FunctionEntity parent = null;
+        if (null != command.getParent() && !StringUtils.isEmpty(command.getParent().getId())) {
+            parent = this.findById(command.getParent().getId());
+        }
+        entity.setName(command.getName());
+        entity.setUri(command.getUri());
+        entity.setDescription(command.getDescription());
+        entity.setOrder(command.getOrder());
+        entity.setType(command.getType());
+        entity.setParent(parent);
+        entity.setIconEntity(iconEntity);
+        functionRepository.update(entity);
+        return entity;
     }
 
     @Override

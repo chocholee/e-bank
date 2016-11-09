@@ -2,7 +2,9 @@ package cn.cloudwalk.ebank.core.domain.model.icon;
 
 import cn.cloudwalk.ebank.core.support.entity.AbstractEntity;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 /**
  * Created by liwenhe on 2016/9/28.
@@ -23,21 +25,18 @@ public class IconEntity extends AbstractEntity {
 
     private String          description;                // 描述
 
-    private IconEntityType  type;                       // 图标类型
-
     public IconEntity() {
         super();
     }
 
     public IconEntity(String name, String beforeHoverPath, String afterHoverPath, String suffix,
-                      String description, IconEntityType type) {
+                      String description) {
         this();
         this.name = name;
         this.beforeHoverPath = beforeHoverPath;
         this.afterHoverPath = afterHoverPath;
         this.suffix = suffix;
         this.description = description;
-        this.type = type;
     }
 
     @Column(name = "name")
@@ -65,12 +64,6 @@ public class IconEntity extends AbstractEntity {
         return description;
     }
 
-    @Column(name = "type")
-    @Enumerated(EnumType.STRING)
-    public IconEntityType getType() {
-        return type;
-    }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -91,7 +84,4 @@ public class IconEntity extends AbstractEntity {
         this.description = description;
     }
 
-    public void setType(IconEntityType type) {
-        this.type = type;
-    }
 }

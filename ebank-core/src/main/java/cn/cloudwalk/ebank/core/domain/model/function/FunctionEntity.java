@@ -19,8 +19,6 @@ public class FunctionEntity extends AbstractEntity {
 
     private String              name;                   // 名称
 
-    private String              code;                   // 编码
-
     private String              uri;                    // 标识
 
     private String              description;            // 描述
@@ -39,11 +37,10 @@ public class FunctionEntity extends AbstractEntity {
         super();
     }
 
-    public FunctionEntity(String name, String code, String uri, String description, Integer order, FunctionEntityType type,
+    public FunctionEntity(String name, String uri, String description, Integer order, FunctionEntityType type,
                           FunctionEntity parent, IconEntity iconEntity, List<RoleEntity> roleEntities) {
         this();
         this.name = name;
-        this.code = code;
         this.uri = uri;
         this.description = description;
         this.order = order;
@@ -53,14 +50,9 @@ public class FunctionEntity extends AbstractEntity {
         this.roleEntities = roleEntities;
     }
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", nullable = false, unique = true)
     public String getName() {
         return name;
-    }
-
-    @Column(name = "code", nullable = false)
-    public String getCode() {
-        return code;
     }
 
     @Column(name = "uri")
@@ -103,10 +95,6 @@ public class FunctionEntity extends AbstractEntity {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
     }
 
     public void setUri(String uri) {

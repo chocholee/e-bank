@@ -99,8 +99,9 @@
             } else {
                 user.id = $(checkbox).val();
                 user.username = $(checkbox).parents("td").next().text();
+                parent.layer.close(index);
+                return true;
             }
-            parent.layer.close(index);
         }
     </script>
 </tmpl:override>

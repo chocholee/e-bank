@@ -34,6 +34,7 @@
         <version.spring.security>4.1.3.RELEASE</version.spring.security>
         <version.validation>1.1.0.Final</version.validation>
         <version.hibernate>5.2.2.Final</version.hibernate>
+        <version.fileupload>1.3.1</version.fileupload>
         <version.arm4j>0.1.0</version.arm4j>
 
         <!-- maven插件版本管理 -->
@@ -281,6 +282,13 @@
                 <groupId>com.github.axet</groupId>
                 <artifactId>kaptcha</artifactId>
                 <version>${version.kaptcha}</version>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload -->
+            <dependency>
+                <groupId>commons-fileupload</groupId>
+                <artifactId>commons-fileupload</artifactId>
+                <version>${version.fileupload}</version>
             </dependency>
 
             <dependency>

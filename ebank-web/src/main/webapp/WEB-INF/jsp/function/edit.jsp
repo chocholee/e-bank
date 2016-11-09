@@ -7,12 +7,13 @@
 
 <tmpl:override name="page_css">
     <link href="${pageContext.request.contextPath}/resources/css/form.css" rel="stylesheet" type="text/css">
-    <link href="${pageContext.request.contextPath}/resources/js/plugins/layui/css/layui.css" rel="stylesheet" type="text/css">
+    <link href="${pageContext.request.contextPath}/resources/js/plugins/layui/css/layui.css" rel="stylesheet"
+          type="text/css">
 </tmpl:override>
 
 <tmpl:override name="body">
     <div class="block">
-        <form class="layui-form" action="${pageContext.request.contextPath}/function/add" method="post">
+        <form class="layui-form" action="${pageContext.request.contextPath}/function/edit/${function.id}" method="post">
             <div class="layui-form-item">
                 <label class="layui-form-label">名称</label>
                 <div class="layui-input-block">
@@ -34,7 +35,14 @@
                         <option value="">请选择</option>
                         <option value="">请选择</option>
                         <c:forEach var="icon" items="${icons}">
-                            <option value="${icon.id}">${icon.name}</option>
+                            <c:choose>
+                                <c:when test="${function.iconEntity ne null && function.iconEntity.id eq icon.id}">
+                                    <option value="${icon.id}" selected>${icon.name}</option>
+                                </c:when>
+                                <c:otherwise>
+                                    <option value="${icon.id}">${icon.name}</option>
+                                </c:otherwise>
+                            </c:choose>
                         </c:forEach>
                     </select>
                 </div>
@@ -44,9 +52,9 @@
                 <div class="layui-input-block layui-form-item-type">
                     <select name="type" lay-verify="required">
                         <option value="">请选择</option>
-                        <option value="FIRST">一级菜单</option>
-                        <option value="SECOND">二级菜单</option>
-                        <option value="THIRD">三级菜单</option>
+                        <option value="FIRST" <c:if test="${function.type eq 'FIRST'}">selected</c:if>>一级菜单</option>
+                        <option value="SECOND" <c:if test="${function.type eq 'SECOND'}">selected</c:if>>二级菜单</option>
+                        <option value="THIRD" <c:if test="${function.type eq 'THIRD'}">selected</c:if>>三级菜单</option>
                     </select>
                 </div>
             </div>
@@ -64,6 +72,15 @@
                            value="${function.description}">
                 </div>
             </div>
+            <c:if test="${function.parent ne null}">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">父菜单</label>
+                    <div class="layui-input-block">
+                        <input type="hidden" name="parent.id" value="${function.parent.id}">
+                        <input type="text" class="layui-input" value="${function.parent.name}" disabled>
+                    </div>
+                </div>
+            </c:if>
             <div class="layui-form-item">
                 <div class="layui-input-block">
                     <button class="layui-btn" id="select-parent-function" type="button">选择父菜单</button>
@@ -74,8 +91,17 @@
 </tmpl:override>
 
 <tmpl:override name="page_script">
-    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/plugins/layui/layui.js"></script>
+    <script type="text/javascript"
+            src="${pageContext.request.contextPath}/resources/js/plugins/layui/layui.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/submit.js"></script>
+    <%-- 判断页面是否存在记录 --%>
+    <c:if test="${function eq null}">
+        <script>
+            parent.layer.alert('记录不存在', {title: "警告"}, function () {
+                parent.layer.closeAll(); //再执行关闭所有层
+            });
+        </script>
+    </c:if>
     <script type="text/javascript">
         $("#select-parent-function").on("click", function () {
             var _this = this;
@@ -89,12 +115,12 @@
                 maxmin: false,
                 btn: ["确定"],
                 yes: function (index, cLayer) {
-                    var _function = { id: undefined, name: undefined };
+                    var _function = {id: undefined, name: undefined};
                     var iframeWin = parent.window[cLayer.find('iframe')[0]['name']];
                     var result = iframeWin.select(_function);
                     var inputHidden = "<input type='hidden' name='parent.id' value='" + _function.id + "'>";
-                    var inputShow   = "<input type='text' class='layui-input' value='" + _function.name + "' disabled>";
-                    var div         = "<div class='layui-form-item'>"
+                    var inputShow = "<input type='text' class='layui-input' value='" + _function.name + "' disabled>";
+                    var div = "<div class='layui-form-item'>"
                             + "<label class='layui-form-label'>父菜单</label>"
                             + "<div class='layui-input-block'>"
                             + inputHidden

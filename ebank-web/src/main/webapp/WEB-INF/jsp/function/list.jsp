@@ -20,7 +20,7 @@
     <div class="button-wrapper">
         <div class="left button-group-wrapper ">
             <div class="button-group">
-                <a href="javascript:_add('${pageContext.request.contextPath}/user/add', '新增', '600px', '550px');" class="button">
+                <a href="javascript:_add('${pageContext.request.contextPath}/function/add', '新增', '600px', '450px');" class="button">
                     <img src="${pageContext.request.contextPath}/resources/images/btn_add_n.png" height="18" width="18"
                          alt="添加">
                     <span>添加</span>
@@ -77,6 +77,8 @@
     <script>
         // 初始化插件
         $("#treetable").fancytree({
+            debugLevel: 0,
+            strings: {loading: "加载中…", loadError: "加载出错!", moreData: "更多…", noData: "没有可用数据."},
             extensions: ["table", "filter"],
             checkbox: false,
             table: {

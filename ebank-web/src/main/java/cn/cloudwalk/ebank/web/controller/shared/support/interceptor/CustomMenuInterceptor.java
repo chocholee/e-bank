@@ -6,6 +6,7 @@ import cn.cloudwalk.ebank.core.domain.service.function.IFunctionService;
 import cn.cloudwalk.ebank.core.support.utils.CustomSecurityContextHolderUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -22,6 +23,9 @@ import java.util.Map;
  * @author 李文禾
  */
 public class CustomMenuInterceptor extends HandlerInterceptorAdapter {
+
+    @Value("${icon.host}")
+    private String iconHost;
 
     @Autowired
     private IFunctionService functionService;
@@ -74,6 +78,7 @@ public class CustomMenuInterceptor extends HandlerInterceptorAdapter {
 
         modelAndView.addObject("firstFuncList", firstFuncCopyList);
         modelAndView.addObject("secondFuncMap", secondFuncCopyMap);
+        modelAndView.addObject("iconHost", iconHost);
     }
 
 }

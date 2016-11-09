@@ -6,6 +6,7 @@ import cn.cloudwalk.ebank.core.domain.service.icon.command.IconCommand;
 import cn.cloudwalk.ebank.core.domain.service.icon.command.IconPaginationCommand;
 import cn.cloudwalk.ebank.core.repository.Pagination;
 import cn.cloudwalk.ebank.core.repository.icon.IIconRepository;
+import cn.cloudwalk.ebank.core.support.utils.CustomUploadUtil;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,8 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,10 +41,12 @@ public class IconService implements IIconService {
         if (!StringUtils.isEmpty(command.getName())) {
             criterions.add(Restrictions.like("name", command.getName()));
         }
-        if (null != command.getType() && !command.getType().isOnlyQuery()) {
-            criterions.add(Restrictions.eq("type", command.getType()));
-        }
         return iconRepository.pagination(command.getPage(), command.getPageSize(), criterions);
+    }
+
+    @Override
+    public List<IconEntity> findAll() {
+        return iconRepository.findAll();
     }
 
     @Override
@@ -50,35 +55,60 @@ public class IconService implements IIconService {
     }
 
     @Override
-    public IconEntity save(IconCommand command) {
+    public IconEntity save(IconCommand command, String tempDir, String saveDir) throws IOException {
         IconEntity entity = new IconEntity(
                 command.getName(),
                 command.getBeforeHoverPath(),
                 command.getAfterHoverPath(),
                 command.getBeforeHoverPath().substring(command.getBeforeHoverPath().indexOf(".")),
-                command.getDescription(),
-                command.getType()
+                command.getDescription()
         );
         iconRepository.save(entity);
+
+        File beforeSrc = new File(tempDir.concat(File.separator).concat(command.getBeforeHoverPath()));
+        File beforeDst = new File(saveDir.concat(File.separator).concat(command.getBeforeHoverPath()));
+        CustomUploadUtil.move(beforeSrc, beforeDst);
+
+        File afterSrc = new File(tempDir.concat(File.separator).concat(command.getAfterHoverPath()));
+        File afterDst = new File(saveDir.concat(File.separator).concat(command.getAfterHoverPath()));
+        CustomUploadUtil.move(afterSrc, afterDst);
+
         return entity;
     }
 
     @Override
-    public IconEntity update(IconCommand command) {
+    public IconEntity update(IconCommand command, String tempDir, String saveDir) throws IOException {
         IconEntity entity = iconRepository.getById(command.getId());
         entity.setName(command.getName());
-        entity.setBeforeHoverPath(command.getBeforeHoverPath());
-        entity.setAfterHoverPath(command.getAfterHoverPath());
+
+        if (!entity.getBeforeHoverPath().equals(command.getBeforeHoverPath())) {
+            entity.setBeforeHoverPath(command.getBeforeHoverPath());
+            File beforeSrc = new File(tempDir.concat(File.separator).concat(command.getBeforeHoverPath()));
+            File beforeDst = new File(saveDir.concat(File.separator).concat(command.getBeforeHoverPath()));
+            CustomUploadUtil.move(beforeSrc, beforeDst);
+        }
+
+        if (!entity.getAfterHoverPath().equals(command.getAfterHoverPath())) {
+            entity.setAfterHoverPath(command.getAfterHoverPath());
+            File afterSrc = new File(tempDir.concat(File.separator).concat(command.getAfterHoverPath()));
+            File afterDst = new File(saveDir.concat(File.separator).concat(command.getAfterHoverPath()));
+            CustomUploadUtil.move(afterSrc, afterDst);
+        }
+
         entity.setSuffix(command.getBeforeHoverPath().substring(command.getBeforeHoverPath().indexOf(".")));
         entity.setDescription(command.getDescription());
-        entity.setType(command.getType());
         iconRepository.update(entity);
         return entity;
     }
 
     @Override
-    public void delete(String id) {
+    public void delete(String id, String saveDir) throws IOException {
         IconEntity entity = iconRepository.getById(id);
         iconRepository.delete(entity);
+
+        File beforeDst = new File(saveDir.concat(File.separator).concat(entity.getBeforeHoverPath()));
+        File afterDst = new File(saveDir.concat(File.separator).concat(entity.getAfterHoverPath()));
+        CustomUploadUtil.delete(beforeDst);
+        CustomUploadUtil.delete(afterDst);
     }
 }
