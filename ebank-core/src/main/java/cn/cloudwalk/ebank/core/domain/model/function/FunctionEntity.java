@@ -5,7 +5,6 @@ import cn.cloudwalk.ebank.core.domain.model.role.RoleEntity;
 import cn.cloudwalk.ebank.core.support.entity.AbstractEntity;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -31,14 +30,14 @@ public class FunctionEntity extends AbstractEntity {
 
     private IconEntity          iconEntity;             // 图标
 
-    private List<RoleEntity> roleEntities;              // 关联角色
+    private Set<RoleEntity>     roleEntities;           // 关联角色
 
     public FunctionEntity() {
         super();
     }
 
     public FunctionEntity(String name, String uri, String description, Integer order, FunctionEntityType type,
-                          FunctionEntity parent, IconEntity iconEntity, List<RoleEntity> roleEntities) {
+                          FunctionEntity parent, IconEntity iconEntity, Set<RoleEntity> roleEntities) {
         this();
         this.name = name;
         this.uri = uri;
@@ -88,8 +87,8 @@ public class FunctionEntity extends AbstractEntity {
         return iconEntity;
     }
 
-    @ManyToMany(mappedBy = "functionEntities", cascade = CascadeType.ALL)
-    public List<RoleEntity> getRoleEntities() {
+    @ManyToMany(mappedBy = "functionEntities")
+    public Set<RoleEntity> getRoleEntities() {
         return roleEntities;
     }
 
@@ -121,7 +120,7 @@ public class FunctionEntity extends AbstractEntity {
         this.iconEntity = iconEntity;
     }
 
-    public void setRoleEntities(List<RoleEntity> roleEntities) {
+    public void setRoleEntities(Set<RoleEntity> roleEntities) {
         this.roleEntities = roleEntities;
     }
 }

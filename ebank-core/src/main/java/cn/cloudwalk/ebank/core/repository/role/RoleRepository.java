@@ -21,7 +21,8 @@ public class RoleRepository extends AbstractHibernateRepository<RoleEntity, Stri
         Criteria criteria = getSession().createCriteria(getPersistenceClass());
         criteria.add(Restrictions.eq("id", id))
                 .setFetchMode("parent", FetchMode.JOIN)
-                .setFetchMode("functionEntities", FetchMode.JOIN);
+                .setFetchMode("functionEntities", FetchMode.JOIN)
+                .setFetchMode("userEntities", FetchMode.JOIN);
         return (RoleEntity) criteria.uniqueResult();
     }
 

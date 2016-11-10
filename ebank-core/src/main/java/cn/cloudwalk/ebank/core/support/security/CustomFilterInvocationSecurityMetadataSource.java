@@ -36,7 +36,7 @@ public class CustomFilterInvocationSecurityMetadataSource implements FilterInvoc
         List<FunctionEntity> functionEntities = functionService.findAll();
         for (FunctionEntity functionEntity : functionEntities) {
             // 查寻function entity的详细数据
-            FunctionEntity functionEntityDetail = functionService.findById(functionEntity.getId());
+            FunctionEntity functionEntityDetail = functionService.findByIdAndFetch(functionEntity.getId());
 
             // 得到角色集合并放入configAttributes中
             List<ConfigAttribute> configAttributes = new ArrayList<>();

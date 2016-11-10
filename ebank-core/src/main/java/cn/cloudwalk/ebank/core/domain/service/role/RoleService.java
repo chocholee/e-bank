@@ -2,11 +2,13 @@ package cn.cloudwalk.ebank.core.domain.service.role;
 
 import cn.cloudwalk.ebank.core.domain.model.function.FunctionEntity;
 import cn.cloudwalk.ebank.core.domain.model.role.RoleEntity;
-import cn.cloudwalk.ebank.core.domain.service.function.IFunctionService;
+import cn.cloudwalk.ebank.core.domain.model.user.UserEntity;
 import cn.cloudwalk.ebank.core.domain.service.role.command.RoleCommand;
 import cn.cloudwalk.ebank.core.domain.service.role.command.RolePaginationCommand;
 import cn.cloudwalk.ebank.core.repository.Pagination;
+import cn.cloudwalk.ebank.core.repository.function.IFunctionRepository;
 import cn.cloudwalk.ebank.core.repository.role.IRoleRepository;
+import cn.cloudwalk.ebank.core.repository.user.IUserRepository;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
@@ -35,7 +37,10 @@ public class RoleService implements IRoleService {
     private IRoleRepository<RoleEntity, String> roleRepository;
 
     @Autowired
-    private IFunctionService functionService;
+    private IUserRepository<UserEntity, String> userRepository;
+
+    @Autowired
+    private IFunctionRepository<FunctionEntity, String> functionRepository;
 
     @Override
     public Pagination<RoleEntity> pagination(RolePaginationCommand command) {
@@ -55,12 +60,16 @@ public class RoleService implements IRoleService {
 
     @Override
     public RoleEntity findById(String id) {
+        return roleRepository.getById(id);
+    }
+
+    @Override
+    public RoleEntity findByIdAndFetch(String id) {
         return roleRepository.findById(id);
     }
 
     @Override
     public RoleEntity save(RoleCommand command) {
-//        RoleEntity parent = this.findById(command.getParent().getId());
         RoleEntity entity = new RoleEntity(
                 command.getName(),
                 command.getDescription(),
@@ -74,12 +83,10 @@ public class RoleService implements IRoleService {
 
     @Override
     public RoleEntity update(RoleCommand command) {
-        RoleEntity entity = this.findById(command.getId());
-//        RoleEntity parent = this.findById(command.getParent().getId());
+        RoleEntity entity = roleRepository.getById(command.getId());
         entity.setName(command.getName());
         entity.setDescription(command.getDescription());
         entity.setOrder(command.getOrder());
-//        entity.setParent(parent);
         roleRepository.update(entity);
         return entity;
     }
@@ -87,19 +94,38 @@ public class RoleService implements IRoleService {
     @Override
     public void delete(String id) {
         RoleEntity entity = this.findById(id);
+
+        // 清空user中包含的role
+        for (UserEntity user : entity.getUserEntities()) {
+            Set<RoleEntity> newRoleEntities = new HashSet<>();
+            for (RoleEntity role : user.getRoleEntities()) {
+                if (!role.getId().equals(id)) {
+                    newRoleEntities.add(role);
+                }
+            }
+            user.setRoleEntities(newRoleEntities);
+            userRepository.update(user);
+        }
+
+        // role删除外键数据
+        entity.setParent(null);
+        entity.setFunctionEntities(null);
+        roleRepository.update(entity);
+
+        // 删除role
         roleRepository.delete(entity);
     }
 
     @Override
     public void authorize(String id, String[] functionIds) {
-        List<FunctionEntity> functionEntities = new ArrayList<>();
+        Set<FunctionEntity> functionEntities = new HashSet<>();
         if (null != functionIds) {
             for (String functionId : functionIds) {
-                FunctionEntity functionEntity = functionService.findById(functionId);
+                FunctionEntity functionEntity = functionRepository.getById(functionId);
                 functionEntities.add(functionEntity);
             }
         }
-        RoleEntity entity = this.findById(id);
+        RoleEntity entity = roleRepository.getById(id);
         entity.setFunctionEntities(functionEntities);
         roleRepository.update(entity);
     }

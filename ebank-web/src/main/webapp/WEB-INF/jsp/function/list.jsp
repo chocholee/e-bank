@@ -94,9 +94,6 @@
                 mode: "dimm",
                 autoExpand:true
             },
-            icon: function(node, data) {
-                data.node.icon = data.node.data.icon;
-            },
             source: {
                 url: "${pageContext.request.contextPath}/function/dataset"
             },
@@ -124,6 +121,7 @@
                 $tdList.eq(2).html(operateElem).css({'text-align': 'center'});
             }
         });
+
         // 展开与折叠
         $("#expand").on("click", function (e) {
             e.preventDefault();

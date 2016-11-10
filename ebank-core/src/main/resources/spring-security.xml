@@ -8,9 +8,15 @@
        http://www.springframework.org/schema/security/spring-security.xsd">
 
     <!-- http配置 -->
+    <security:http pattern="/resources/**" security="none"/>
     <security:http pattern="/favicon.ico" security="none"/>
+    <security:http pattern="/upload/**" security="none"/>
     <security:http use-expressions="true" authentication-manager-ref="authenticationManager"
                    access-decision-manager-ref="accessDecisionManager">
+
+        <!-- 自定义url拦截 -->
+        <security:intercept-url pattern="/captcha" access="permitAll"/>
+        <security:intercept-url pattern="/login" access="permitAll"/>
 
         <security:headers defaults-disabled="false">
             <security:frame-options policy="SAMEORIGIN"/>
@@ -20,10 +26,6 @@
         <security:custom-filter ref="rememberMeFilter" position="REMEMBER_ME_FILTER"/>
         <security:custom-filter ref="authenticationFilterWithCaptcha" before="FORM_LOGIN_FILTER"/>
         <security:custom-filter ref="filterSecurityInterceptor" before="FILTER_SECURITY_INTERCEPTOR"/>
-
-        <!-- 自定义url拦截 -->
-        <security:intercept-url pattern="/login" access="permitAll"/>
-        <security:intercept-url pattern="/captcha" access="permitAll"/>
 
         <!-- 表单登录 -->
         <security:access-denied-handler error-page="/forbidden"/>

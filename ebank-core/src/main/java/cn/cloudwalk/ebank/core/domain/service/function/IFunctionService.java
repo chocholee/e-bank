@@ -18,13 +18,13 @@ public interface IFunctionService {
 
     List<FunctionEntity> findAll();
 
-    List<FunctionEntity> findByIconId(String iconId);
+    List<FunctionEntity> findForFirstMenu(boolean isFetchIcon, boolean isFetchRole);
 
-    List<FunctionEntity> findForFirstMenu();
-
-    List<FunctionEntity> findByParentId(String parentId);
+    List<FunctionEntity> findByParentId(String parentId, boolean isFetchIcon, boolean isFetchRole);
 
     FunctionEntity findById(String id);
+
+    FunctionEntity findByIdAndFetch(String id);
 
     FunctionEntity save(FunctionCommand command);
 

@@ -3,12 +3,14 @@ package cn.cloudwalk.ebank.core.domain.service.user;
 import cn.cloudwalk.ebank.core.domain.model.role.RoleEntity;
 import cn.cloudwalk.ebank.core.domain.model.user.UserEntity;
 import cn.cloudwalk.ebank.core.domain.model.user.UserEntityStatus;
-import cn.cloudwalk.ebank.core.domain.service.role.IRoleService;
+import cn.cloudwalk.ebank.core.domain.model.weixin.account.WeiXinAccountEntity;
 import cn.cloudwalk.ebank.core.domain.service.user.command.UserAddCommand;
 import cn.cloudwalk.ebank.core.domain.service.user.command.UserEditCommand;
 import cn.cloudwalk.ebank.core.domain.service.user.command.UserPaginationCommand;
 import cn.cloudwalk.ebank.core.repository.Pagination;
+import cn.cloudwalk.ebank.core.repository.role.IRoleRepository;
 import cn.cloudwalk.ebank.core.repository.user.IUserRepository;
+import cn.cloudwalk.ebank.core.repository.weixin.account.IWeiXinAccountRepository;
 import cn.cloudwalk.ebank.core.support.utils.CustomSecurityContextHolderUtil;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
@@ -36,7 +38,10 @@ public class UserService implements IUserService {
     private IUserRepository<UserEntity, String> userRepository;
 
     @Autowired
-    private IRoleService roleService;
+    private IRoleRepository<RoleEntity, String> roleRepository;
+
+    @Autowired
+    private IWeiXinAccountRepository<WeiXinAccountEntity, String> weiXinAccountRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -164,6 +169,15 @@ public class UserService implements IUserService {
     @Override
     public void delete(String id) {
         UserEntity entity = this.findById(id);
+
+        // 清空微信公众号与用户表之间的关系
+        WeiXinAccountEntity account = weiXinAccountRepository.findByUsername(entity.getUsername());
+        if (null != account) {
+            account.setUser(null);
+            weiXinAccountRepository.update(account);
+        }
+
+        // 删除用户
         userRepository.delete(entity);
     }
 
@@ -183,10 +197,10 @@ public class UserService implements IUserService {
 
     @Override
     public void authorize(String id, String[] roleIds) {
-        List<RoleEntity> roleEntities = new ArrayList<>();
+        Set<RoleEntity> roleEntities = new HashSet<>();
         if (null != roleIds) {
             for (String roleId : roleIds) {
-                RoleEntity roleEntity = roleService.findById(roleId);
+                RoleEntity roleEntity = roleRepository.findById(roleId);
                 roleEntities.add(roleEntity);
             }
         }

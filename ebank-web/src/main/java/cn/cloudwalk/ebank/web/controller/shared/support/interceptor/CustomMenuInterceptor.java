@@ -40,7 +40,7 @@ public class CustomMenuInterceptor extends HandlerInterceptorAdapter {
         List<String> filterFirstFuncList = new ArrayList<>();
         List<String> filterSecondFuncList = new ArrayList<>();
 
-        List<FunctionEntity> firstFuncList = functionService.findForFirstMenu();
+        List<FunctionEntity> firstFuncList = functionService.findForFirstMenu(true, true);
         for (FunctionEntity func : firstFuncList) {
             // 过滤一级菜单
             if (!filterFirstFuncList.contains(func.getId())) {
@@ -49,7 +49,7 @@ public class CustomMenuInterceptor extends HandlerInterceptorAdapter {
                     boolean hasRole = CustomSecurityContextHolderUtil.hasRole(role.getName());
                     if (hasRole) {
                         FunctionEntity tmpEntity = new FunctionEntity();
-                        BeanUtils.copyProperties(func, tmpEntity, "parent");
+                        BeanUtils.copyProperties(func, tmpEntity, "roleEntities", "parent");
                         firstFuncCopyList.add(tmpEntity);
                         break;
                     }
@@ -58,7 +58,7 @@ public class CustomMenuInterceptor extends HandlerInterceptorAdapter {
 
             // 过滤二级菜单
             List<FunctionEntity> secondFuncCopyList = new ArrayList<>();
-            List<FunctionEntity> secondFuncList = functionService.findByParentId(func.getId());
+            List<FunctionEntity> secondFuncList = functionService.findByParentId(func.getId(), true, true);
             for (FunctionEntity secondFunc : secondFuncList) {
                 if (!filterSecondFuncList.contains(secondFunc.getId())) {
                     filterSecondFuncList.add(secondFunc.getId());

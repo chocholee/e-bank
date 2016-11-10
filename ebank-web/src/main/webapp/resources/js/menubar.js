@@ -30,7 +30,7 @@ $(document).ready(function () {
         $(this).siblings().find("ul").slideUp();
         $(this).children("a").addClass("current");
         $(this).siblings().children("a").removeClass("current");
-        $(this).siblings().find("ul li a").removeClass("active");
+        // $(this).siblings().find("ul li a").removeClass("active");
         if ($(this).find("a img").attr("src") === $(this).find("a img").attr("data-src-before")) {
             $(this).find("a img").attr("src", $(this).find("a img").attr("data-src-after"));
         } else {

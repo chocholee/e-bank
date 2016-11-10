@@ -64,9 +64,6 @@
                 mode: "dimm",
                 autoExpand:true
             },
-            icon: function(node, data) {
-                data.node.icon = data.node.data.icon;
-            },
             source: {
                 url: "${pageContext.request.contextPath}/function/dataset"
             },
@@ -100,15 +97,20 @@
         var select = function (_function) {
             var index = parent.layer.getFrameIndex(window.name);
             if ($("input[name=functionId]").filter(":checked").length != 1) {
-                parent.layer.alert("请择一条记录进行操作!")
+                parent.layer.alert("请择一条记录进行操作!");
                 return false;
             } else {
                 _function.id = $("input[name=functionId]").filter(":checked").val();
                 _function.type = $("input[name=functionId]").filter(":checked").siblings("input").val();
                 _function.name = $("input[name=functionId]").filter(":checked")
                         .parents(".fancytree-checkbox").siblings(".fancytree-title").text();
-                parent.layer.close(index);
-                return true;
+                if (_function.type == "THIRD") {
+                    parent.layer.alert("该记录无法创建子菜单!");
+                    return false;
+                } else {
+                    parent.layer.close(index);
+                    return true;
+                }
             }
         }
     </script>

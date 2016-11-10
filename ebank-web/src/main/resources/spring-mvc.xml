@@ -108,6 +108,8 @@
         <mvc:interceptor>
             <mvc:mapping path="/"/>
             <mvc:mapping path="/**/list"/>
+            <mvc:exclude-mapping path="/user/parent/list"/>
+            <mvc:exclude-mapping path="/function/parent/list"/>
             <bean class="cn.cloudwalk.ebank.web.controller.shared.support.interceptor.CustomMenuInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>

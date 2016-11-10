@@ -116,7 +116,7 @@ public class RoleController extends BaseController {
     @RequestMapping(value = "/functions/{roleId}", method = RequestMethod.GET)
     @ResponseBody
     public List<FunctionEntity> roleFunctions(@PathVariable String roleId) {
-        RoleEntity role = roleService.findById(roleId);
+        RoleEntity role = roleService.findByIdAndFetch(roleId);
         List<FunctionEntity> functionEntities = new ArrayList<>();
         for (FunctionEntity function : role.getFunctionEntities()) {
             FunctionEntity tmpFunction = new FunctionEntity();

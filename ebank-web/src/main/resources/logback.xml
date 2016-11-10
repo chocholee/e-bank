@@ -23,6 +23,7 @@
     </root>
 
     <logger name="org.springframework" level="debug"/>
+    <logger name="org.springframework.web" level="debug"/>
     <logger name="org.hibernate" level="warn"/>
     <logger name="org.apache" level="debug"/>
 </configuration>

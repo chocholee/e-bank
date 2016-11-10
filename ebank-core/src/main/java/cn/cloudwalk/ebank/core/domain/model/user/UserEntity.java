@@ -5,7 +5,7 @@ import cn.cloudwalk.ebank.core.support.entity.AbstractEntity;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 /**
  * Created by liwenhe on 2016/9/21.
@@ -44,7 +44,7 @@ public class UserEntity extends AbstractEntity {
 
     private UserEntity          parent;                 // 父用户
 
-    private List<RoleEntity> roleEntities;              // 关联角色
+    private Set<RoleEntity>     roleEntities;           // 关联角色
 
     public UserEntity() {
         super();
@@ -52,7 +52,7 @@ public class UserEntity extends AbstractEntity {
 
     public UserEntity(String username, String password, String salt, String realname, String phone, String email,
                       String remark, Integer loginCount, Date loginDate, Date lastLoginDate, Date createdDate,
-                      Date updatedDate, UserEntityStatus status, UserEntity parent, List<RoleEntity> roleEntities) {
+                      Date updatedDate, UserEntityStatus status, UserEntity parent, Set<RoleEntity> roleEntities) {
         this();
         this.username = username;
         this.password = password;
@@ -143,14 +143,14 @@ public class UserEntity extends AbstractEntity {
         return parent;
     }
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH, CascadeType.MERGE})
+    @ManyToMany
     @JoinTable(name = "user_role",
             joinColumns =
             @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns =
             @JoinColumn(name = "role_id", referencedColumnName = "id")
     )
-    public List<RoleEntity> getRoleEntities() {
+    public Set<RoleEntity> getRoleEntities() {
         return roleEntities;
     }
 
@@ -210,7 +210,7 @@ public class UserEntity extends AbstractEntity {
         this.parent = parent;
     }
 
-    public void setRoleEntities(List<RoleEntity> roleEntities) {
+    public void setRoleEntities(Set<RoleEntity> roleEntities) {
         this.roleEntities = roleEntities;
     }
 }

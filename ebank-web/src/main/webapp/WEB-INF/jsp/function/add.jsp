@@ -14,7 +14,7 @@
     <div class="block">
         <form class="layui-form" action="${pageContext.request.contextPath}/function/add" method="post">
             <div class="layui-form-item">
-                <label class="layui-form-label">名称</label>
+                <label class="layui-form-label red-star">名称</label>
                 <div class="layui-input-block">
                     <input type="text" name="name" lay-verify="required" autocomplete="off" class="layui-input"
                            value="${function.name}">
@@ -40,13 +40,11 @@
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">类型</label>
+                <label class="layui-form-label red-star">类型</label>
                 <div class="layui-input-block layui-form-item-type">
                     <select name="type" lay-verify="required">
                         <option value="">请选择</option>
                         <option value="FIRST">一级菜单</option>
-                        <option value="SECOND">二级菜单</option>
-                        <option value="THIRD">三级菜单</option>
                     </select>
                 </div>
             </div>

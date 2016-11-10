@@ -64,9 +64,6 @@
                 mode: "dimm",
                 autoExpand:true
             },
-            icon: function(node, data) {
-                data.node.icon = data.node.data.icon;
-            },
             source: {
                 url: "${pageContext.request.contextPath}/function/dataset"
             },

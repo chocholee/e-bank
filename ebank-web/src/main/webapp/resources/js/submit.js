@@ -12,7 +12,11 @@ layui.use('form', function(){
             data: $(this).serialize(),
             success: function (result) {
                 if (result.type === "SUCCESS") {
-                    tips(result.message);
+                    var parentWindow = parent.window;
+                    parent.layer.alert(result.message, function () {
+                        parentWindow.location.reload();
+                        parent.layer.closeAll();
+                    });
                 } else {
                     if (result.data !== null && result.data !== undefined) {
                         $.each(result.data, function () {
@@ -21,21 +25,13 @@ layui.use('form', function(){
                             return false;
                         });
                     } else {
-                        tips(result.message);
+                        parent.layer.alert(result.message);
                     }
                 }
             }
         });
         return false;
     });
-
-    var tips = function (message) {
-        var parentWindow = parent.window;
-        parent.layer.alert(message, function () {
-            parentWindow.location.reload();
-            parent.layer.closeAll();
-        });
-    }
 
     window.submit = function () {
         $(".layui-form").submit();

@@ -20,6 +20,8 @@ public interface IRoleService {
 
     RoleEntity findById(String id);
 
+    RoleEntity findByIdAndFetch(String id);
+
     RoleEntity save(RoleCommand command);
 
     RoleEntity update(RoleCommand command);

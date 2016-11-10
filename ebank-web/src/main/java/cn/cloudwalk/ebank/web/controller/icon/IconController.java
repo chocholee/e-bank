@@ -85,6 +85,7 @@ public class IconController extends BaseController {
         IconEntity entity = iconService.findById(command.getId());
         model.addAttribute("icon", entity);
         model.addAttribute("host", host);
+        model.addAttribute("tempHost", tempHost);
         return new ModelAndView("/icon/edit");
     }
 

@@ -27,7 +27,7 @@
                         <span class="layui-upload-icon"><i class="layui-icon"></i>请上传图片</span>
                     </div>
                     <input type="text" name="beforeHoverPath" lay-verify="required" value="${icon.beforeHoverPath}"
-                           readonly style="border: 0;">
+                           readonly style="border: 0;width: 195px;">
                 </div>
             </div>
             <div class="layui-form-item">
@@ -37,7 +37,7 @@
                         <span class="layui-upload-icon"><i class="layui-icon"></i>请上传图片</span>
                     </div>
                     <input type="text" name="afterHoverPath" lay-verify="required" value="${icon.afterHoverPath}"
-                           readonly style="border: 0;">
+                           readonly style="border: 0;width: 195px;">
                 </div>
             </div>
             <div class="layui-form-item">

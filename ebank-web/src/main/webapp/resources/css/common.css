@@ -43,6 +43,7 @@ img {border: 0}
 #leftbox ul li ul li>a:hover{color:#dc1818;}
 #leftbox ul li ul{display:none;background:#f3f3f3;}
 #leftbox>ul>li>.current{background:url(../images/ico_up.png) 95% center no-repeat;background-color:#d82929;}
+#leftbox>ul>li>.current:hover{color: #fff;}
 #leftbox ul li ul li a{width:100%;}
 .active{color:#dc1818;}
 /*右侧*/

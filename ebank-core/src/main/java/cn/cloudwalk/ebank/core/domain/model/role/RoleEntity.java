@@ -5,7 +5,7 @@ import cn.cloudwalk.ebank.core.domain.model.user.UserEntity;
 import cn.cloudwalk.ebank.core.support.entity.AbstractEntity;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 
 /**
  * Created by liwenhe on 2016/9/21.
@@ -24,15 +24,15 @@ public class RoleEntity extends AbstractEntity {
 
     private RoleEntity          parent;                 // 父角色
 
-    private List<UserEntity> userEntities;              // 关联用户
+    private Set<UserEntity>     userEntities;           // 关联用户
 
-    private List<FunctionEntity> functionEntities;      // 关联资源
+    private Set<FunctionEntity> functionEntities;       // 关联资源
 
     public RoleEntity() {
         super();
     }
 
-    public RoleEntity(String name, String description, Integer order, RoleEntity parent, List<FunctionEntity> functionEntities) {
+    public RoleEntity(String name, String description, Integer order, RoleEntity parent, Set<FunctionEntity> functionEntities) {
         this();
         this.name = name;
         this.description = description;
@@ -62,9 +62,8 @@ public class RoleEntity extends AbstractEntity {
         return parent;
     }
 
-    @ManyToMany(mappedBy = "roleEntities",
-            cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH, CascadeType.MERGE})
-    public List<UserEntity> getUserEntities() {
+    @ManyToMany(mappedBy = "roleEntities")
+    public Set<UserEntity> getUserEntities() {
         return userEntities;
     }
 
@@ -75,7 +74,7 @@ public class RoleEntity extends AbstractEntity {
             inverseJoinColumns =
             @JoinColumn(name = "function_id", referencedColumnName = "id")
     )
-    public List<FunctionEntity> getFunctionEntities() {
+    public Set<FunctionEntity> getFunctionEntities() {
         return functionEntities;
     }
 
@@ -95,11 +94,11 @@ public class RoleEntity extends AbstractEntity {
         this.parent = parent;
     }
 
-    public void setUserEntities(List<UserEntity> userEntities) {
+    public void setUserEntities(Set<UserEntity> userEntities) {
         this.userEntities = userEntities;
     }
 
-    public void setFunctionEntities(List<FunctionEntity> functionEntities) {
+    public void setFunctionEntities(Set<FunctionEntity> functionEntities) {
         this.functionEntities = functionEntities;
     }
 }

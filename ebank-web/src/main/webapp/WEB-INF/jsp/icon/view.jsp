@@ -17,7 +17,7 @@
                 <label class="layui-form-label red-star">名称</label>
                 <div class="layui-input-block">
                     <input type="text" name="name" lay-verify="required" autocomplete="off" class="layui-input"
-                           value="${icon.name}">
+                           value="${icon.name}" disabled>
                 </div>
             </div>
             <div class="layui-form-item">
@@ -40,7 +40,7 @@
                 <label class="layui-form-label">描述</label>
                 <div class="layui-input-block">
                     <input type="text" name="description" autocomplete="off" class="layui-input"
-                           value="${icon.description}">
+                           value="${icon.description}" disabled>
                 </div>
             </div>
         </form>

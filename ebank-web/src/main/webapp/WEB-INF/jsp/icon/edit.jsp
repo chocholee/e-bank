@@ -28,7 +28,7 @@
                     </div>
                     <img height="34" src="${host}/${icon.beforeHoverPath}">
                     <input type="text" name="beforeHoverPath" lay-verify="required" value="${icon.beforeHoverPath}"
-                           readonly style="border: 0;">
+                           readonly style="border: 0;width: 195px;">
                 </div>
             </div>
             <div class="layui-form-item">
@@ -39,7 +39,7 @@
                     </div>
                     <img height="34" src="${host}/${icon.afterHoverPath}">
                     <input type="text" name="afterHoverPath" lay-verify="required" value="${icon.afterHoverPath}"
-                           readonly style="border: 0;">
+                           readonly style="border: 0;width: 195px;">
                 </div>
             </div>
             <div class="layui-form-item">
