@@ -2,13 +2,14 @@
 <%@ taglib prefix="tmpl" uri="/jsp-templ.tld" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt_rt" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <tmpl:override name="title">菜单管理</tmpl:override>
 
 <tmpl:override name="page_css">
     <link href="${pageContext.request.contextPath}/resources/js/plugins/fancytree/css/ui.fancytree.css" rel="stylesheet" type="text/css">
     <style>
-        th { text-align:left;font-weight:500; }
+        th { text-align:center;font-weight:500;padding: 15px 0; }
         thead { background:rgb(244,244,244); }
         tbody tr td { padding-top:5px; padding-bottom: 5px; }
     </style>
@@ -19,13 +20,15 @@
     <div class="greyLine"></div>
     <div class="button-wrapper">
         <div class="left button-group-wrapper ">
-            <div class="button-group">
-                <a href="javascript:_add('${pageContext.request.contextPath}/function/add', '新增', '600px', '450px');" class="button">
-                    <img src="${pageContext.request.contextPath}/resources/images/btn_add_n.png" height="18" width="18"
-                         alt="添加">
-                    <span>添加</span>
-                </a>
-            </div>
+            <sec:authorize url="/function/add">
+                <div class="button-group">
+                    <a href="javascript:_add('${pageContext.request.contextPath}/function/add', '新增', '600px', '450px');" class="button">
+                        <img src="${pageContext.request.contextPath}/resources/images/btn_add_n.png" height="18" width="18"
+                             alt="添加">
+                        <span>添加</span>
+                    </a>
+                </div>
+            </sec:authorize>
             <div class="button-group">
                 <a href="javascript:void(0);" class="button" id="expand">
                     <img src="${pageContext.request.contextPath}/resources/images/ico_nav_Monitor_h.png" height="18"
@@ -108,16 +111,23 @@
             renderColumns: function(event, data) {
                 var node = data.node, $tdList = $(node.tr).find(">td");
 //                $tdList.eq(0).find(".fancytree-title").text(node.data.name);
-                $tdList.eq(1).text(node.data.order);
-                var operateElem =  "<a class='mr-5' href=\"javascript:_view('${pageContext.request.contextPath}/function/view/" + node.data.id + "', '查看', '600px', '450px');\" title='查看'>" +
-                                            "<img src='${pageContext.request.contextPath}/resources/images/eye.png'>" +
-                                    "</a>" +
-                                    "<a class='mr-5' href=\"javascript:_edit('${pageContext.request.contextPath}/function/edit/" + node.data.id + "', '编辑', '600px', '450px');\" title='查看'>" +
+                $tdList.eq(1).text(node.data.order).css({"text-align": "center"});
+                var operateElem = "";
+                <sec:authorize url="/function/view/">
+                    operateElem +=  "<a class='mr-5' href=\"javascript:_view('${pageContext.request.contextPath}/function/view/" + node.data.id + "', '查看', '600px', '450px');\" title='查看'>" +
+                                        "<img src='${pageContext.request.contextPath}/resources/images/eye.png'>" +
+                                    "</a>";
+                </sec:authorize>
+                <sec:authorize url="/function/edit/">
+                    operateElem +=  "<a class='mr-5' href=\"javascript:_edit('${pageContext.request.contextPath}/function/edit/" + node.data.id + "', '编辑', '600px', '450px');\" title='查看'>" +
                                         "<img src='${pageContext.request.contextPath}/resources/images/edit.png'>" +
-                                    "</a>" +
-                                    "<a href=\"javascript:_delete('${pageContext.request.contextPath}/function/delete/" + node.data.id + "');\" title='删除'>" +
+                                    "</a>";
+                </sec:authorize>
+                <sec:authorize url="/function/delete/">
+                    operateElem +=  "<a href=\"javascript:_delete('${pageContext.request.contextPath}/function/delete/" + node.data.id + "');\" title='删除'>" +
                                         "<img src='${pageContext.request.contextPath}/resources/images/btn_delete_n.png'>" +
                                     "</a>";
+                </sec:authorize>
                 $tdList.eq(2).html(operateElem).css({'text-align': 'center'});
             }
         });

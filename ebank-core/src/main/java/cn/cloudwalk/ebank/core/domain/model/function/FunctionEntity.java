@@ -49,7 +49,7 @@ public class FunctionEntity extends AbstractEntity {
         this.roleEntities = roleEntities;
     }
 
-    @Column(name = "name", nullable = false, unique = true)
+    @Column(name = "name", nullable = false)
     public String getName() {
         return name;
     }

@@ -8,6 +8,7 @@ import cn.cloudwalk.ebank.core.domain.service.weixin.account.command.WeiXinAccou
 import cn.cloudwalk.ebank.core.domain.service.weixin.account.command.WeiXinAccountPaginationCommand;
 import cn.cloudwalk.ebank.core.repository.Pagination;
 import cn.cloudwalk.ebank.core.repository.weixin.account.IWeiXinAccountRepository;
+import cn.cloudwalk.ebank.core.support.utils.CustomSecurityContextHolderUtil;
 import com.arm4j.weixin.exception.WeiXinRequestException;
 import com.arm4j.weixin.request.accesstoken.WeiXinAccessTokenRequest;
 import com.arm4j.weixin.request.accesstoken.WeiXinJsApiTicketAccessTokenRequest;
@@ -19,6 +20,7 @@ import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,28 +46,48 @@ public class WeiXinAccountService implements IWeiXinAccountService {
     private IUserService userService;
 
     @Override
+    @SuppressWarnings("unchecked")
     public Pagination<WeiXinAccountEntity> pagination(WeiXinAccountPaginationCommand command) {
-        // 添加查询条件
-        List<Criterion> criterions = new ArrayList<>();
-        if (!StringUtils.isEmpty(command.getName())) {
-            criterions.add(Restrictions.like("name", command.getName(), MatchMode.ANYWHERE));
-        }
-        if (!StringUtils.isEmpty(command.getAppId())) {
-            criterions.add(Restrictions.like("appId", command.getAppId(), MatchMode.ANYWHERE));
-        }
-        if (null != command.getType() && !command.getType().isOnlyQuery()) {
-            criterions.add(Restrictions.eq("type", command.getType()));
-        }
+        try {
+            // 添加查询条件
+            List<Criterion> criterions = new ArrayList<>();
+            if (!StringUtils.isEmpty(command.getName())) {
+                criterions.add(Restrictions.like("name", command.getName(), MatchMode.ANYWHERE));
+            }
+            if (!StringUtils.isEmpty(command.getAppId())) {
+                criterions.add(Restrictions.like("appId", command.getAppId(), MatchMode.ANYWHERE));
+            }
+            if (null != command.getType() && !command.getType().isOnlyQuery()) {
+                criterions.add(Restrictions.eq("type", command.getType()));
+            }
 
-        // 添加排序条件
-        List<Order> orders = new ArrayList<>();
-        orders.add(Order.desc("createdDate"));
+            if (!CustomSecurityContextHolderUtil.hasRole("administrator")) {
+                String username = CustomSecurityContextHolderUtil.getUsername();
+                criterions.add(Restrictions.eq("user.username", username));
+            }
 
-        // 查询时关联user
-        Map<String, FetchMode> fetchModeMap = new HashMap<>();
-        fetchModeMap.put("user", FetchMode.JOIN);
+            // 添加排序条件
+            List<Order> orders = new ArrayList<>();
+            orders.add(Order.desc("createdDate"));
 
-        return weiXinAccountRepository.pagination(command.getPage(), command.getPageSize(), criterions, orders, fetchModeMap);
+            // 查询时关联user
+            Map<String, FetchMode> fetchModeMap = new HashMap<>();
+            fetchModeMap.put("user", FetchMode.JOIN);
+
+            // 为user创建别名
+            Map<String, String> aliasMap = new HashMap<>();
+            aliasMap.put("user", "user");
+
+            return weiXinAccountRepository.pagination(
+                    command.getPage(),
+                    command.getPageSize(),
+                    criterions, orders,
+                    fetchModeMap,
+                    aliasMap);
+        } catch (AccountExpiredException e) {
+            logger.warn(e.getMessage(), e);
+            return new Pagination<>(command.getPage(), command.getPageSize(), 0, Collections.EMPTY_LIST);
+        }
     }
 
     @Override
@@ -165,7 +187,11 @@ public class WeiXinAccountService implements IWeiXinAccountService {
 
     @Override
     public WeiXinAccountEntity save(WeiXinAccountCommand command) {
-        UserEntity userEntity = userService.findById(command.getUserId());
+        // 得到当前user
+        String username = CustomSecurityContextHolderUtil.getUsername();
+        UserEntity userEntity = userService.findByUsername(username);
+
+        // 新增
         WeiXinAccountEntity entity = new WeiXinAccountEntity(
                 command.getName(),
                 command.getToken(),
@@ -186,7 +212,11 @@ public class WeiXinAccountService implements IWeiXinAccountService {
 
     @Override
     public WeiXinAccountEntity update(WeiXinAccountCommand command) {
-        UserEntity userEntity = userService.findById(command.getUserId());
+        // 得到当前user
+        String username = CustomSecurityContextHolderUtil.getUsername();
+        UserEntity userEntity = userService.findByUsername(username);
+
+        // 更新
         WeiXinAccountEntity entity = this.findById(command.getId());
         entity.setName(command.getName());
         entity.setToken(command.getToken());

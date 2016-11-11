@@ -37,8 +37,6 @@ public class WeiXinAccountCommand extends AbstractCommand {
 
     private String description;            // 公众号描述
 
-    private String userId;                 // 关联用户
-
     @NotNull(message = "{WeiXinAccountCommand.type.NotNull}")
     private WeiXinAccountEntityType type;  // 公众号类型
 
@@ -76,10 +74,6 @@ public class WeiXinAccountCommand extends AbstractCommand {
 
     public String getDescription() {
         return description;
-    }
-
-    public String getUserId() {
-        return userId;
     }
 
     public WeiXinAccountEntityType getType() {
@@ -120,10 +114,6 @@ public class WeiXinAccountCommand extends AbstractCommand {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
     }
 
     public void setType(WeiXinAccountEntityType type) {

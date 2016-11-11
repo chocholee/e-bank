@@ -161,7 +161,7 @@ public class WeiXinAccountEntity extends AbstractEntity {
     }
 
     @OneToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id", unique = true)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     public UserEntity getUser() {
         return user;
     }

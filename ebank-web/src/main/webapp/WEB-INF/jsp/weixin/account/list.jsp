@@ -2,6 +2,7 @@
 <%@ taglib prefix="tmpl" uri="/jsp-templ.tld" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt_rt" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <tmpl:override name="title">微信公众号</tmpl:override>
 
@@ -21,22 +22,26 @@
     <%-- 条件查询及按钮操作区域 --%>
     <div class="button-wrapper">
         <div class="left button-group-wrapper">
-            <div class="button-group">
-                <a href="javascript:_add('${pageContext.request.contextPath}/weixin/account/add', '新增', '600px', '600px');" class="button">
-                    <img src="${pageContext.request.contextPath}/resources/images/btn_add_n.png" height="18" width="18"
-                         alt="添加">
-                    <span>添加</span>
-                </a>
-            </div>
-            <div class="button-group">
-                <a href="javascript:token('${pageContext.request.contextPath}/weixin/account/token');"
-                   class="button">
-                    <img src="${pageContext.request.contextPath}/resources/images/btn_Reset_n.png" height="18"
-                         width="18"
-                         alt="重置微信Token">
-                    <span>重置微信Token</span>
-                </a>
-            </div>
+            <sec:authorize url="/weixin/account/add">
+                <div class="button-group">
+                    <a href="javascript:_add('${pageContext.request.contextPath}/weixin/account/add', '新增', '600px', '600px');" class="button">
+                        <img src="${pageContext.request.contextPath}/resources/images/btn_add_n.png" height="18" width="18"
+                             alt="添加">
+                        <span>添加</span>
+                    </a>
+                </div>
+            </sec:authorize>
+            <sec:authorize url="/weixin/account/token/">
+                <div class="button-group">
+                    <a href="javascript:token('${pageContext.request.contextPath}/weixin/account/token');"
+                       class="button">
+                        <img src="${pageContext.request.contextPath}/resources/images/btn_Reset_n.png" height="18"
+                             width="18"
+                             alt="重置微信Token">
+                        <span>重置微信Token</span>
+                    </a>
+                </div>
+            </sec:authorize>
         </div>
         <div class="right">
             <form class="form-inline" role="form" action="${pageContext.request.contextPath}/weixin/account/list">
@@ -113,15 +118,21 @@
                         </td>
                         <td>${account.createdDate}</td>
                         <td class="last-td">
-                            <a href="javascript:_view('${pageContext.request.contextPath}/weixin/account/view/${account.id}', '查看', '600px', '600px')" title="查看">
-                                <img src="${pageContext.request.contextPath}/resources/images/eye.png">
-                            </a>
-                            <a href="javascript:_edit('${pageContext.request.contextPath}/weixin/account/edit/${account.id}', '编辑', '600px', '600px')" title="编辑">
-                                <img src="${pageContext.request.contextPath}/resources/images/edit.png">
-                            </a>
-                            <a href="javascript:_delete('${pageContext.request.contextPath}/weixin/account/delete/${account.id}')" title="删除">
-                                <img src="${pageContext.request.contextPath}/resources/images/btn_delete_n.png">
-                            </a>
+                            <sec:authorize url="/weixin/account/view/">
+                                <a href="javascript:_view('${pageContext.request.contextPath}/weixin/account/view/${account.id}', '查看', '600px', '600px')" title="查看">
+                                    <img src="${pageContext.request.contextPath}/resources/images/eye.png">
+                                </a>
+                            </sec:authorize>
+                            <sec:authorize url="/weixin/account/edit/">
+                                <a href="javascript:_edit('${pageContext.request.contextPath}/weixin/account/edit/${account.id}', '编辑', '600px', '600px')" title="编辑">
+                                    <img src="${pageContext.request.contextPath}/resources/images/edit.png">
+                                </a>
+                            </sec:authorize>
+                            <sec:authorize url="/weixin/account/delete/">
+                                <a href="javascript:_delete('${pageContext.request.contextPath}/weixin/account/delete/${account.id}')" title="删除">
+                                    <img src="${pageContext.request.contextPath}/resources/images/btn_delete_n.png">
+                                </a>
+                            </sec:authorize>
                         </td>
                     </tr>
                 </c:forEach>

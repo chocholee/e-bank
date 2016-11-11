@@ -2,6 +2,7 @@
 <%@ taglib prefix="tmpl" uri="/jsp-templ.tld" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt_rt" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <tmpl:override name="title">用户列表</tmpl:override>
 
@@ -21,13 +22,15 @@
     <%-- 条件查询及按钮操作区域 --%>
     <div class="button-wrapper">
         <div class="left button-group-wrapper">
-            <div class="button-group mr-20">
-                <a href="javascript:_add('${pageContext.request.contextPath}/user/add', '新增', '600px', '550px');" class="button">
-                    <img src="${pageContext.request.contextPath}/resources/images/btn_add_n.png" height="18" width="18"
-                         alt="添加">
-                    <span>添加</span>
-                </a>
-            </div>
+            <sec:authorize url="/user/add">
+                <div class="button-group mr-20">
+                    <a href="javascript:_add('${pageContext.request.contextPath}/user/add', '新增', '600px', '550px');" class="button">
+                        <img src="${pageContext.request.contextPath}/resources/images/btn_add_n.png" height="18" width="18"
+                             alt="添加">
+                        <span>添加</span>
+                    </a>
+                </div>
+            </sec:authorize>
         </div>
         <div class="right">
             <form class="form-inline" role="form" action="${pageContext.request.contextPath}/user/list">
@@ -83,18 +86,26 @@
                             </div>
                         </td>
                         <td class="last-td">
-                            <a href="javascript:_view('${pageContext.request.contextPath}/user/view/${user.id}', '查看', '650px', '600px')" title="查看">
-                                <img src="${pageContext.request.contextPath}/resources/images/eye.png">
-                            </a>
-                            <a href="javascript:_edit('${pageContext.request.contextPath}/user/edit/${user.id}', '编辑', '600px', '500px')" title="编辑">
-                                <img src="${pageContext.request.contextPath}/resources/images/edit.png" alt="编辑">
-                            </a>
-                            <a href="javascript:_delete('${pageContext.request.contextPath}/user/delete/${user.id}')">
-                                <img src="${pageContext.request.contextPath}/resources/images/btn_delete_n.png" alt="删除" title="删除">
-                            </a>
-                            <a href="javascript:authorize('${pageContext.request.contextPath}/user/authorize/${user.id}')">
-                                <img src="${pageContext.request.contextPath}/resources/images/btn_user_n.png" alt="授权" title="授权">
-                            </a>
+                            <sec:authorize url="/user/view/">
+                                <a href="javascript:_view('${pageContext.request.contextPath}/user/view/${user.id}', '查看', '650px', '600px')" title="查看">
+                                    <img src="${pageContext.request.contextPath}/resources/images/eye.png">
+                                </a>
+                            </sec:authorize>
+                            <sec:authorize url="/user/edit/">
+                                <a href="javascript:_edit('${pageContext.request.contextPath}/user/edit/${user.id}', '编辑', '600px', '500px')" title="编辑">
+                                    <img src="${pageContext.request.contextPath}/resources/images/edit.png" alt="编辑">
+                                </a>
+                            </sec:authorize>
+                            <sec:authorize url="/user/delete/">
+                                <a href="javascript:_delete('${pageContext.request.contextPath}/user/delete/${user.id}')">
+                                    <img src="${pageContext.request.contextPath}/resources/images/btn_delete_n.png" alt="删除" title="删除">
+                                </a>
+                            </sec:authorize>
+                            <sec:authorize url="/user/authorize/">
+                                <a href="javascript:authorize('${pageContext.request.contextPath}/user/authorize/${user.id}')">
+                                    <img src="${pageContext.request.contextPath}/resources/images/btn_user_n.png" alt="授权" title="授权">
+                                </a>
+                            </sec:authorize>
                         </td>
                     </tr>
                 </c:forEach>

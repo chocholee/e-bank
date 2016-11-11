@@ -2,6 +2,7 @@
 <%@ taglib prefix="tmpl" uri="/jsp-templ.tld" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt_rt" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <tmpl:override name="title">角色列表</tmpl:override>
 
@@ -13,13 +14,15 @@
     <%-- 条件查询及按钮操作区域 --%>
     <div class="button-wrapper">
         <div class="left button-group-wrapper">
-            <div class="button-group mr-20">
-                <a href="javascript:_add('${pageContext.request.contextPath}/role/add', '新增', '600px', '340px');" class="button">
-                    <img src="${pageContext.request.contextPath}/resources/images/btn_add_n.png" height="18" width="18"
-                         alt="添加">
-                    <span>添加</span>
-                </a>
-            </div>
+            <sec:authorize url="/role/add">
+                <div class="button-group mr-20">
+                    <a href="javascript:_add('${pageContext.request.contextPath}/role/add', '新增', '600px', '340px');" class="button">
+                        <img src="${pageContext.request.contextPath}/resources/images/btn_add_n.png" height="18" width="18"
+                             alt="添加">
+                        <span>添加</span>
+                    </a>
+                </div>
+            </sec:authorize>
         </div>
         <div class="right">
             <form class="form-inline" role="form" action="${pageContext.request.contextPath}/role/list">
@@ -64,15 +67,21 @@
                         <td>${role.description}</td>
                         <td>${role.order}</td>
                         <td class="last-td">
-                            <a href="javascript:_edit('${pageContext.request.contextPath}/role/edit/${role.id}', '编辑', '600px', '340px')" title="编辑">
-                                <img src="${pageContext.request.contextPath}/resources/images/edit.png" alt="编辑">
-                            </a>
-                            <a href="javascript:_delete('${pageContext.request.contextPath}/role/delete/${role.id}')" title="删除">
-                                <img src="${pageContext.request.contextPath}/resources/images/btn_delete_n.png" alt="删除">
-                            </a>
-                            <a href="javascript:_edit('${pageContext.request.contextPath}/role/authorize/${role.id}', '角色授权', '800px', '500px')" title="授权">
-                                <img src="${pageContext.request.contextPath}/resources/images/btn_user_n.png" alt="授权">
-                            </a>
+                            <sec:authorize url="/role/edit/">
+                                <a href="javascript:_edit('${pageContext.request.contextPath}/role/edit/${role.id}', '编辑', '600px', '340px')" title="编辑">
+                                    <img src="${pageContext.request.contextPath}/resources/images/edit.png" alt="编辑">
+                                </a>
+                            </sec:authorize>
+                            <sec:authorize url="/role/delete/">
+                                <a href="javascript:_delete('${pageContext.request.contextPath}/role/delete/${role.id}')" title="删除">
+                                    <img src="${pageContext.request.contextPath}/resources/images/btn_delete_n.png" alt="删除">
+                                </a>
+                            </sec:authorize>
+                            <sec:authorize url="/role/authorize/">
+                                <a href="javascript:_edit('${pageContext.request.contextPath}/role/authorize/${role.id}', '角色授权', '800px', '500px')" title="授权">
+                                    <img src="${pageContext.request.contextPath}/resources/images/btn_user_n.png" alt="授权">
+                                </a>
+                            </sec:authorize>
                         </td>
                     </tr>
                 </c:forEach>

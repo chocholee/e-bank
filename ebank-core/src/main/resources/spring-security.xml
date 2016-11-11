@@ -7,6 +7,11 @@
        http://www.springframework.org/schema/security
        http://www.springframework.org/schema/security/spring-security.xsd">
 
+    <!-- 覆盖默认配置，页面按钮控制 -->
+    <bean class="org.springframework.security.web.access.DefaultWebInvocationPrivilegeEvaluator">
+        <constructor-arg name="securityInterceptor" ref="filterSecurityInterceptor"/>
+    </bean>
+
     <!-- http配置 -->
     <security:http pattern="/resources/**" security="none"/>
     <security:http pattern="/upload/**" security="none"/>
@@ -104,6 +109,7 @@
         <property name="accessDecisionManager" ref="accessDecisionManager"/>
         <property name="authenticationManager" ref="authenticationManager"/>
         <property name="securityMetadataSource" ref="securityMetadataSource"/>
+        <property name="rejectPublicInvocations" value="false"/>
     </bean>
 
     <!-- 决策管理器 -->

@@ -178,6 +178,13 @@
                 <artifactId>spring-security-config</artifactId>
                 <version>${version.spring.security}</version>
             </dependency>
+
+            <!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-taglibs -->
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-taglibs</artifactId>
+                <version>${version.spring.security}</version>
+            </dependency>
             <!-- spring -->
 
             <!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
