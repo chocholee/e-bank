@@ -64,7 +64,7 @@ public class CustomMappingHandlerExceptionResolver extends SimpleMappingExceptio
      * @param ex
      */
     private void doLog(HttpServletRequest request, HandlerMethod handler, Exception ex) {
-
+        logger.error(ex);
     }
 
 }

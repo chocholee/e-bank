@@ -9,15 +9,17 @@
 
     <!-- http配置 -->
     <security:http pattern="/resources/**" security="none"/>
-    <security:http pattern="/favicon.ico" security="none"/>
     <security:http pattern="/upload/**" security="none"/>
-    <security:http use-expressions="true" authentication-manager-ref="authenticationManager"
+    <security:http pattern="/favicon.ico" security="none"/>
+    <!--静态资源过滤-->
+    <security:http use-expressions="false" authentication-manager-ref="authenticationManager"
                    access-decision-manager-ref="accessDecisionManager">
 
         <!-- 自定义url拦截 -->
         <security:intercept-url pattern="/captcha" access="permitAll"/>
         <security:intercept-url pattern="/login" access="permitAll"/>
 
+        <!-- iframe跨域 -->
         <security:headers defaults-disabled="false">
             <security:frame-options policy="SAMEORIGIN"/>
         </security:headers>
