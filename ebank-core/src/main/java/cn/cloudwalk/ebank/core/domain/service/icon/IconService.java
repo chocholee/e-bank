@@ -11,6 +11,8 @@ import cn.cloudwalk.ebank.core.support.utils.CustomUploadUtil;
 import org.hibernate.FetchMode;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -32,6 +34,8 @@ import java.util.Map;
 @Service("iconService")
 @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 public class IconService implements IIconService {
+
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private IIconRepository<IconEntity, String> iconRepository;
@@ -86,8 +90,13 @@ public class IconService implements IIconService {
         entity.setName(command.getName());
 
         if (!entity.getBeforeHoverPath().equals(command.getBeforeHoverPath())) {
-            File beforeOrigin = new File(saveDir.concat(File.separator).concat(entity.getBeforeHoverPath()));
-            CustomUploadUtil.delete(beforeOrigin);
+            try {
+                // 删除图片
+                File beforeOrigin = new File(saveDir.concat(File.separator).concat(entity.getBeforeHoverPath()));
+                CustomUploadUtil.delete(beforeOrigin);
+            } catch (IOException e) {
+                logger.warn(e.getMessage(), e);
+            }
 
             entity.setBeforeHoverPath(command.getBeforeHoverPath());
 
@@ -97,8 +106,13 @@ public class IconService implements IIconService {
         }
 
         if (!entity.getAfterHoverPath().equals(command.getAfterHoverPath())) {
-            File afterOrigin = new File(saveDir.concat(File.separator).concat(entity.getAfterHoverPath()));
-            CustomUploadUtil.delete(afterOrigin);
+            try {
+                // 删除图片
+                File afterOrigin = new File(saveDir.concat(File.separator).concat(entity.getAfterHoverPath()));
+                CustomUploadUtil.delete(afterOrigin);
+            } catch (IOException e) {
+                logger.warn(e.getMessage(), e);
+            }
 
             entity.setAfterHoverPath(command.getAfterHoverPath());
 
@@ -134,9 +148,14 @@ public class IconService implements IIconService {
         IconEntity entity = iconRepository.getById(id);
         iconRepository.delete(entity);
 
-        File beforeDst = new File(saveDir.concat(File.separator).concat(entity.getBeforeHoverPath()));
-        File afterDst = new File(saveDir.concat(File.separator).concat(entity.getAfterHoverPath()));
-        CustomUploadUtil.delete(beforeDst);
-        CustomUploadUtil.delete(afterDst);
+        try {
+            // 删除图片
+            File beforeDst = new File(saveDir.concat(File.separator).concat(entity.getBeforeHoverPath()));
+            File afterDst = new File(saveDir.concat(File.separator).concat(entity.getAfterHoverPath()));
+            CustomUploadUtil.delete(beforeDst);
+            CustomUploadUtil.delete(afterDst);
+        } catch (IOException e) {
+            logger.warn(e.getMessage(), e);
+        }
     }
 }

@@ -43,12 +43,12 @@ public class RoleController extends BaseController {
     @RequestMapping("/list")
     public ModelAndView list(@ModelAttribute("role") RolePaginationCommand command) {
         Pagination<RoleEntity> pagination = roleService.pagination(command);
-        return new ModelAndView("/role/list", "pagination", pagination);
+        return new ModelAndView("role/list", "pagination", pagination);
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.GET)
     public ModelAndView add(@ModelAttribute("role") RoleCommand command) {
-        return new ModelAndView("/role/add");
+        return new ModelAndView("role/add");
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
@@ -77,7 +77,7 @@ public class RoleController extends BaseController {
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
     public ModelAndView edit(@ModelAttribute("role") RoleCommand command) {
         RoleEntity entity = roleService.findById(command.getId());
-        return new ModelAndView("/role/edit", "role", entity);
+        return new ModelAndView("role/edit", "role", entity);
     }
 
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.POST)
@@ -128,7 +128,7 @@ public class RoleController extends BaseController {
 
     @RequestMapping(value = "/authorize/{id}", method = RequestMethod.GET)
     public ModelAndView authorize(@PathVariable String id) {
-        return new ModelAndView("/role/authorize", "id", id);
+        return new ModelAndView("role/authorize", "id", id);
     }
 
     @RequestMapping(value = "/authorize/{id}", method = RequestMethod.POST)

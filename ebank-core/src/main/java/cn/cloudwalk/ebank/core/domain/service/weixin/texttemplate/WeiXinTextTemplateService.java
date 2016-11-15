@@ -1,13 +1,13 @@
 package cn.cloudwalk.ebank.core.domain.service.weixin.texttemplate;
 
 import cn.cloudwalk.ebank.core.domain.model.weixin.account.WeiXinAccountEntity;
-import cn.cloudwalk.ebank.core.domain.model.weixin.texttemplate.WeiXinTextTemplateEntity;
-import cn.cloudwalk.ebank.core.domain.service.weixin.account.IWeiXinAccountService;
+import cn.cloudwalk.ebank.core.domain.model.weixin.template.text.WeiXinTextTemplateEntity;
 import cn.cloudwalk.ebank.core.domain.service.weixin.texttemplate.command.WeiXinTextTemplateCommand;
 import cn.cloudwalk.ebank.core.domain.service.weixin.texttemplate.command.WeiXinTextTemplatePaginationCommand;
 import cn.cloudwalk.ebank.core.repository.Pagination;
-import cn.cloudwalk.ebank.core.repository.weixin.texttemplate.IWeiXinTextTemplateRepository;
-import cn.cloudwalk.ebank.core.support.exception.WeiXinAccountNotFoundException;
+import cn.cloudwalk.ebank.core.repository.weixin.account.IWeiXinAccountRepository;
+import cn.cloudwalk.ebank.core.repository.weixin.template.text.IWeiXinTextTemplateRepository;
+import cn.cloudwalk.ebank.core.support.exception.WeiXinNotFoundException;
 import cn.cloudwalk.ebank.core.support.utils.CustomSecurityContextHolderUtil;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
@@ -38,15 +38,16 @@ public class WeiXinTextTemplateService implements IWeiXinTextTemplateService {
     private IWeiXinTextTemplateRepository<WeiXinTextTemplateEntity, String> weiXinTextTemplateRepository;
 
     @Autowired
-    private IWeiXinAccountService weiXinAccountService;
+    private IWeiXinAccountRepository<WeiXinAccountEntity, String> weiXinAccountRepository;
 
     @Autowired
     private MessageSourceAccessor message;
 
     @Override
+    @SuppressWarnings("unchecked")
     public Pagination<WeiXinTextTemplateEntity> pagination(WeiXinTextTemplatePaginationCommand command) {
         String username = CustomSecurityContextHolderUtil.getUsername();
-        WeiXinAccountEntity accountEntity = weiXinAccountService.findByUsername(username);
+        WeiXinAccountEntity accountEntity = weiXinAccountRepository.findByUsername(username);
 
         if (null != accountEntity) {
             // 添加查询条件
@@ -54,8 +55,8 @@ public class WeiXinTextTemplateService implements IWeiXinTextTemplateService {
             if (!StringUtils.isEmpty(command.getName())) {
                 criterions.add(Restrictions.like("name", command.getName(), MatchMode.ANYWHERE));
             }
-            if (!CustomSecurityContextHolderUtil.hasRole("administrator"))
-                criterions.add(Restrictions.eq("accountEntity.id", accountEntity.getId()));
+
+            criterions.add(Restrictions.eq("accountId", accountEntity.getId()));
 
             // 添加排序
             List<Order> orders = new ArrayList<>();
@@ -63,7 +64,7 @@ public class WeiXinTextTemplateService implements IWeiXinTextTemplateService {
 
             return weiXinTextTemplateRepository.pagination(command.getPage(), command.getPageSize(), criterions, orders);
         } else {
-            return new Pagination<WeiXinTextTemplateEntity>(command.getPage(), command.getPageSize(), 0, Collections.EMPTY_LIST);
+            return new Pagination<>(command.getPage(), command.getPageSize(), 0, Collections.EMPTY_LIST);
         }
     }
 
@@ -75,16 +76,16 @@ public class WeiXinTextTemplateService implements IWeiXinTextTemplateService {
     @Override
     public WeiXinTextTemplateEntity save(WeiXinTextTemplateCommand command) {
         String username = CustomSecurityContextHolderUtil.getUsername();
-        WeiXinAccountEntity accountEntity = weiXinAccountService.findByUsername(username);
+        WeiXinAccountEntity accountEntity = weiXinAccountRepository.findByUsername(username);
         if (null == accountEntity) {
-            throw new WeiXinAccountNotFoundException(message.getMessage("WeiXinTextTemplateService.WeiXinAccountNotFoundException"));
+            throw new WeiXinNotFoundException(message.getMessage("WeiXinAccountNotFoundException.message"));
         }
 
         WeiXinTextTemplateEntity entity = new WeiXinTextTemplateEntity(
                 command.getName(),
                 command.getContent(),
                 new Date(),
-                accountEntity
+                accountEntity.getId()
         );
 
         weiXinTextTemplateRepository.save(entity);

@@ -16,7 +16,7 @@ public class IndexController extends BaseController {
 
     @RequestMapping("/")
     public ModelAndView index() {
-        return new ModelAndView("/index");
+        return new ModelAndView("index");
     }
 
     @RequestMapping("/forbidden")

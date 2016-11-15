@@ -7,7 +7,7 @@ import cn.cloudwalk.ebank.core.domain.service.weixin.receive.command.WeiXinRecei
 import cn.cloudwalk.ebank.core.domain.service.weixin.receive.command.WeiXinReceivePaginationCommand;
 import cn.cloudwalk.ebank.core.repository.Pagination;
 import cn.cloudwalk.ebank.core.repository.weixin.receive.IWeiXinReceiveRepository;
-import cn.cloudwalk.ebank.core.support.exception.WeiXinAccountNotFoundException;
+import cn.cloudwalk.ebank.core.support.exception.WeiXinNotFoundException;
 import cn.cloudwalk.ebank.core.support.utils.CustomSecurityContextHolderUtil;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
@@ -74,7 +74,7 @@ public class WeiXinReceiveService implements IWeiXinReceiveService {
     public WeiXinReceiveEntity save(WeiXinReceiveCommand command) {
         WeiXinAccountEntity accountEntity = weiXinAccountService.findByAccountId(command.getToUserName());
         if (null == accountEntity) {
-            throw new WeiXinAccountNotFoundException(message.getMessage("WeiXinMenuService.WeiXinAccountNotFoundException"));
+            throw new WeiXinNotFoundException(message.getMessage("WeiXinMenuService.WeiXinNotFoundException"));
         }
 
         WeiXinReceiveEntity entity = new WeiXinReceiveEntity(

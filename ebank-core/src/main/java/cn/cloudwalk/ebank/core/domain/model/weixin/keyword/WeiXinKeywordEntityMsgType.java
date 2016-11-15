@@ -9,7 +9,7 @@ public enum WeiXinKeywordEntityMsgType {
     ALL("全部", Boolean.TRUE),
     TEXT("文本", Boolean.FALSE),
     NEWS("图文", Boolean.FALSE),
-    EXPAND("扩展", Boolean.FALSE);
+    IMAGE("图片", Boolean.FALSE);
 
     private final String name;
 

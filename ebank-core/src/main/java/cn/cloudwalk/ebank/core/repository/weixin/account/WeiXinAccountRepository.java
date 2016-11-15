@@ -1,6 +1,7 @@
 package cn.cloudwalk.ebank.core.repository.weixin.account;
 
 import cn.cloudwalk.ebank.core.domain.model.weixin.account.WeiXinAccountEntity;
+import cn.cloudwalk.ebank.core.domain.model.weixin.account.WeiXinAccountEntityActivated;
 import cn.cloudwalk.ebank.core.repository.AbstractHibernateRepository;
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
@@ -36,6 +37,7 @@ public class WeiXinAccountRepository extends AbstractHibernateRepository<WeiXinA
     public WeiXinAccountEntity findByUsername(String username) {
         Criteria criteria = getSession().createCriteria(getPersistenceClass());
         criteria.add(Restrictions.eq("user.username", username))
+                .add(Restrictions.eq("activated", WeiXinAccountEntityActivated.ACTIVATED))
                 .setFetchMode("user", FetchMode.JOIN)
                 .createAlias("user", "user");
         return (WeiXinAccountEntity) criteria.uniqueResult();

@@ -48,7 +48,7 @@
                 <div class="form-group">
                     <a href="javascript:void(0);" onclick="_reset(this)" class="button"><img
                             src="${pageContext.request.contextPath}/resources/images/btn_Reset_n.png" alt="" height="18"
-                            width="18"><span>重 置</span></a>
+                            width="18"><span>刷新</span></a>
                 </div>
             </form>
         </div>
@@ -99,6 +99,13 @@
             },
             source: {
                 url: "${pageContext.request.contextPath}/function/dataset"
+            },
+            icon: function (event, data) {
+                if (data.node.key != 1 && data.node.data.icon == null) {
+                    if (data.node.hasChildren()) {
+                        data.node.folder = true;
+                    }
+                }
             },
             renderTitle: function (event, data) {
                 if (data.node.key != 1) {

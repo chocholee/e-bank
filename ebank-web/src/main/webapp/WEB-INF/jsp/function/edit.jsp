@@ -65,7 +65,7 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">排序</label>
                 <div class="layui-input-block">
-                    <input type="text" name="order" lay-verify="required" autocomplete="off" class="layui-input"
+                    <input type="text" name="order" autocomplete="off" class="layui-input"
                            value="${function.order}">
                 </div>
             </div>

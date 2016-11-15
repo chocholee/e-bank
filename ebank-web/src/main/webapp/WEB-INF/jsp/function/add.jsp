@@ -13,6 +13,7 @@
 <tmpl:override name="body">
     <div class="block">
         <form class="layui-form" action="${pageContext.request.contextPath}/function/add" method="post">
+            <input type="hidden" name="type" value="FIRST">
             <div class="layui-form-item">
                 <label class="layui-form-label red-star">名称</label>
                 <div class="layui-input-block">
@@ -40,18 +41,9 @@
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label red-star">类型</label>
-                <div class="layui-input-block layui-form-item-type">
-                    <select name="type" lay-verify="required">
-                        <option value="">请选择</option>
-                        <option value="FIRST">一级菜单</option>
-                    </select>
-                </div>
-            </div>
-            <div class="layui-form-item">
                 <label class="layui-form-label">排序</label>
                 <div class="layui-input-block">
-                    <input type="text" name="order" lay-verify="required" autocomplete="off" class="layui-input"
+                    <input type="text" name="order" autocomplete="off" class="layui-input"
                            value="${function.order}">
                 </div>
             </div>
@@ -103,15 +95,12 @@
                         $("input[name='parent.id']").parents(".layui-form-item").remove();
                     }
                     if (result) {
-                        $(".layui-form-item-type").empty();
                         switch (_function.type) {
                             case 'FIRST':
-                                $(".layui-form-item-type").append("<input type='hidden' name='type' value='SECOND'>");
-                                $(".layui-form-item-type").append("<input readonly type='text' class='layui-input' value='二级菜单'>");
+                                $("input[name='type']").val("SECOND");
                                 break;
                             case 'SECOND':
-                                $(".layui-form-item-type").append("<input type='hidden' name='type' value='THIRD'>");
-                                $(".layui-form-item-type").append("<input readonly type='text' class='layui-input' value='三级菜单'>");
+                                $("input[name='type']").val("THIRD");
                                 break;
 
                         }

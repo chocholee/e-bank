@@ -7,7 +7,7 @@ import cn.cloudwalk.ebank.core.domain.service.weixin.menu.command.WeiXinMenuComm
 import cn.cloudwalk.ebank.core.domain.service.weixin.menu.command.WeiXinMenuPaginationCommand;
 import cn.cloudwalk.ebank.core.repository.Pagination;
 import cn.cloudwalk.ebank.core.repository.weixin.menu.IWeiXinMenuRepository;
-import cn.cloudwalk.ebank.core.support.exception.WeiXinAccountNotFoundException;
+import cn.cloudwalk.ebank.core.support.exception.WeiXinNotFoundException;
 import cn.cloudwalk.ebank.core.support.utils.CustomSecurityContextHolderUtil;
 import com.arm4j.weixin.exception.WeiXinRequestException;
 import com.arm4j.weixin.request.menu.WeiXinMenuCreateRequest;
@@ -50,6 +50,7 @@ public class WeiXinMenuService implements IWeiXinMenuService {
     private MessageSourceAccessor message;
 
     @Override
+    @SuppressWarnings("unchecked")
     public Pagination<WeiXinMenuEntity> pagination(WeiXinMenuPaginationCommand command) {
         String username = CustomSecurityContextHolderUtil.getUsername();
         WeiXinAccountEntity accountEntity = weiXinAccountService.findByUsername(username);
@@ -80,9 +81,10 @@ public class WeiXinMenuService implements IWeiXinMenuService {
             fetchModeMap.put("parent", FetchMode.JOIN);
             fetchModeMap.put("accountEntity", FetchMode.JOIN);
 
-            return weiXinMenuRepository.pagination(command.getPage(), command.getPageSize(), criterions, orders, fetchModeMap);
+            return weiXinMenuRepository.pagination(
+                    command.getPage(), command.getPageSize(), criterions, orders, fetchModeMap);
         } else {
-            return new Pagination<WeiXinMenuEntity>(command.getPage(), command.getPageSize(), 0, Collections.EMPTY_LIST);
+            return new Pagination<>(command.getPage(), command.getPageSize(), 0, Collections.EMPTY_LIST);
         }
     }
 
@@ -94,7 +96,7 @@ public class WeiXinMenuService implements IWeiXinMenuService {
         if (null != accountEntity) {
             // 添加查询条件
             List<Criterion> criterions = new ArrayList<>();
-            criterions.add(Restrictions.eq("accountEntity.id", accountEntity.getId()));
+            criterions.add(Restrictions.eq("accountId", accountEntity.getId()));
 
             // 添加排序条件
             List<Order> orders = new ArrayList<>();
@@ -114,7 +116,7 @@ public class WeiXinMenuService implements IWeiXinMenuService {
         if (null != accountEntity) {
             // 添加查询条件
             List<Criterion> criterions = new ArrayList<>();
-            criterions.add(Restrictions.eq("accountEntity.id", accountEntity.getId()));
+            criterions.add(Restrictions.eq("accountId", accountEntity.getId()));
             criterions.add(Restrictions.isNull("parent"));
 
             // 添加排序条件
@@ -146,23 +148,31 @@ public class WeiXinMenuService implements IWeiXinMenuService {
 
     @Override
     public WeiXinMenuEntity save(WeiXinMenuCommand command) {
+        // 查询公众号
         String username = CustomSecurityContextHolderUtil.getUsername();
         WeiXinAccountEntity accountEntity = weiXinAccountService.findByUsername(username);
         if (null == accountEntity) {
-            throw new WeiXinAccountNotFoundException(message.getMessage("WeiXinMenuService.WeiXinAccountNotFoundException"));
+            throw new WeiXinNotFoundException(message.getMessage("WeiXinAccountNotFoundException.message"));
         }
 
-        WeiXinMenuEntity parent = weiXinMenuRepository.getById(command.getParent());
+        // 查询父类
+        WeiXinMenuEntity parent = null;
+        if (!StringUtils.isEmpty(command.getParent())) {
+            parent = weiXinMenuRepository.getById(command.getParent());
+        }
+
+        // 新增数据
         WeiXinMenuEntity entity = new WeiXinMenuEntity(
                 command.getName(),
                 command.getKey(),
                 command.getUrl(),
+                command.getMediaId(),
                 command.getTemplateId(),
                 command.getOrder(),
                 command.getType(),
                 command.getMsgType(),
                 parent,
-                accountEntity
+                accountEntity.getId()
         );
 
         weiXinMenuRepository.save(entity);
@@ -171,7 +181,13 @@ public class WeiXinMenuService implements IWeiXinMenuService {
 
     @Override
     public WeiXinMenuEntity update(WeiXinMenuCommand command) {
-        WeiXinMenuEntity parent = weiXinMenuRepository.getById(command.getParent());
+        // 查询父类
+        WeiXinMenuEntity parent = null;
+        if (!StringUtils.isEmpty(command.getParent())) {
+            parent = weiXinMenuRepository.getById(command.getParent());
+        }
+
+        // 更新当前数据
         WeiXinMenuEntity entity = weiXinMenuRepository.getById(command.getId());
         entity.setName(command.getName());
         entity.setKey(command.getKey());
@@ -188,6 +204,10 @@ public class WeiXinMenuService implements IWeiXinMenuService {
 
     @Override
     public void delete(String id) {
+        List<WeiXinMenuEntity> parents = this.findByParentId(id);
+        if (!parents.isEmpty()) {
+            this.delete(id);
+        }
         WeiXinMenuEntity entity = weiXinMenuRepository.getById(id);
         weiXinMenuRepository.delete(entity);
     }
@@ -203,6 +223,16 @@ public class WeiXinMenuService implements IWeiXinMenuService {
             // 第一级菜单
             MenuButtonEntity firstMenuButtonEntity = new MenuButtonEntity();
             firstMenuButtonEntity.setName(parentIsNullMenu.getName());
+            firstMenuButtonEntity.setKey(parentIsNullMenu.getKey());
+            firstMenuButtonEntity.setType(parentIsNullMenu.getType().name().toLowerCase());
+            switch (parentIsNullMenu.getType()) {
+                case VIEW:
+                    firstMenuButtonEntity.setUrl(parentIsNullMenu.getUrl());
+                    break;
+                case VIEW_LIMITED:
+                    firstMenuButtonEntity.setMediaId(parentIsNullMenu.getMediaId());
+                    break;
+            }
 
             // 第二级菜单
             List<MenuButtonEntity> secondMenuButtonEntities = new ArrayList<>();
@@ -212,12 +242,22 @@ public class WeiXinMenuService implements IWeiXinMenuService {
                 menuButtonEntity.setName(entity.getName());
                 menuButtonEntity.setKey(entity.getKey());
                 menuButtonEntity.setType(entity.getType().name().toLowerCase());
-                menuButtonEntity.setUrl(entity.getUrl());
+                switch (parentIsNullMenu.getType()) {
+                    case VIEW:
+                        menuButtonEntity.setUrl(parentIsNullMenu.getUrl());
+                        break;
+                    case VIEW_LIMITED:
+                        menuButtonEntity.setMediaId(parentIsNullMenu.getMediaId());
+                        break;
+                }
+
                 secondMenuButtonEntities.add(menuButtonEntity);
             }
 
-            // 第二级菜单添加至第一级菜单
-            firstMenuButtonEntity.setSubButton(secondMenuButtonEntities);
+            if (!menuEntities.isEmpty()) {
+                // 第二级菜单添加至第一级菜单
+                firstMenuButtonEntity.setSubButton(secondMenuButtonEntities);
+            }
 
             // 第一级菜单添加至容器中
             allMenuButtonEntities.add(firstMenuButtonEntity);

@@ -39,4 +39,6 @@ public interface IWeiXinAccountService {
     void delete(String id);
 
     void token(String id) throws WeiXinRequestException;
+
+    void activated(String id);
 }

@@ -1,6 +1,5 @@
 package cn.cloudwalk.ebank.core.domain.model.weixin.menu;
 
-import cn.cloudwalk.ebank.core.domain.model.weixin.account.WeiXinAccountEntity;
 import cn.cloudwalk.ebank.core.support.entity.AbstractEntity;
 
 import javax.persistence.*;
@@ -20,6 +19,8 @@ public class WeiXinMenuEntity extends AbstractEntity {
 
     private String                  url;                // 网页链接(view类型必须)
 
+    private String                  mediaId;            // 微信永久素材id
+
     private String                  templateId;         // 消息模板id
 
     private Integer                 order;              // 排序
@@ -30,25 +31,26 @@ public class WeiXinMenuEntity extends AbstractEntity {
 
     private WeiXinMenuEntity        parent;             // 关联自身
 
-    private WeiXinAccountEntity     accountEntity;      // 关联公众号
+    private String                  accountId;          // 关联公众号
 
     public WeiXinMenuEntity() {
         super();
     }
 
-    public WeiXinMenuEntity(String name, String key, String url, String templateId, Integer order,
+    public WeiXinMenuEntity(String name, String key, String url, String mediaId, String templateId, Integer order,
                             WeiXinMenuEntityType type, WeiXinMenuEntityMsgType msgType, WeiXinMenuEntity parent,
-                            WeiXinAccountEntity accountEntity) {
+                            String accountId) {
         this();
         this.name = name;
         this.key = key;
         this.url = url;
+        this.mediaId = mediaId;
         this.templateId = templateId;
         this.order = order;
         this.type = type;
         this.msgType = msgType;
         this.parent = parent;
-        this.accountEntity = accountEntity;
+        this.accountId = accountId;
     }
 
     @Column(name = "name")
@@ -64,6 +66,11 @@ public class WeiXinMenuEntity extends AbstractEntity {
     @Column(name = "url")
     public String getUrl() {
         return url;
+    }
+
+    @Column(name = "media_id")
+    public String getMediaId() {
+        return mediaId;
     }
 
     @Column(name = "template_id")
@@ -94,10 +101,9 @@ public class WeiXinMenuEntity extends AbstractEntity {
         return parent;
     }
 
-    @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.DETACH, CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(name = "account_id", nullable = false)
-    public WeiXinAccountEntity getAccountEntity() {
-        return accountEntity;
+    @Column(name = "account_id")
+    public String getAccountId() {
+        return accountId;
     }
 
     public void setName(String name) {
@@ -110,6 +116,10 @@ public class WeiXinMenuEntity extends AbstractEntity {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public void setMediaId(String mediaId) {
+        this.mediaId = mediaId;
     }
 
     public void setTemplateId(String templateId) {
@@ -132,7 +142,7 @@ public class WeiXinMenuEntity extends AbstractEntity {
         this.parent = parent;
     }
 
-    public void setAccountEntity(WeiXinAccountEntity accountEntity) {
-        this.accountEntity = accountEntity;
+    public void setAccountId(String accountId) {
+        this.accountId = accountId;
     }
 }

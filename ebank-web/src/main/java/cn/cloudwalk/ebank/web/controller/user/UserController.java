@@ -44,7 +44,7 @@ public class UserController extends BaseController {
     @RequestMapping("/list")
     public ModelAndView pagination(@ModelAttribute("user") UserPaginationCommand command) {
         Pagination<UserEntity> pagination = userService.pagination(command);
-        return new ModelAndView("/user/list", "pagination", pagination);
+        return new ModelAndView("user/list", "pagination", pagination);
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.GET)
@@ -78,7 +78,7 @@ public class UserController extends BaseController {
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
     public ModelAndView edit(@PathVariable String id) {
         UserEntity entity = userService.findById(id);
-        return new ModelAndView("/user/edit", "user", entity);
+        return new ModelAndView("user/edit", "user", entity);
     }
 
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.POST)
@@ -103,7 +103,7 @@ public class UserController extends BaseController {
     @RequestMapping(value = "/view/{id}", method = RequestMethod.GET)
     public ModelAndView view(@PathVariable String id) {
         UserEntity entity = userService.findById(id);
-        return new ModelAndView("/user/view", "user", entity);
+        return new ModelAndView("user/view", "user", entity);
     }
 
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
@@ -140,7 +140,7 @@ public class UserController extends BaseController {
         UserEntity entity = userService.findById(id);
         model.addAttribute("user", entity);
         model.addAttribute("roles", roleEntities);
-        return new ModelAndView("/user/authorize");
+        return new ModelAndView("user/authorize");
     }
 
     @RequestMapping(value = "/authorize/{id}", method = RequestMethod.POST)
@@ -160,7 +160,7 @@ public class UserController extends BaseController {
     @RequestMapping(value = "/parent/list")
     public ModelAndView parentList(@ModelAttribute("user") UserPaginationCommand command) {
         Pagination<UserEntity> pagination = userService.paginationWithoutSelf(command);
-        return new ModelAndView("/user/select-parent", "pagination", pagination);
+        return new ModelAndView("user/select-parent", "pagination", pagination);
     }
 
 }

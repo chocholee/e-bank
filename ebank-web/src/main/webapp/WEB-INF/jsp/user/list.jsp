@@ -97,13 +97,13 @@
                                 </a>
                             </sec:authorize>
                             <sec:authorize url="/user/delete/">
-                                <a href="javascript:_delete('${pageContext.request.contextPath}/user/delete/${user.id}')">
-                                    <img src="${pageContext.request.contextPath}/resources/images/btn_delete_n.png" alt="删除" title="删除">
+                                <a href="javascript:_delete('${pageContext.request.contextPath}/user/delete/${user.id}')" title="删除">
+                                    <img src="${pageContext.request.contextPath}/resources/images/btn_delete_n.png" alt="删除">
                                 </a>
                             </sec:authorize>
                             <sec:authorize url="/user/authorize/">
-                                <a href="javascript:authorize('${pageContext.request.contextPath}/user/authorize/${user.id}')">
-                                    <img src="${pageContext.request.contextPath}/resources/images/btn_user_n.png" alt="授权" title="授权">
+                                <a href="javascript:authorize('${pageContext.request.contextPath}/user/authorize/${user.id}')" title="授权">
+                                    <img src="${pageContext.request.contextPath}/resources/images/btn_user_n.png" alt="授权">
                                 </a>
                             </sec:authorize>
                         </td>

@@ -81,6 +81,13 @@
                     data.tree.render({deep:true});
                 });
             },
+            icon: function (event, data) {
+                if (data.node.key != 1 && data.node.data.icon == null) {
+                    if (data.node.hasChildren()) {
+                        data.node.folder = true;
+                    }
+                }
+            },
             renderColumns: function(event, data) {
                 var node = data.node, $tdList = $(node.tr).find(">td");
 

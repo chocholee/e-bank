@@ -5,12 +5,14 @@
 layui.use('form', function(){
     var form = layui.form();
     form.on('submit', function (data) {
-        var _this= this;
+        var _this = this;
+        var index = parent.layer.load();
         $.ajax({
             url:  this.action,
             type: this.method,
             data: $(this).serialize(),
             success: function (result) {
+                parent.layer.close(index);
                 if (result.type === "SUCCESS") {
                     var parentWindow = parent.window;
                     parent.layer.alert(result.message, function () {

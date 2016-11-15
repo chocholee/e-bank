@@ -1,7 +1,9 @@
 package cn.cloudwalk.ebank.core.domain.service.weixin.newstemplate;
 
-import cn.cloudwalk.ebank.core.domain.model.weixin.newstemplate.WeiXinNewsItemsTemplateEntity;
+import cn.cloudwalk.ebank.core.domain.model.weixin.template.news.WeiXinNewsItemsTemplateEntity;
+import cn.cloudwalk.ebank.core.domain.service.weixin.newstemplate.command.WeiXinNewsItemsTemplateCommand;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -14,5 +16,11 @@ public interface IWeiXinNewsItemsTemplateService {
     List<WeiXinNewsItemsTemplateEntity> findByNewsTemplateId(String newsTemplateId);
 
     WeiXinNewsItemsTemplateEntity findById(String id);
+
+    WeiXinNewsItemsTemplateEntity save(WeiXinNewsItemsTemplateCommand command, String tempDir, String saveDir) throws IOException;
+
+    WeiXinNewsItemsTemplateEntity update(WeiXinNewsItemsTemplateCommand command, String tempDir, String saveDir) throws IOException;
+
+    void delete(String id, String saveDir);
 
 }

@@ -1,11 +1,10 @@
 package cn.cloudwalk.ebank.core.domain.service.weixin;
 
 import cn.cloudwalk.ebank.core.domain.model.weixin.keyword.WeiXinKeywordEntity;
-import cn.cloudwalk.ebank.core.domain.model.weixin.newstemplate.WeiXinNewsItemsTemplateEntity;
-import cn.cloudwalk.ebank.core.domain.model.weixin.newstemplate.WeiXinNewsTemplateEntity;
-import cn.cloudwalk.ebank.core.domain.model.weixin.texttemplate.WeiXinTextTemplateEntity;
+import cn.cloudwalk.ebank.core.domain.model.weixin.template.news.WeiXinNewsItemsTemplateEntity;
+import cn.cloudwalk.ebank.core.domain.model.weixin.template.news.WeiXinNewsTemplateEntity;
+import cn.cloudwalk.ebank.core.domain.model.weixin.template.text.WeiXinTextTemplateEntity;
 import cn.cloudwalk.ebank.core.domain.service.weixin.account.IWeiXinAccountService;
-import cn.cloudwalk.ebank.core.domain.service.weixin.expandtemplate.IWeiXinExpandTemplateService;
 import cn.cloudwalk.ebank.core.domain.service.weixin.keyword.IWeiXinKeywordService;
 import cn.cloudwalk.ebank.core.domain.service.weixin.newstemplate.IWeiXinNewsItemsTemplateService;
 import cn.cloudwalk.ebank.core.domain.service.weixin.newstemplate.IWeiXinNewsTemplateService;
@@ -46,9 +45,6 @@ public class WeiXinService {
 
     @Autowired
     private IWeiXinNewsItemsTemplateService weiXinNewsItemsTemplateService;
-
-    @Autowired
-    private IWeiXinExpandTemplateService weiXinExpandTemplateService;
 
     @Autowired
     private IWeiXinReceiveService weiXinReceiveService;
@@ -147,7 +143,7 @@ public class WeiXinService {
                         }
                         responseMap.put("Articles", articles);
                         break;
-                    case EXPAND:
+                    case IMAGE:
                         // 返回扩展消息
                         break;
                 }

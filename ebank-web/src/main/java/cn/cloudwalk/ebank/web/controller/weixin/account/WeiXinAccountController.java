@@ -34,12 +34,12 @@ public class WeiXinAccountController extends BaseController {
     @RequestMapping("/list")
     public ModelAndView pagination(@ModelAttribute("account") WeiXinAccountPaginationCommand command) {
         Pagination<WeiXinAccountEntity> pagination = weiXinAccountService.pagination(command);
-        return new ModelAndView("/weixin/account/list", "pagination", pagination);
+        return new ModelAndView("weixin/account/list", "pagination", pagination);
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.GET)
     public ModelAndView add(@ModelAttribute("account") WeiXinAccountCommand command) {
-        return new ModelAndView("/weixin/account/add");
+        return new ModelAndView("weixin/account/add");
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
@@ -64,7 +64,7 @@ public class WeiXinAccountController extends BaseController {
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
     public ModelAndView edit(@ModelAttribute("account") WeiXinAccountCommand command) {
         WeiXinAccountEntity account = weiXinAccountService.findById(command.getId());
-        return new ModelAndView("/weixin/account/edit", "account", account);
+        return new ModelAndView("weixin/account/edit", "account", account);
     }
 
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.POST)
@@ -89,7 +89,7 @@ public class WeiXinAccountController extends BaseController {
     @RequestMapping(value = "/view/{id}", method = RequestMethod.GET)
     public ModelAndView view(@PathVariable String id) {
         WeiXinAccountEntity account = weiXinAccountService.findById(id);
-        return new ModelAndView("/weixin/account/view", "account", account);
+        return new ModelAndView("weixin/account/view", "account", account);
     }
 
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)

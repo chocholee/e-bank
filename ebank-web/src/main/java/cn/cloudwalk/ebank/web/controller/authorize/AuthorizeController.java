@@ -67,7 +67,7 @@ public class AuthorizeController extends BaseController {
             String message = (String) request.getSession().getAttribute("message");
             if (!StringUtils.isEmpty(message))
                 request.setAttribute("message", message);
-            return new ModelAndView("/login");
+            return new ModelAndView("login");
         } finally {
             request.getSession().removeAttribute("message");
         }

@@ -95,8 +95,10 @@ function _edit() {
 // 通用删除方法
 function _delete(url) {
     layer.confirm('真的要删除该记录吗?', {icon: 7, title:'警告'}, function(){
+        var index = layer.load();
         $.get(url, function (result) {
             layer.alert(result.message, function () {
+                layer.close(index);
                 window.location.reload();
             });
         });

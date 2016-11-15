@@ -89,7 +89,6 @@
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/plugins/layui/layui.js"></script>
     <c:if test="${account eq null}">
         <script>
-            var parentIndex = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
             parent.layer.alert('记录不存在', {title: "警告"}, function () {
                 parent.layer.closeAll(); //再执行关闭所有层
             });

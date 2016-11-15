@@ -2,6 +2,7 @@ package cn.cloudwalk.ebank.core.domain.service.weixin.account;
 
 import cn.cloudwalk.ebank.core.domain.model.user.UserEntity;
 import cn.cloudwalk.ebank.core.domain.model.weixin.account.WeiXinAccountEntity;
+import cn.cloudwalk.ebank.core.domain.model.weixin.account.WeiXinAccountEntityActivated;
 import cn.cloudwalk.ebank.core.domain.model.weixin.account.WeiXinAccountEntityStatus;
 import cn.cloudwalk.ebank.core.domain.service.user.IUserService;
 import cn.cloudwalk.ebank.core.domain.service.weixin.account.command.WeiXinAccountCommand;
@@ -61,10 +62,8 @@ public class WeiXinAccountService implements IWeiXinAccountService {
                 criterions.add(Restrictions.eq("type", command.getType()));
             }
 
-            if (!CustomSecurityContextHolderUtil.hasRole("administrator")) {
-                String username = CustomSecurityContextHolderUtil.getUsername();
-                criterions.add(Restrictions.eq("user.username", username));
-            }
+            String username = CustomSecurityContextHolderUtil.getUsername();
+            criterions.add(Restrictions.eq("user.username", username));
 
             // 添加排序条件
             List<Order> orders = new ArrayList<>();
@@ -191,6 +190,12 @@ public class WeiXinAccountService implements IWeiXinAccountService {
         String username = CustomSecurityContextHolderUtil.getUsername();
         UserEntity userEntity = userService.findByUsername(username);
 
+        WeiXinAccountEntity activated = weiXinAccountRepository.findByUsername(username);
+        WeiXinAccountEntityActivated activatedStatus =
+                (null == activated)
+                        ? WeiXinAccountEntityActivated.ACTIVATED
+                        : WeiXinAccountEntityActivated.NONACTIVATED;
+
         // 新增
         WeiXinAccountEntity entity = new WeiXinAccountEntity(
                 command.getName(),
@@ -204,6 +209,7 @@ public class WeiXinAccountService implements IWeiXinAccountService {
                 new Date(),
                 command.getType(),
                 WeiXinAccountEntityStatus.UNAUTHORIZED,
+                activatedStatus,
                 userEntity
         );
         weiXinAccountRepository.save(entity);
@@ -250,5 +256,21 @@ public class WeiXinAccountService implements IWeiXinAccountService {
         WeiXinAccountEntity entity = this.findById(id);
         getAccessToken(entity.getAppId());
         getJsApiTicket(entity.getAppId());
+    }
+
+    @Override
+    public void activated(String id) {
+        // 找到之前激活过的公众号并更新为未激活
+        String username = CustomSecurityContextHolderUtil.getUsername();
+        WeiXinAccountEntity beforeActivated = this.findByUsername(username);
+        if (null != beforeActivated) {
+            beforeActivated.setActivated(WeiXinAccountEntityActivated.NONACTIVATED);
+            weiXinAccountRepository.update(beforeActivated);
+        }
+
+        // 更新当前公众号为激活
+        WeiXinAccountEntity newActivated = this.findById(id);
+        newActivated.setActivated(WeiXinAccountEntityActivated.ACTIVATED);
+        weiXinAccountRepository.update(newActivated);
     }
 }

@@ -53,12 +53,12 @@ public class IconController extends BaseController {
     @RequestMapping("/list")
     public ModelAndView list(@ModelAttribute("icon") IconPaginationCommand command) {
         Pagination<IconEntity> pagination = iconService.pagination(command);
-        return new ModelAndView("/icon/list", "pagination", pagination);
+        return new ModelAndView("icon/list", "pagination", pagination);
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.GET)
     public ModelAndView add(@ModelAttribute("icon") IconCommand command) {
-        return new ModelAndView("/icon/add", "tempHost", tempHost);
+        return new ModelAndView("icon/add", "tempHost", tempHost);
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
@@ -86,7 +86,7 @@ public class IconController extends BaseController {
         model.addAttribute("icon", entity);
         model.addAttribute("host", host);
         model.addAttribute("tempHost", tempHost);
-        return new ModelAndView("/icon/edit");
+        return new ModelAndView("icon/edit");
     }
 
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.POST)
@@ -113,7 +113,7 @@ public class IconController extends BaseController {
         IconEntity entity = iconService.findById(id);
         model.addAttribute("icon", entity);
         model.addAttribute("host", host);
-        return new ModelAndView("/icon/view");
+        return new ModelAndView("icon/view");
     }
 
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)

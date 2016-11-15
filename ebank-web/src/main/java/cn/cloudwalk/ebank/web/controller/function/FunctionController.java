@@ -106,7 +106,7 @@ public class FunctionController extends BaseController {
     @RequestMapping(value = "/add", method = RequestMethod.GET)
     public ModelAndView add(@ModelAttribute("function") FunctionCommand command) {
         List<IconEntity> iconEntities = iconService.findAll();
-        return new ModelAndView("/function/add", "icons", iconEntities);
+        return new ModelAndView("function/add", "icons", iconEntities);
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
@@ -138,7 +138,7 @@ public class FunctionController extends BaseController {
         List<IconEntity> iconEntities = iconService.findAll();
         model.addAttribute("function", entity);
         model.addAttribute("icons", iconEntities);
-        return new ModelAndView("/function/edit");
+        return new ModelAndView("function/edit");
     }
 
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.POST)
@@ -163,7 +163,7 @@ public class FunctionController extends BaseController {
     @RequestMapping(value = "/view/{id}", method = RequestMethod.GET)
     public ModelAndView view(@PathVariable String id) {
         FunctionEntity entity = functionService.findById(id);
-        return new ModelAndView("/function/view", "function", entity);
+        return new ModelAndView("function/view", "function", entity);
     }
 
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
@@ -182,7 +182,7 @@ public class FunctionController extends BaseController {
 
     @RequestMapping(value = "/parent/list")
     public ModelAndView parentList() {
-        return new ModelAndView("/function/select-parent");
+        return new ModelAndView("function/select-parent");
     }
 
 }

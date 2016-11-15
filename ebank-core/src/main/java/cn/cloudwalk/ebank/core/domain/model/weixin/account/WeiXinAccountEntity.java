@@ -15,49 +15,51 @@ import java.util.Date;
 @Table(name = "weixin_account")
 public class WeiXinAccountEntity extends AbstractEntity {
 
-    private String                      name;                   // 公众号名称
+    private String                          name;                   // 公众号名称
 
-    private String                      token;                  // 公众号token
+    private String                          token;                  // 公众号token
 
-    private String                      number;                 // 公众号微信号
+    private String                          number;                 // 公众号微信号
 
-    private String                      accountId;              // 公众号微信号(原始ID)
+    private String                          accountId;              // 公众号微信号(原始ID)
 
-    private String                      appId;                  // 公众号appId
+    private String                          appId;                  // 公众号appId
 
-    private String                      appSecret;              // 公众号appSecret
+    private String                          appSecret;              // 公众号appSecret
 
-    private String                      accessToken;            // 公众号accessToken
+    private String                          accessToken;            // 公众号accessToken
 
-    private Date                        accessTokenTime;        // 公众号accessTokenTime
+    private Date                            accessTokenTime;        // 公众号accessTokenTime
 
-    private String                      jsApiTicket;            // 公众号jsApiTicket
+    private String                          jsApiTicket;            // 公众号jsApiTicket
 
-    private Date                        jsApiTicketTime;        // 公众号jsApiTicketTime
+    private Date                            jsApiTicketTime;        // 公众号jsApiTicketTime
 
-    private String                      apiTicket;              // 公众号apiTicket
+    private String                          apiTicket;              // 公众号apiTicket
 
-    private Date                        apiTicketTime;          // 公众号apiTicketTime
+    private Date                            apiTicketTime;          // 公众号apiTicketTime
 
-    private String                      email;                  // 公众号email
+    private String                          email;                  // 公众号email
 
-    private String                      description;            // 公众号描述
+    private String                          description;            // 公众号描述
 
-    private Date                        createdDate;            // 创建日期
+    private Date                            createdDate;            // 创建日期
 
-    private WeiXinAccountEntityType     type;                   // 公众号类型
+    private WeiXinAccountEntityType         type;                   // 公众号类型
 
-    private WeiXinAccountEntityStatus   status;                 // 授权状态
+    private WeiXinAccountEntityStatus       status;                 // 授权状态
 
-    private UserEntity                  user;                   // 关联用户
+    private WeiXinAccountEntityActivated    activated;              // 激活状态
+
+    private UserEntity                      user;                   // 关联用户
 
     public WeiXinAccountEntity() {
         super();
     }
 
-    public WeiXinAccountEntity(String name, String token, String number, String accountId, String appId,
-                               String appSecret, String email, String description, Date createdDate,
-                               WeiXinAccountEntityType type, WeiXinAccountEntityStatus status, UserEntity user) {
+    public WeiXinAccountEntity(String name, String token, String number, String accountId, String appId, String appSecret,
+                               String email, String description, Date createdDate, WeiXinAccountEntityType type,
+                               WeiXinAccountEntityStatus status, WeiXinAccountEntityActivated activated, UserEntity user) {
         this();
         this.name = name;
         this.token = token;
@@ -70,6 +72,7 @@ public class WeiXinAccountEntity extends AbstractEntity {
         this.createdDate = createdDate;
         this.type = type;
         this.status = status;
+        this.activated = activated;
         this.user = user;
     }
 
@@ -160,6 +163,12 @@ public class WeiXinAccountEntity extends AbstractEntity {
         return status;
     }
 
+    @Column(name = "activated")
+    @Enumerated(EnumType.STRING)
+    public WeiXinAccountEntityActivated getActivated() {
+        return activated;
+    }
+
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     public UserEntity getUser() {
@@ -232,6 +241,10 @@ public class WeiXinAccountEntity extends AbstractEntity {
 
     public void setStatus(WeiXinAccountEntityStatus status) {
         this.status = status;
+    }
+
+    public void setActivated(WeiXinAccountEntityActivated activated) {
+        this.activated = activated;
     }
 
     public void setUser(UserEntity user) {
