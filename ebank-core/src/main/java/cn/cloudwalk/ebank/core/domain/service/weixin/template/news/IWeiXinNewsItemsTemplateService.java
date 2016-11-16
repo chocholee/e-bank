@@ -1,7 +1,7 @@
-package cn.cloudwalk.ebank.core.domain.service.weixin.newstemplate;
+package cn.cloudwalk.ebank.core.domain.service.weixin.template.news;
 
 import cn.cloudwalk.ebank.core.domain.model.weixin.template.news.WeiXinNewsItemsTemplateEntity;
-import cn.cloudwalk.ebank.core.domain.service.weixin.newstemplate.command.WeiXinNewsItemsTemplateCommand;
+import cn.cloudwalk.ebank.core.domain.service.weixin.template.news.command.WeiXinNewsItemsTemplateCommand;
 
 import java.io.IOException;
 import java.util.List;

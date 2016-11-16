@@ -1,9 +1,9 @@
-package cn.cloudwalk.ebank.core.domain.service.weixin.texttemplate;
+package cn.cloudwalk.ebank.core.domain.service.weixin.template.text;
 
 import cn.cloudwalk.ebank.core.domain.model.weixin.account.WeiXinAccountEntity;
 import cn.cloudwalk.ebank.core.domain.model.weixin.template.text.WeiXinTextTemplateEntity;
-import cn.cloudwalk.ebank.core.domain.service.weixin.texttemplate.command.WeiXinTextTemplateCommand;
-import cn.cloudwalk.ebank.core.domain.service.weixin.texttemplate.command.WeiXinTextTemplatePaginationCommand;
+import cn.cloudwalk.ebank.core.domain.service.weixin.template.text.command.WeiXinTextTemplateCommand;
+import cn.cloudwalk.ebank.core.domain.service.weixin.template.text.command.WeiXinTextTemplatePaginationCommand;
 import cn.cloudwalk.ebank.core.repository.Pagination;
 import cn.cloudwalk.ebank.core.repository.weixin.account.IWeiXinAccountRepository;
 import cn.cloudwalk.ebank.core.repository.weixin.template.text.IWeiXinTextTemplateRepository;

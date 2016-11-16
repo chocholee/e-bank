@@ -1,4 +1,4 @@
-package cn.cloudwalk.ebank.core.domain.service.weixin.imagetemplate.command;
+package cn.cloudwalk.ebank.core.domain.service.weixin.template.image.command;
 
 import cn.cloudwalk.ebank.core.support.command.AbstractPaginationCommand;
 

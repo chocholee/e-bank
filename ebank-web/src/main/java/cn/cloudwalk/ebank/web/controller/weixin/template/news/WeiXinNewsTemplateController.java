@@ -2,11 +2,11 @@ package cn.cloudwalk.ebank.web.controller.weixin.template.news;
 
 import cn.cloudwalk.ebank.core.domain.model.weixin.template.news.WeiXinNewsItemsTemplateEntity;
 import cn.cloudwalk.ebank.core.domain.model.weixin.template.news.WeiXinNewsTemplateEntity;
-import cn.cloudwalk.ebank.core.domain.service.weixin.newstemplate.IWeiXinNewsItemsTemplateService;
-import cn.cloudwalk.ebank.core.domain.service.weixin.newstemplate.IWeiXinNewsTemplateService;
-import cn.cloudwalk.ebank.core.domain.service.weixin.newstemplate.command.WeiXinNewsItemsTemplateCommand;
-import cn.cloudwalk.ebank.core.domain.service.weixin.newstemplate.command.WeiXinNewsTemplateCommand;
-import cn.cloudwalk.ebank.core.domain.service.weixin.newstemplate.command.WeiXinNewsTemplatePaginationCommand;
+import cn.cloudwalk.ebank.core.domain.service.weixin.template.news.IWeiXinNewsItemsTemplateService;
+import cn.cloudwalk.ebank.core.domain.service.weixin.template.news.IWeiXinNewsTemplateService;
+import cn.cloudwalk.ebank.core.domain.service.weixin.template.news.command.WeiXinNewsItemsTemplateCommand;
+import cn.cloudwalk.ebank.core.domain.service.weixin.template.news.command.WeiXinNewsTemplateCommand;
+import cn.cloudwalk.ebank.core.domain.service.weixin.template.news.command.WeiXinNewsTemplatePaginationCommand;
 import cn.cloudwalk.ebank.core.repository.Pagination;
 import cn.cloudwalk.ebank.core.support.exception.WeiXinNotFoundException;
 import cn.cloudwalk.ebank.core.support.utils.CustomUploadUtil;

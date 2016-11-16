@@ -1,9 +1,9 @@
 package cn.cloudwalk.ebank.web.controller.weixin.template.image;
 
 import cn.cloudwalk.ebank.core.domain.model.weixin.template.image.WeiXinImageTemplateEntity;
-import cn.cloudwalk.ebank.core.domain.service.weixin.imagetemplate.IWeiXinImageTemplateService;
-import cn.cloudwalk.ebank.core.domain.service.weixin.imagetemplate.command.WeiXinImageTemplateCommand;
-import cn.cloudwalk.ebank.core.domain.service.weixin.imagetemplate.command.WeiXinImageTemplatePaginationCommand;
+import cn.cloudwalk.ebank.core.domain.service.weixin.template.image.IWeiXinImageTemplateService;
+import cn.cloudwalk.ebank.core.domain.service.weixin.template.image.command.WeiXinImageTemplateCommand;
+import cn.cloudwalk.ebank.core.domain.service.weixin.template.image.command.WeiXinImageTemplatePaginationCommand;
 import cn.cloudwalk.ebank.core.repository.Pagination;
 import cn.cloudwalk.ebank.core.support.utils.CustomUploadUtil;
 import cn.cloudwalk.ebank.web.controller.shared.AlertMessage;

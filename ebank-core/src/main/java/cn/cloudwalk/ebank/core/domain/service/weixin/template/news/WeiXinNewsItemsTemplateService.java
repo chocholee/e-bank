@@ -1,8 +1,8 @@
-package cn.cloudwalk.ebank.core.domain.service.weixin.newstemplate;
+package cn.cloudwalk.ebank.core.domain.service.weixin.template.news;
 
 import cn.cloudwalk.ebank.core.domain.model.weixin.template.news.WeiXinNewsItemsTemplateEntity;
 import cn.cloudwalk.ebank.core.domain.model.weixin.template.news.WeiXinNewsTemplateEntity;
-import cn.cloudwalk.ebank.core.domain.service.weixin.newstemplate.command.WeiXinNewsItemsTemplateCommand;
+import cn.cloudwalk.ebank.core.domain.service.weixin.template.news.command.WeiXinNewsItemsTemplateCommand;
 import cn.cloudwalk.ebank.core.repository.weixin.template.news.IWeiXinNewsItemsTemplateRepository;
 import cn.cloudwalk.ebank.core.repository.weixin.template.news.IWeiXinNewsTemplateRepository;
 import cn.cloudwalk.ebank.core.support.exception.WeiXinNotFoundException;

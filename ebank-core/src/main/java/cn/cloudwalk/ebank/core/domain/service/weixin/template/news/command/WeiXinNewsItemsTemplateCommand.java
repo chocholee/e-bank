@@ -1,4 +1,4 @@
-package cn.cloudwalk.ebank.core.domain.service.weixin.newstemplate.command;
+package cn.cloudwalk.ebank.core.domain.service.weixin.template.news.command;
 
 import cn.cloudwalk.ebank.core.support.command.AbstractCommand;
 import org.hibernate.validator.constraints.NotBlank;
