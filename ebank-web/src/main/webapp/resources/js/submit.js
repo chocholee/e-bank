@@ -1,10 +1,11 @@
 /**
  * Created by liwenhe on 2016/11/1.
  */
+var currentWindow = undefined;
 // 表单提交时操作
 layui.use('form', function(){
     var form = layui.form();
-    form.on('submit', function (data) {
+    form.on('submit', function () {
         var _this = this;
         var index = parent.layer.load();
         $.ajax({
@@ -14,10 +15,11 @@ layui.use('form', function(){
             success: function (result) {
                 parent.layer.close(index);
                 if (result.type === "SUCCESS") {
-                    var parentWindow = parent.window;
-                    parent.layer.alert(result.message, function () {
-                        parentWindow.location.reload();
-                        parent.layer.closeAll();
+                    var currentWinIndex = parent.layer.getFrameIndex(window.name);
+                    parent.layer.alert(result.message, function (alertIndex) {
+                        parent.layer.close(alertIndex);
+                        parent.layer.close(currentWinIndex);
+                        currentWindow.location.reload();
                     });
                 } else {
                     if (result.data !== null && result.data !== undefined) {
@@ -35,7 +37,8 @@ layui.use('form', function(){
         return false;
     });
 
-    window.submit = function () {
+    window.submit = function (_pWindow) {
+        currentWindow = _pWindow;
         $(".layui-form").submit();
     }
 });

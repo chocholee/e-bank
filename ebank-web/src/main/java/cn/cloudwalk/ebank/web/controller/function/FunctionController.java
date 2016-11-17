@@ -1,6 +1,7 @@
 package cn.cloudwalk.ebank.web.controller.function;
 
 import cn.cloudwalk.ebank.core.domain.model.function.FunctionEntity;
+import cn.cloudwalk.ebank.core.domain.model.function.FunctionEntityType;
 import cn.cloudwalk.ebank.core.domain.model.icon.IconEntity;
 import cn.cloudwalk.ebank.core.domain.service.function.IFunctionService;
 import cn.cloudwalk.ebank.core.domain.service.function.command.FunctionCommand;
@@ -69,32 +70,17 @@ public class FunctionController extends BaseController {
             List<Map<String, Object>> secondMenuList = new ArrayList<>();
             List<FunctionEntity> secondMenus = functionService.findByParentId(first.getId(), true, false);
             for (FunctionEntity second : secondMenus) {
-                Map<String, Object> secondMenuMap = new HashMap<>();
-                secondMenuMap.put("id", second.getId());
-                secondMenuMap.put("name", second.getName());
-                secondMenuMap.put("order", second.getOrder());
-                secondMenuMap.put("type", second.getType());
-                secondMenuMap.put("icon", (null != second.getIconEntity())
-                        ? iconHost.concat("/").concat(second.getIconEntity().getBeforeHoverPath())
-                        : null);
-
-                // 查找三级菜单
-                List<Map<String, Object>> thirdMenuList = new ArrayList<>();
-                List<FunctionEntity> thirdMenus = functionService.findByParentId(second.getId(), true, false);
-                for (FunctionEntity third : thirdMenus) {
-                    Map<String, Object> thirdMenuMap = new HashMap<>();
-                    thirdMenuMap.put("id", third.getId());
-                    thirdMenuMap.put("name", third.getName());
-                    thirdMenuMap.put("order", third.getOrder());
-                    thirdMenuMap.put("type", third.getType());
-                    thirdMenuMap.put("icon", (null != third.getIconEntity())
-                            ? iconHost.concat("/").concat(third.getIconEntity().getBeforeHoverPath())
+                if (second.getType() == FunctionEntityType.SECOND) {
+                    Map<String, Object> secondMenuMap = new HashMap<>();
+                    secondMenuMap.put("id", second.getId());
+                    secondMenuMap.put("name", second.getName());
+                    secondMenuMap.put("order", second.getOrder());
+                    secondMenuMap.put("type", second.getType());
+                    secondMenuMap.put("icon", (null != second.getIconEntity())
+                            ? iconHost.concat("/").concat(second.getIconEntity().getBeforeHoverPath())
                             : null);
-                    thirdMenuList.add(thirdMenuMap);
+                    secondMenuList.add(secondMenuMap);
                 }
-                // 组装三级菜单数据至二级菜单中
-                secondMenuMap.put("children", thirdMenuList);
-                secondMenuList.add(secondMenuMap);
             }
             // 组装二级菜单数据至一级菜单中
             firstMenuMap.put("children", secondMenuList);
@@ -177,6 +163,61 @@ public class FunctionController extends BaseController {
             logger.error(e.getMessage(), e);
             return new AlertMessage(AlertMessage.Type.ERROR,
                     getMessageSourceAccessor().getMessage("default.delete.failure.message"));
+        }
+    }
+
+    @RequestMapping(value = "/btn/dataset/{id}")
+    @ResponseBody
+    public List<Map<String, Object>> btnDataset(@PathVariable String id) {
+        // 查找三级菜单
+        List<Map<String, Object>> dataset = new ArrayList<>();
+        List<FunctionEntity> functionEntities = functionService.findByParentId(id, true, false);
+        for (FunctionEntity function : functionEntities) {
+            if (function.getType() == FunctionEntityType.THIRD) {
+                Map<String, Object> thirdMenuMap = new HashMap<>();
+                thirdMenuMap.put("id", function.getId());
+                thirdMenuMap.put("name", function.getName());
+                thirdMenuMap.put("order", function.getOrder());
+                thirdMenuMap.put("type", function.getType());
+                thirdMenuMap.put("icon", (null != function.getIconEntity())
+                        ? iconHost.concat("/").concat(function.getIconEntity().getBeforeHoverPath())
+                        : null);
+                dataset.add(thirdMenuMap);
+            }
+        }
+        return dataset;
+    }
+
+    @RequestMapping(value = "/btn/list/{id}")
+    public ModelAndView btnList(@PathVariable String id) {
+        return new ModelAndView("function/select-btn", "id", id);
+    }
+
+    @RequestMapping(value = "/btn/add/{parent.id}", method = RequestMethod.GET)
+    public ModelAndView btnAdd(@ModelAttribute("function") FunctionCommand command) {
+        return new ModelAndView("function/add-btn");
+    }
+
+    @RequestMapping(value = "/btn/add/{parent.id}", method = RequestMethod.POST)
+    @ResponseBody
+    public AlertMessage btnAdd(@Validated @ModelAttribute("function") FunctionCommand command,
+                               BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return new AlertMessage(AlertMessage.Type.ERROR, null, bindingResult.getFieldErrors());
+        }
+
+        try {
+            functionService.save(command);
+            return new AlertMessage(AlertMessage.Type.SUCCESS,
+                    getMessageSourceAccessor().getMessage("default.add.success.message"));
+        } catch (DataIntegrityViolationException e) {
+            logger.error(e.getMessage(), e);
+            return new AlertMessage(AlertMessage.Type.ERROR,
+                    getMessageSourceAccessor().getMessage("default.not.unique.message"));
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return new AlertMessage(AlertMessage.Type.ERROR,
+                    getMessageSourceAccessor().getMessage("default.add.failure.message"));
         }
     }
 

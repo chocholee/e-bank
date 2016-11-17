@@ -52,13 +52,17 @@
 
 <tmpl:override name="page_script">
     <c:if test="${fn:length(items) eq 0}">
-        <script>
+        <script type="text/javascript">
             parent.layer.alert('请添加图文项信息!', {title: "警告"}, function () {
                 parent.layer.closeAll(); //再执行关闭所有层
             });
         </script>
     </c:if>
-    <script>
+    <script type="text/javascript">
+        // 初始化CURD
+        CURD.init(window, parent);
+
+        // 增加遮罩
         $(".item").on("mouseenter", function () {
             $(".mask").show();
 
@@ -80,42 +84,9 @@
 
             var editURL   = "${pageContext.request.contextPath}/weixin/template/news/item/edit/" + itemId;
             var deleteURL = "${pageContext.request.contextPath}/weixin/template/news/item/delete/" + itemId;
-            $(".mask > .btn-group > a:first").attr("href", "javascript:_edit('" + editURL + "', '编辑图文项', '900px', '495px');");
-            $(".mask > .btn-group > a:last").attr("href", "javascript:_delete('" + deleteURL + "');");
+            $(".mask > .btn-group > a:first").attr("href", "javascript:CURD.edit('" + editURL + "', '编辑图文项', '900px', '495px');");
+            $(".mask > .btn-group > a:last").attr("href", "javascript:CURD.delete('" + deleteURL + "');");
         });
-
-        // 编辑方法
-        function _edit(url, title, width, height) {
-            parent.layer.open({
-                type: 2,
-                title: title,
-                shadeClose: true,
-                shade: [0.5],
-                area: [width, height],
-                content: url,
-                maxmin: false,
-                btn: ["确定"],
-                yes: function (index, cLayer) {
-                    var iframeWin = parent.window[cLayer.find('iframe')[0]['name']];
-                    iframeWin.submit();
-                    window.location.reload();
-                }
-            });
-        }
-
-        // 删除方法
-        function _delete(url) {
-            parent.layer.confirm('真的要删除该记录吗?', {icon: 7, title:'警告'}, function(){
-                $.get(url, function (result) {
-                    var loadIndex = parent.layer.load();
-                    parent.layer.alert(result.message, function (index) {
-                        parent.layer.close(loadIndex);
-                        parent.layer.close(index);
-                        window.location.reload();
-                    });
-                });
-            });
-        }
     </script>
 </tmpl:override>
 

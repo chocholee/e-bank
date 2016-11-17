@@ -4,4 +4,4 @@ body{width:550px;margin:0 auto !important;background-color: inherit;}
 .layui-form-item {margin-bottom:10px;}
 .layui-input-block{margin-left:120px !important;}
 .layui-form-label {width: 90px !important;}
-.layui-form-select ul {max-height: none !important;}
+.layui-form-select ul {max-height: 120px !important;}

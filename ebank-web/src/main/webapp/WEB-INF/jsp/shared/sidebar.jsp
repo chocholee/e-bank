@@ -36,7 +36,7 @@
                         </ul>
                     </c:when>
                     <c:otherwise>
-                        <a href="${firstFunc.uri}">
+                        <a href="${firstFunc.uri}" style="background-image: none;">
                             <c:choose>
                                 <c:when test="${firstFunc.iconEntity ne null}">
                                     <img src="${iconHost}/${firstFunc.iconEntity.beforeHoverPath}"

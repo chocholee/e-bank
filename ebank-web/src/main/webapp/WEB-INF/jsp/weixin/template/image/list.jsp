@@ -19,7 +19,7 @@
         <div class="left button-group-wrapper">
             <sec:authorize url="/weixin/template/image/add">
                 <div class="button-group mr-20">
-                    <a href="javascript:_add('${pageContext.request.contextPath}/weixin/template/image/add', '新增', '900px', '400px');" class="button">
+                    <a href="javascript:CURD.add('${pageContext.request.contextPath}/weixin/template/image/add', '新增', '900px', '400px');" class="button">
                         <img src="${pageContext.request.contextPath}/resources/images/btn_add_n.png" height="18" width="18"
                              alt="添加">
                         <span>添加</span>
@@ -34,7 +34,7 @@
                     <input name="name" type="text" class="form-control" value="${image.name}">
                 </div>
                 <div class="form-group">
-                    <a href="javascript:void(0);" onclick="_search(this)" class="button"><img
+                    <a href="javascript:void(0);" onclick="CURD.search(this)" class="button"><img
                             src="${pageContext.request.contextPath}/resources/images/btn_search_n.png" alt="查询"
                             height="18"
                             width="18">
@@ -42,7 +42,7 @@
                     </a>
                 </div>
                 <div class="form-group">
-                    <a href="javascript:void(0);" onclick="_reset(this)" class="button"><img
+                    <a href="javascript:void(0);" onclick="CURD.reset(this)" class="button"><img
                             src="${pageContext.request.contextPath}/resources/images/btn_Reset_n.png" alt="重置"
                             height="18"
                             width="18">
@@ -69,17 +69,17 @@
                         <td>${image.createdDate}</td>
                         <td class="last-td">
                             <sec:authorize url="/weixin/template/image/view/">
-                                <a href="javascript:_view('${pageContext.request.contextPath}/weixin/template/image/view/${image.id}', '查看', '360px', '345px')" title="查看">
+                                <a href="javascript:CURD.view('${pageContext.request.contextPath}/weixin/template/image/view/${image.id}', '查看', '360px', '345px')" title="查看">
                                     <img src="${pageContext.request.contextPath}/resources/images/eye.png">
                                 </a>
                             </sec:authorize>
                             <sec:authorize url="/weixin/template/text/edit/">
-                                <a href="javascript:_edit('${pageContext.request.contextPath}/weixin/template/image/edit/${image.id}', '编辑', '900px', '400px')" title="编辑">
+                                <a href="javascript:CURD.edit('${pageContext.request.contextPath}/weixin/template/image/edit/${image.id}', '编辑', '900px', '400px')" title="编辑">
                                     <img src="${pageContext.request.contextPath}/resources/images/edit.png" alt="编辑">
                                 </a>
                             </sec:authorize>
                             <sec:authorize url="/weixin/template/text/delete/">
-                                <a href="javascript:_delete('${pageContext.request.contextPath}/weixin/template/image/delete/${image.id}')" title="删除">
+                                <a href="javascript:CURD.delete('${pageContext.request.contextPath}/weixin/template/image/delete/${image.id}')" title="删除">
                                     <img src="${pageContext.request.contextPath}/resources/images/btn_delete_n.png" alt="删除">
                                 </a>
                             </sec:authorize>
@@ -100,6 +100,10 @@
 <tmpl:override name="page_script">
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/plugins/jquery.dropkick-min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/pagination.js"></script>
+    <script type="text/javascript">
+        // 初始化CURD
+        CURD.init(window, window);
+    </script>
 </tmpl:override>
 
 <%@ include file="../../../shared/decorator.jsp" %>

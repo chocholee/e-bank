@@ -4,6 +4,7 @@ import cn.cloudwalk.ebank.core.domain.model.weixin.receive.WeiXinReceiveEntity;
 import cn.cloudwalk.ebank.core.domain.service.weixin.receive.command.WeiXinReceiveCommand;
 import cn.cloudwalk.ebank.core.domain.service.weixin.receive.command.WeiXinReceivePaginationCommand;
 import cn.cloudwalk.ebank.core.repository.Pagination;
+import com.arm4j.weixin.exception.WeiXinRequestException;
 
 /**
  * Created by liwenhe on 2016/10/9.
@@ -16,7 +17,7 @@ public interface IWeiXinReceiveService {
 
     WeiXinReceiveEntity save(WeiXinReceiveCommand command);
 
-    void response(String id, String content);
+    void reply(String id, String content) throws WeiXinRequestException;
 
     void delete(String id);
 

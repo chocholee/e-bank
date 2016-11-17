@@ -65,7 +65,7 @@
                 autoExpand:true
             },
             source: {
-                url: "${pageContext.request.contextPath}/function/dataset"
+                url: "${pageContext.request.contextPath}/role/authorize/dataset"
             },
             postProcess: function (event, data) {
                 $.get("${pageContext.request.contextPath}/role/functions/${id}", function (result) {

@@ -16,7 +16,7 @@
         <div class="left button-group-wrapper">
             <sec:authorize url="/role/add">
                 <div class="button-group mr-20">
-                    <a href="javascript:_add('${pageContext.request.contextPath}/role/add', '新增', '600px', '340px');" class="button">
+                    <a href="javascript:CURD.add('${pageContext.request.contextPath}/role/add', '新增', '600px', '340px');" class="button">
                         <img src="${pageContext.request.contextPath}/resources/images/btn_add_n.png" height="18" width="18"
                              alt="添加">
                         <span>添加</span>
@@ -31,7 +31,7 @@
                     <input name="name" type="text" class="form-control" value="${role.name}">
                 </div>
                 <div class="form-group">
-                    <a href="javascript:void(0);" onclick="_search(this)" class="button"><img
+                    <a href="javascript:void(0);" onclick="CURD.search(this)" class="button"><img
                             src="${pageContext.request.contextPath}/resources/images/btn_search_n.png" alt="查询"
                             height="18"
                             width="18">
@@ -39,7 +39,7 @@
                     </a>
                 </div>
                 <div class="form-group">
-                    <a href="javascript:void(0);" onclick="_reset(this)" class="button"><img
+                    <a href="javascript:void(0);" onclick="CURD.reset(this)" class="button"><img
                             src="${pageContext.request.contextPath}/resources/images/btn_Reset_n.png" alt="重置"
                             height="18"
                             width="18">
@@ -68,17 +68,17 @@
                         <td>${role.order}</td>
                         <td class="last-td">
                             <sec:authorize url="/role/edit/">
-                                <a href="javascript:_edit('${pageContext.request.contextPath}/role/edit/${role.id}', '编辑', '600px', '340px')" title="编辑">
+                                <a href="javascript:CURD.edit('${pageContext.request.contextPath}/role/edit/${role.id}', '编辑', '600px', '340px')" title="编辑">
                                     <img src="${pageContext.request.contextPath}/resources/images/edit.png" alt="编辑">
                                 </a>
                             </sec:authorize>
                             <sec:authorize url="/role/delete/">
-                                <a href="javascript:_delete('${pageContext.request.contextPath}/role/delete/${role.id}')" title="删除">
+                                <a href="javascript:CURD.delete('${pageContext.request.contextPath}/role/delete/${role.id}')" title="删除">
                                     <img src="${pageContext.request.contextPath}/resources/images/btn_delete_n.png" alt="删除">
                                 </a>
                             </sec:authorize>
                             <sec:authorize url="/role/authorize/">
-                                <a href="javascript:_edit('${pageContext.request.contextPath}/role/authorize/${role.id}', '角色授权', '800px', '500px')" title="授权">
+                                <a href="javascript:CURD.edit('${pageContext.request.contextPath}/role/authorize/${role.id}', '角色授权', '800px', '500px')" title="授权">
                                     <img src="${pageContext.request.contextPath}/resources/images/btn_user_n.png" alt="授权">
                                 </a>
                             </sec:authorize>
@@ -99,6 +99,10 @@
 <tmpl:override name="page_script">
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/plugins/jquery.dropkick-min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/pagination.js"></script>
+    <script type="text/javascript">
+        // 初始化CURD
+        CURD.init(window, window);
+    </script>
 </tmpl:override>
 
 <%@ include file="../shared/decorator.jsp" %>

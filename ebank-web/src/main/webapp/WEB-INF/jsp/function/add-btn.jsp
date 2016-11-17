@@ -7,13 +7,13 @@
 
 <tmpl:override name="page_css">
     <link href="${pageContext.request.contextPath}/resources/css/form.css" rel="stylesheet" type="text/css">
-    <link href="${pageContext.request.contextPath}/resources/js/plugins/layui/css/layui.css" rel="stylesheet"
-          type="text/css">
+    <link href="${pageContext.request.contextPath}/resources/js/plugins/layui/css/layui.css" rel="stylesheet" type="text/css">
 </tmpl:override>
 
 <tmpl:override name="body">
     <div class="block">
-        <form class="layui-form" action="${pageContext.request.contextPath}/function/edit/${function.id}" method="post">
+        <form class="layui-form" action="${pageContext.request.contextPath}/function/btn/add/${function.parent.id}" method="post">
+            <input type="hidden" name="type" value="THIRD">
             <div class="layui-form-item">
                 <label class="layui-form-label red-star">名称</label>
                 <div class="layui-input-block">
@@ -35,33 +35,8 @@
                         <option value="">请选择</option>
                         <option value="">请选择</option>
                         <c:forEach var="icon" items="${icons}">
-                            <c:choose>
-                                <c:when test="${function.iconEntity ne null && function.iconEntity.id eq icon.id}">
-                                    <option value="${icon.id}" selected>${icon.name}</option>
-                                </c:when>
-                                <c:otherwise>
-                                    <option value="${icon.id}">${icon.name}</option>
-                                </c:otherwise>
-                            </c:choose>
+                            <option value="${icon.id}">${icon.name}</option>
                         </c:forEach>
-                    </select>
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label red-star">类型</label>
-                <div class="layui-input-block layui-form-item-type">
-                    <select name="type" lay-verify="required">
-                        <option value="">请选择</option>
-                        <c:if test="${function.type eq 'FIRST'}">
-                            <option value="FIRST" selected>一级菜单</option>
-                        </c:if>
-                        <c:if test="${function.type eq 'SECOND'}">
-                            <option value="FIRST">一级菜单</option>
-                            <option value="SECOND" selected>二级菜单</option>
-                        </c:if>
-                        <c:if test="${function.type eq 'THIRD'}">
-                            <option value="THIRD" selected>三级菜单</option>
-                        </c:if>
                     </select>
                 </div>
             </div>
@@ -79,38 +54,13 @@
                            value="${function.description}">
                 </div>
             </div>
-            <c:if test="${function.parent ne null}">
-                <div class="layui-form-item">
-                    <label class="layui-form-label">父菜单</label>
-                    <div class="layui-input-block">
-                        <input type="hidden" name="parent.id" value="${function.parent.id}">
-                        <input type="text" class="layui-input" value="${function.parent.name}" disabled>
-                    </div>
-                </div>
-            </c:if>
-            <c:if test="${function.type ne 'THIRD'}">
-                <div class="layui-form-item">
-                    <div class="layui-input-block">
-                        <button class="layui-btn" id="select-parent-function" type="button">选择父菜单</button>
-                    </div>
-                </div>
-            </c:if>
         </form>
     </div>
 </tmpl:override>
 
 <tmpl:override name="page_script">
-    <script type="text/javascript"
-            src="${pageContext.request.contextPath}/resources/js/plugins/layui/layui.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/plugins/layui/layui.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/submit.js"></script>
-    <%-- 判断页面是否存在记录 --%>
-    <c:if test="${function eq null}">
-        <script>
-            parent.layer.alert('记录不存在', {title: "警告"}, function () {
-                parent.layer.closeAll(); //再执行关闭所有层
-            });
-        </script>
-    </c:if>
     <script type="text/javascript">
         $("#select-parent-function").on("click", function () {
             var _this = this;
@@ -124,12 +74,12 @@
                 maxmin: false,
                 btn: ["确定"],
                 yes: function (index, cLayer) {
-                    var _function = {id: undefined, name: undefined};
+                    var _function = { id: undefined, name: undefined };
                     var iframeWin = parent.window[cLayer.find('iframe')[0]['name']];
                     var result = iframeWin.select(_function);
                     var inputHidden = "<input type='hidden' name='parent.id' value='" + _function.id + "'>";
-                    var inputShow = "<input type='text' class='layui-input' value='" + _function.name + "' disabled>";
-                    var div = "<div class='layui-form-item'>"
+                    var inputShow   = "<input type='text' class='layui-input' value='" + _function.name + "' disabled>";
+                    var div         = "<div class='layui-form-item'>"
                             + "<label class='layui-form-label'>父菜单</label>"
                             + "<div class='layui-input-block'>"
                             + inputHidden
@@ -140,15 +90,12 @@
                         $("input[name='parent.id']").parents(".layui-form-item").remove();
                     }
                     if (result) {
-                        $(".layui-form-item-type").empty();
                         switch (_function.type) {
                             case 'FIRST':
-                                $(".layui-form-item-type").append("<input type='hidden' name='type' value='SECOND'>");
-                                $(".layui-form-item-type").append("<input readonly type='text' class='layui-input' value='二级菜单'>");
+                                $("input[name='type']").val("SECOND");
                                 break;
                             case 'SECOND':
-                                $(".layui-form-item-type").append("<input type='hidden' name='type' value='THIRD'>");
-                                $(".layui-form-item-type").append("<input readonly type='text' class='layui-input' value='三级菜单'>");
+                                $("input[name='type']").val("THIRD");
                                 break;
 
                         }

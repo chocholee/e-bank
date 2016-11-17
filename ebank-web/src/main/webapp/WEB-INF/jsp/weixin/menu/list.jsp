@@ -4,7 +4,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt_rt" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
-<tmpl:override name="title">微信菜单管理</tmpl:override>
+<tmpl:override name="title">微信菜单列表</tmpl:override>
 
 <tmpl:override name="page_css">
     <link href="${pageContext.request.contextPath}/resources/js/plugins/fancytree/css/ui.fancytree.css" rel="stylesheet" type="text/css">
@@ -16,7 +16,7 @@
 </tmpl:override>
 
 <tmpl:override name="rightBox">
-    <span class="title">微信菜单管理</span>
+    <span class="title">微信菜单列表</span>
     <div class="greyLine"></div>
     <div class="button-wrapper">
         <div class="left button-group-wrapper ">

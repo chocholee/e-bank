@@ -9,6 +9,10 @@ import cn.cloudwalk.ebank.core.repository.Pagination;
 import cn.cloudwalk.ebank.core.repository.weixin.receive.IWeiXinReceiveRepository;
 import cn.cloudwalk.ebank.core.support.exception.WeiXinNotFoundException;
 import cn.cloudwalk.ebank.core.support.utils.CustomSecurityContextHolderUtil;
+import com.arm4j.weixin.exception.WeiXinRequestException;
+import com.arm4j.weixin.request.customservice.WeiXinCustomServiceSendMessageRequest;
+import com.arm4j.weixin.request.customservice.entity.msg.text.KFAccountTextMsgEntity;
+import com.arm4j.weixin.request.customservice.entity.msg.text.TextMsgEntity;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
@@ -44,6 +48,7 @@ public class WeiXinReceiveService implements IWeiXinReceiveService {
     private MessageSourceAccessor message;
 
     @Override
+    @SuppressWarnings("unchecked")
     public Pagination<WeiXinReceiveEntity> pagination(WeiXinReceivePaginationCommand command) {
         String username = CustomSecurityContextHolderUtil.getUsername();
         WeiXinAccountEntity accountEntity = weiXinAccountService.findByUsername(username);
@@ -57,8 +62,8 @@ public class WeiXinReceiveService implements IWeiXinReceiveService {
             if (!StringUtils.isEmpty(command.getContent())) {
                 criterions.add(Restrictions.like("content", command.getContent(), MatchMode.ANYWHERE));
             }
-            if (!CustomSecurityContextHolderUtil.hasRole("administrator"))
-                criterions.add(Restrictions.eq("accountEntity.id", accountEntity.getId()));
+
+            criterions.add(Restrictions.eq("accountId", accountEntity.getId()));
 
             // 添加排序条件
             List<Order> orders = new ArrayList<>();
@@ -66,7 +71,7 @@ public class WeiXinReceiveService implements IWeiXinReceiveService {
 
             return weiXinReceiveRepository.pagination(command.getPage(), command.getPageSize(), criterions, orders);
         } else {
-            return new Pagination<WeiXinReceiveEntity>(command.getPage(), command.getPageSize(), 0, Collections.EMPTY_LIST);
+            return new Pagination<>(command.getPage(), command.getPageSize(), 0, Collections.EMPTY_LIST);
         }
     }
 
@@ -87,7 +92,7 @@ public class WeiXinReceiveService implements IWeiXinReceiveService {
                 null,
                 false,
                 new Date(),
-                accountEntity
+                accountEntity.getId()
         );
 
         weiXinReceiveRepository.save(entity);
@@ -95,8 +100,26 @@ public class WeiXinReceiveService implements IWeiXinReceiveService {
     }
 
     @Override
-    public void response(String id, String content) {
+    public void reply(String id, String content) throws WeiXinRequestException {
+        // 更新数据
+        WeiXinReceiveEntity entity = weiXinReceiveRepository.getById(id);
+        entity.setResponse(content);
+        entity.setIsResponse(true);
+        weiXinReceiveRepository.update(entity);
 
+
+        // 回复信息给用户
+        TextMsgEntity textMsgEntity = new TextMsgEntity();
+        textMsgEntity.setContent(content);
+
+        KFAccountTextMsgEntity kfAccountTextMsgEntity = new KFAccountTextMsgEntity();
+        kfAccountTextMsgEntity.setToUser(entity.getFromUserName());
+        kfAccountTextMsgEntity.setText(textMsgEntity);
+
+        WeiXinAccountEntity accountEntity = weiXinAccountService.findById(entity.getAccountId());
+        WeiXinCustomServiceSendMessageRequest.request(
+                weiXinAccountService.getAccessToken(accountEntity.getAppId()),
+                kfAccountTextMsgEntity);
     }
 
     @Override

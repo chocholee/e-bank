@@ -61,7 +61,7 @@
                         <span class="layui-upload-icon"><i class="layui-icon"></i>请上传图片</span>
                     </div>
                     <input type="text" name="picUrl" lay-verify="required" value="${item.picUrl}"
-                           readonly style="border: 0;width: 200px;">
+                           readonly style="border: 0;width: 215px;">
                 </div>
             </div>
             <div class="layui-form-item">

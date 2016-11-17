@@ -61,7 +61,7 @@
                         <span class="layui-upload-icon"><i class="layui-icon"></i>请上传图片</span>
                     </div>
                     <input type="text" name="picUrl" lay-verify="required" value="${item.picUrl}"
-                           readonly style="border: 0;width: 200px;">
+                           readonly style="border: 0;width: 215px;">
                 </div>
             </div>
             <div class="layui-form-item">
@@ -92,6 +92,7 @@
 
 <tmpl:override name="page_script">
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/plugins/layui/layui.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/submit.js"></script>
     <c:if test="${item eq null}">
         <script>
             parent.layer.alert('记录不存在', {title: "警告"}, function () {
@@ -131,45 +132,6 @@
             $("input[name=description]").on("change", function () {
                 $(".item-preview > .item > .item-description > p").text($(this).val());
             });
-        });
-
-        // 表单提交时操作
-        layui.use('form', function(){
-            var form = layui.form();
-            form.on('submit', function (data) {
-                var _this = this;
-                var index = parent.layer.load();
-                $.ajax({
-                    url:  this.action,
-                    type: this.method,
-                    data: $(this).serialize(),
-                    success: function (result) {
-                        parent.layer.close(index);
-                        if (result.type === "SUCCESS") {
-                            var currentWinIndex = parent.layer.getFrameIndex(window.name);
-                            parent.layer.alert(result.message, function (alertIndex) {
-                                parent.layer.close(alertIndex);
-                                parent.layer.close(currentWinIndex);
-                            });
-                        } else {
-                            if (result.data !== null && result.data !== undefined) {
-                                $.each(result.data, function () {
-                                    var elem = $(_this).find("*[name=" + this.field + "]");
-                                    layer.tips(this.defaultMessage, elem, {tips: [3, '#c00']})
-                                    return false;
-                                });
-                            } else {
-                                parent.layer.alert(result.message);
-                            }
-                        }
-                    }
-                });
-                return false;
-            });
-
-            window.submit = function () {
-                $(".layui-form").submit();
-            }
         });
     </script>
 </tmpl:override>

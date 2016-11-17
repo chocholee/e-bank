@@ -24,7 +24,7 @@
         <div class="left button-group-wrapper">
             <sec:authorize url="/user/add">
                 <div class="button-group mr-20">
-                    <a href="javascript:_add('${pageContext.request.contextPath}/user/add', '新增', '600px', '550px');" class="button">
+                    <a href="javascript:CURD.add('${pageContext.request.contextPath}/user/add', '新增', '600px', '550px');" class="button">
                         <img src="${pageContext.request.contextPath}/resources/images/btn_add_n.png" height="18" width="18"
                              alt="添加">
                         <span>添加</span>
@@ -39,7 +39,7 @@
                     <input name="username" type="text" class="form-control" value="${user.username}">
                 </div>
                 <div class="form-group">
-                    <a href="javascript:void(0);" onclick="_search(this)" class="button"><img
+                    <a href="javascript:void(0);" onclick="CURD.search(this)" class="button"><img
                             src="${pageContext.request.contextPath}/resources/images/btn_search_n.png" alt="查询"
                             height="18"
                             width="18">
@@ -47,7 +47,7 @@
                     </a>
                 </div>
                 <div class="form-group">
-                    <a href="javascript:void(0);" onclick="_reset(this)" class="button"><img
+                    <a href="javascript:void(0);" onclick="CURD.reset(this)" class="button"><img
                             src="${pageContext.request.contextPath}/resources/images/btn_Reset_n.png" alt="重置"
                             height="18"
                             width="18">
@@ -87,17 +87,17 @@
                         </td>
                         <td class="last-td">
                             <sec:authorize url="/user/view/">
-                                <a href="javascript:_view('${pageContext.request.contextPath}/user/view/${user.id}', '查看', '650px', '600px')" title="查看">
+                                <a href="javascript:CURD.view('${pageContext.request.contextPath}/user/view/${user.id}', '查看', '650px', '600px')" title="查看">
                                     <img src="${pageContext.request.contextPath}/resources/images/eye.png">
                                 </a>
                             </sec:authorize>
                             <sec:authorize url="/user/edit/">
-                                <a href="javascript:_edit('${pageContext.request.contextPath}/user/edit/${user.id}', '编辑', '600px', '500px')" title="编辑">
+                                <a href="javascript:CURD.edit('${pageContext.request.contextPath}/user/edit/${user.id}', '编辑', '600px', '500px')" title="编辑">
                                     <img src="${pageContext.request.contextPath}/resources/images/edit.png" alt="编辑">
                                 </a>
                             </sec:authorize>
                             <sec:authorize url="/user/delete/">
-                                <a href="javascript:_delete('${pageContext.request.contextPath}/user/delete/${user.id}')" title="删除">
+                                <a href="javascript:CURD.delete('${pageContext.request.contextPath}/user/delete/${user.id}')" title="删除">
                                     <img src="${pageContext.request.contextPath}/resources/images/btn_delete_n.png" alt="删除">
                                 </a>
                             </sec:authorize>
@@ -124,6 +124,11 @@
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/plugins/jquery.dropkick-min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/pagination.js"></script>
     <script type="text/javascript">
+        // 初始化CURD
+        CURD.init(window, window);
+
+        <sec:authorize url="/user/lock/">
+        // 改变用户状态
         var changeStatus = function (_this, id) {
             $.get("${pageContext.request.contextPath}/user/lock/" + id, function (result) {
                 layer.alert(result.message, function (index) {
@@ -134,6 +139,9 @@
                 });
             });
         };
+        </sec:authorize>
+
+        // 用户授权操作
         var authorize = function (url) {
             parent.layer.open({
                 type: 2,

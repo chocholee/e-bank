@@ -1,6 +1,7 @@
 package cn.cloudwalk.ebank.web.controller.shared.support.interceptor;
 
 import cn.cloudwalk.ebank.core.domain.model.function.FunctionEntity;
+import cn.cloudwalk.ebank.core.domain.model.function.FunctionEntityType;
 import cn.cloudwalk.ebank.core.domain.model.role.RoleEntity;
 import cn.cloudwalk.ebank.core.domain.service.function.IFunctionService;
 import cn.cloudwalk.ebank.core.support.utils.CustomSecurityContextHolderUtil;
@@ -60,18 +61,20 @@ public class CustomMenuInterceptor extends HandlerInterceptorAdapter {
             List<FunctionEntity> secondFuncCopyList = new ArrayList<>();
             List<FunctionEntity> secondFuncList = functionService.findByParentId(func.getId(), true, true);
             for (FunctionEntity secondFunc : secondFuncList) {
-                if (!filterSecondFuncList.contains(secondFunc.getId())) {
-                    filterSecondFuncList.add(secondFunc.getId());
-                    for (RoleEntity role : secondFunc.getRoleEntities()) {
-                        boolean hasRole = CustomSecurityContextHolderUtil.hasRole(role.getName());
-                        if (hasRole) {
-                            FunctionEntity tmpEntity = new FunctionEntity();
-                            BeanUtils.copyProperties(secondFunc, tmpEntity, "roleEntities", "parent");
-                            secondFuncCopyList.add(tmpEntity);
-                            break;
+                if (secondFunc.getType() == FunctionEntityType.SECOND) {
+                    if (!filterSecondFuncList.contains(secondFunc.getId())) {
+                        filterSecondFuncList.add(secondFunc.getId());
+                        for (RoleEntity role : secondFunc.getRoleEntities()) {
+                            boolean hasRole = CustomSecurityContextHolderUtil.hasRole(role.getName());
+                            if (hasRole) {
+                                FunctionEntity tmpEntity = new FunctionEntity();
+                                BeanUtils.copyProperties(secondFunc, tmpEntity, "roleEntities", "parent");
+                                secondFuncCopyList.add(tmpEntity);
+                                break;
+                            }
                         }
+                        secondFuncCopyMap.put(func.getId(), secondFuncCopyList);
                     }
-                    secondFuncCopyMap.put(func.getId(), secondFuncCopyList);
                 }
             }
         }

@@ -1,9 +1,10 @@
 package cn.cloudwalk.ebank.core.domain.model.weixin.receive;
 
-import cn.cloudwalk.ebank.core.domain.model.weixin.account.WeiXinAccountEntity;
 import cn.cloudwalk.ebank.core.support.entity.AbstractEntity;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.util.Date;
 
 /**
@@ -33,7 +34,7 @@ public class WeiXinReceiveEntity extends AbstractEntity {
 
     private Date                createdDate;        // 创建日期
 
-    private WeiXinAccountEntity accountEntity;      // 关联公众号
+    private String              accountId;          // 关联公众号
 
     public WeiXinReceiveEntity() {
         super();
@@ -41,7 +42,7 @@ public class WeiXinReceiveEntity extends AbstractEntity {
 
     public WeiXinReceiveEntity(String msgId, String msgType, String content, String fromUserName,
                                String toUserName, String nickname, String response, boolean isResponse,
-                               Date createdDate, WeiXinAccountEntity accountEntity) {
+                               Date createdDate, String accountId) {
         this();
         this.msgId = msgId;
         this.msgType = msgType;
@@ -52,7 +53,7 @@ public class WeiXinReceiveEntity extends AbstractEntity {
         this.response = response;
         this.isResponse = isResponse;
         this.createdDate = createdDate;
-        this.accountEntity = accountEntity;
+        this.accountId = accountId;
     }
 
     @Column(name = "msg_id")
@@ -85,7 +86,7 @@ public class WeiXinReceiveEntity extends AbstractEntity {
         return nickname;
     }
 
-    @Column(name = "response")
+    @Column(name = "reply")
     public String getResponse() {
         return response;
     }
@@ -100,10 +101,9 @@ public class WeiXinReceiveEntity extends AbstractEntity {
         return createdDate;
     }
 
-    @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.DETACH, CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(name = "account_id", nullable = false)
-    public WeiXinAccountEntity getAccountEntity() {
-        return accountEntity;
+    @Column(name = "account_id", nullable = false)
+    public String getAccountId() {
+        return accountId;
     }
 
     public void setMsgId(String msgId) {
@@ -142,7 +142,7 @@ public class WeiXinReceiveEntity extends AbstractEntity {
         this.createdDate = createdDate;
     }
 
-    public void setAccountEntity(WeiXinAccountEntity accountEntity) {
-        this.accountEntity = accountEntity;
+    public void setAccountId(String accountId) {
+        this.accountId = accountId;
     }
 }

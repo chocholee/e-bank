@@ -22,7 +22,7 @@
         <div class="left button-group-wrapper ">
             <sec:authorize url="/function/add">
                 <div class="button-group">
-                    <a href="javascript:_add('${pageContext.request.contextPath}/function/add', '新增', '600px', '450px');" class="button">
+                    <a href="javascript:CURD.add('${pageContext.request.contextPath}/function/add', '新增', '600px', '450px');" class="button">
                         <img src="${pageContext.request.contextPath}/resources/images/btn_add_n.png" height="18" width="18"
                              alt="添加">
                         <span>添加</span>
@@ -46,7 +46,7 @@
                     </p>
                 </div>
                 <div class="form-group">
-                    <a href="javascript:void(0);" onclick="_reset(this)" class="button"><img
+                    <a href="javascript:void(0);" onclick="CURD.reset(this)" class="button"><img
                             src="${pageContext.request.contextPath}/resources/images/btn_Reset_n.png" alt="" height="18"
                             width="18"><span>刷新</span></a>
                 </div>
@@ -58,7 +58,7 @@
         <colgroup>
             <col width="30%"/>
             <col width="*"/>
-            <col width="100px"/>
+            <col width="150px"/>
         </colgroup>
         <thead>
         <tr>
@@ -77,7 +77,10 @@
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/plugins/fancytree/jquery.fancytree.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/plugins/fancytree/jquery.fancytree.table.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/plugins/fancytree/jquery.fancytree.filter.js"></script>
-    <script>
+    <script type="text/javascript">
+        // 初始化CURD
+        CURD.init(window, window);
+
         // 初始化插件
         $("#treetable").fancytree({
             debugLevel: 0,
@@ -117,24 +120,31 @@
             },
             renderColumns: function(event, data) {
                 var node = data.node, $tdList = $(node.tr).find(">td");
-//                $tdList.eq(0).find(".fancytree-title").text(node.data.name);
                 $tdList.eq(1).text(node.data.order).css({"text-align": "center"});
+
                 var operateElem = "";
+                <sec:authorize url="/function/btn/add/">
+                    operateElem +=  "<a class='mr-5' href=\"javascript:CURD.view('${pageContext.request.contextPath}/function/btn/list/" + node.data.id + "', '按钮列表', '900px', '600px');\" title='按钮列表'>" +
+                                        "<img src='${pageContext.request.contextPath}/resources/images/add.png'>" +
+                                    "</a>";
+                </sec:authorize>
+
                 <sec:authorize url="/function/view/">
-                    operateElem +=  "<a class='mr-5' href=\"javascript:_view('${pageContext.request.contextPath}/function/view/" + node.data.id + "', '查看', '600px', '450px');\" title='查看'>" +
+                    operateElem +=  "<a class='mr-5' href=\"javascript:CURD.view('${pageContext.request.contextPath}/function/view/" + node.data.id + "', '查看', '600px', '450px');\" title='查看'>" +
                                         "<img src='${pageContext.request.contextPath}/resources/images/eye.png'>" +
                                     "</a>";
                 </sec:authorize>
                 <sec:authorize url="/function/edit/">
-                    operateElem +=  "<a class='mr-5' href=\"javascript:_edit('${pageContext.request.contextPath}/function/edit/" + node.data.id + "', '编辑', '600px', '450px');\" title='查看'>" +
+                    operateElem +=  "<a class='mr-5' href=\"javascript:CURD.edit('${pageContext.request.contextPath}/function/edit/" + node.data.id + "', '编辑', '600px', '450px');\" title='查看'>" +
                                         "<img src='${pageContext.request.contextPath}/resources/images/edit.png'>" +
                                     "</a>";
                 </sec:authorize>
                 <sec:authorize url="/function/delete/">
-                    operateElem +=  "<a href=\"javascript:_delete('${pageContext.request.contextPath}/function/delete/" + node.data.id + "');\" title='删除'>" +
+                    operateElem +=  "<a href=\"javascript:CURD.delete('${pageContext.request.contextPath}/function/delete/" + node.data.id + "');\" title='删除'>" +
                                         "<img src='${pageContext.request.contextPath}/resources/images/btn_delete_n.png'>" +
                                     "</a>";
                 </sec:authorize>
+
                 $tdList.eq(2).html(operateElem).css({'text-align': 'center'});
             }
         });

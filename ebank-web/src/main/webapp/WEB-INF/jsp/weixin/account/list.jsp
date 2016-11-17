@@ -4,7 +4,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt_rt" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
-<tmpl:override name="title">微信公众号</tmpl:override>
+<tmpl:override name="title">微信公众号列表</tmpl:override>
 
 <tmpl:override name="page_css">
     <link href="${pageContext.request.contextPath}/resources/js/plugins/layui/css/layui.css" rel="stylesheet" type="text/css">
@@ -16,7 +16,7 @@
 
 <tmpl:override name="rightBox">
     <%-- 标题 --%>
-    <span class="title">微信公众号</span>
+    <span class="title">微信公众号列表</span>
     <div class="greyLine"></div>
 
     <%-- 条件查询及按钮操作区域 --%>
@@ -24,7 +24,7 @@
         <div class="left button-group-wrapper">
             <sec:authorize url="/weixin/account/add">
                 <div class="button-group">
-                    <a href="javascript:_add('${pageContext.request.contextPath}/weixin/account/add', '新增', '600px', '600px');" class="button">
+                    <a href="javascript:CURD.add('${pageContext.request.contextPath}/weixin/account/add', '新增', '600px', '600px');" class="button">
                         <img src="${pageContext.request.contextPath}/resources/images/btn_add_n.png" height="18" width="18"
                              alt="添加">
                         <span>添加</span>
@@ -49,12 +49,12 @@
                     <label>名称</label>
                     <input name="name" type="text" class="form-control" value="${account.name}">
                 </div>
+                <%--<div class="form-group">--%>
+                    <%--<label>AppId</label>--%>
+                    <%--<input name="appId" type="text" class="form-control" value="${account.appId}">--%>
+                <%--</div>--%>
                 <div class="form-group">
-                    <label>AppId</label>
-                    <input name="appId" type="text" class="form-control" value="${account.appId}">
-                </div>
-                <div class="form-group">
-                    <a href="javascript:void(0);" onclick="_search(this)" class="button"><img
+                    <a href="javascript:void(0);" onclick="CURD.search(this)" class="button"><img
                             src="${pageContext.request.contextPath}/resources/images/btn_search_n.png" alt="查询"
                             height="18"
                             width="18">
@@ -62,7 +62,7 @@
                     </a>
                 </div>
                 <div class="form-group">
-                    <a href="javascript:void(0);" onclick="_reset(this)" class="button"><img
+                    <a href="javascript:void(0);" onclick="CURD.reset(this)" class="button"><img
                             src="${pageContext.request.contextPath}/resources/images/btn_Reset_n.png" alt="重置"
                             height="18"
                             width="18">
@@ -119,17 +119,17 @@
                         <td>${account.createdDate}</td>
                         <td class="last-td">
                             <sec:authorize url="/weixin/account/view/">
-                                <a href="javascript:_view('${pageContext.request.contextPath}/weixin/account/view/${account.id}', '查看', '600px', '600px')" title="查看">
+                                <a href="javascript:CURD.view('${pageContext.request.contextPath}/weixin/account/view/${account.id}', '查看', '600px', '600px')" title="查看">
                                     <img src="${pageContext.request.contextPath}/resources/images/eye.png">
                                 </a>
                             </sec:authorize>
                             <sec:authorize url="/weixin/account/edit/">
-                                <a href="javascript:_edit('${pageContext.request.contextPath}/weixin/account/edit/${account.id}', '编辑', '600px', '600px')" title="编辑">
+                                <a href="javascript:CURD.edit('${pageContext.request.contextPath}/weixin/account/edit/${account.id}', '编辑', '600px', '600px')" title="编辑">
                                     <img src="${pageContext.request.contextPath}/resources/images/edit.png">
                                 </a>
                             </sec:authorize>
                             <sec:authorize url="/weixin/account/delete/">
-                                <a href="javascript:_delete('${pageContext.request.contextPath}/weixin/account/delete/${account.id}')" title="删除">
+                                <a href="javascript:CURD.delete('${pageContext.request.contextPath}/weixin/account/delete/${account.id}')" title="删除">
                                     <img src="${pageContext.request.contextPath}/resources/images/btn_delete_n.png">
                                 </a>
                             </sec:authorize>
@@ -150,7 +150,11 @@
 <tmpl:override name="page_script">
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/plugins/jquery.dropkick-min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/pagination.js"></script>
-    <script>
+    <script type="text/javascript">
+        // 初始化CURD
+        CURD.init(window, window);
+
+        // 重置微信Token
         function token(url) {
             var checkboxes = $("#table").find("input[type=checkbox]");
             var checkCount = 0;
@@ -167,8 +171,10 @@
                 return false;
             } else {
                 url = url + "/" + $(checkbox).val();
+                var index = layer.load();
                 $.get(url, function (result) {
                     layer.alert(result.message, function () {
+                        layer.close(index);
                         window.location.reload();
                     });
                 });

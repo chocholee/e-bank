@@ -22,19 +22,28 @@ $(document).ready(function () {
         }
     });
 
-    $(document).on("click", ".menuBar", function () {
-        $(this).find("ul").slideToggle("normal", "linear");
-        $(this).siblings().find("a img").each(function () {
+    $(document).on("click", ".menuBar > a", function () {
+        var _this = this;
+        $(this).parent(".menuBar").find("ul").slideToggle("normal", "linear", function () {
+            if ($(this).css("display") == "none") {
+                $(_this).removeClass("current");
+                var bgImg = $(_this).css("background-image");
+                $(_this).addClass("current");
+                $(_this).css("background-image", bgImg);
+            } else {
+                $(_this).css("background-image", "");
+            }
+        });
+        $(this).parent(".menuBar").siblings().find("a img").each(function () {
             $(this).attr("src", $(this).attr("data-src-before"));
         });
-        $(this).siblings().find("ul").slideUp();
-        $(this).children("a").addClass("current");
-        $(this).siblings().children("a").removeClass("current");
-        // $(this).siblings().find("ul li a").removeClass("active");
-        if ($(this).find("a img").attr("src") === $(this).find("a img").attr("data-src-before")) {
-            $(this).find("a img").attr("src", $(this).find("a img").attr("data-src-after"));
+        $(this).parent(".menuBar").siblings().find("ul").slideUp();
+        $(this).parent(".menuBar").siblings().children("a").removeClass("current");
+        $(this).addClass("current");
+        if ($(this).find("img").attr("src") === $(this).find("img").attr("data-src-before")) {
+            $(this).find("img").attr("src", $(this).find("img").attr("data-src-after"));
         } else {
-            $(this).find("a img").attr("src", $(this).find("a img").attr("data-src-before"));
+            $(this).find("img").attr("src", $(this).find("img").attr("data-src-before"));
         }
     });
 
@@ -66,5 +75,5 @@ $(document).ready(function () {
         }
     }
 
-    screenWidth();
+    // screenWidth();
 });
