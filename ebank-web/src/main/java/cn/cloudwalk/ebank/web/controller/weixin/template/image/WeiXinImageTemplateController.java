@@ -5,6 +5,7 @@ import cn.cloudwalk.ebank.core.domain.service.weixin.template.image.IWeiXinImage
 import cn.cloudwalk.ebank.core.domain.service.weixin.template.image.command.WeiXinImageTemplateCommand;
 import cn.cloudwalk.ebank.core.domain.service.weixin.template.image.command.WeiXinImageTemplatePaginationCommand;
 import cn.cloudwalk.ebank.core.repository.Pagination;
+import cn.cloudwalk.ebank.core.support.exception.WeiXinNotFoundException;
 import cn.cloudwalk.ebank.core.support.utils.CustomUploadUtil;
 import cn.cloudwalk.ebank.web.controller.shared.AlertMessage;
 import cn.cloudwalk.ebank.web.controller.shared.BaseController;
@@ -12,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -73,6 +75,13 @@ public class WeiXinImageTemplateController extends BaseController {
             weiXinImageTemplateService.save(command, tempDir, saveDir);
             return new AlertMessage(AlertMessage.Type.SUCCESS,
                     getMessageSourceAccessor().getMessage("default.add.success.message"));
+        } catch (DataIntegrityViolationException e) {
+            logger.error(e.getMessage(), e);
+            return new AlertMessage(AlertMessage.Type.ERROR,
+                    getMessageSourceAccessor().getMessage("default.not.unique.message"));
+        } catch (WeiXinNotFoundException e) {
+            logger.error(e.getMessage(), e);
+            return new AlertMessage(AlertMessage.Type.ERROR, e.getMessage());
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             return new AlertMessage(AlertMessage.Type.ERROR,
@@ -101,6 +110,10 @@ public class WeiXinImageTemplateController extends BaseController {
             weiXinImageTemplateService.update(command, tempDir, saveDir);
             return new AlertMessage(AlertMessage.Type.SUCCESS,
                     getMessageSourceAccessor().getMessage("default.edit.success.message"));
+        } catch (DataIntegrityViolationException e) {
+            logger.error(e.getMessage(), e);
+            return new AlertMessage(AlertMessage.Type.ERROR,
+                    getMessageSourceAccessor().getMessage("default.not.unique.message"));
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             return new AlertMessage(AlertMessage.Type.ERROR,

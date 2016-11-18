@@ -7,6 +7,7 @@
     <name>ebank-web</name>
     <groupId>cn.cloudwalk.ebank.web</groupId>
     <artifactId>ebank-web</artifactId>
+    <packaging>war</packaging>
 
     <parent>
         <groupId>cn.cloudwalk.ebank</groupId>
@@ -134,9 +135,45 @@
         </dependency>
 
         <dependency>
-            <groupId>com.arm4j.weixin</groupId>
-            <artifactId>arm4j-weixin</artifactId>
+            <groupId>cn.cloudwalk.ebank.core</groupId>
+            <artifactId>ebank-core</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <type>war</type>
+        </dependency>
+
+        <dependency>
+            <groupId>cn.cloudwalk.ebank.core</groupId>
+            <artifactId>ebank-core</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <classifier>classes</classifier>
+            <type>jar</type>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <!-- 测试插件 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+
+            <!-- 编译插件 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <verbose>true</verbose>
+                    <fork>true</fork>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
     
 </project>

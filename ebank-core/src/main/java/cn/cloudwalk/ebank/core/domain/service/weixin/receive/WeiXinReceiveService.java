@@ -79,7 +79,7 @@ public class WeiXinReceiveService implements IWeiXinReceiveService {
     public WeiXinReceiveEntity save(WeiXinReceiveCommand command) {
         WeiXinAccountEntity accountEntity = weiXinAccountService.findByAccountId(command.getToUserName());
         if (null == accountEntity) {
-            throw new WeiXinNotFoundException(message.getMessage("WeiXinMenuService.WeiXinNotFoundException"));
+            throw new WeiXinNotFoundException(message.getMessage("WeiXinAccountNotFoundException.message"));
         }
 
         WeiXinReceiveEntity entity = new WeiXinReceiveEntity(

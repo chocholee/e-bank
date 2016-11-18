@@ -113,6 +113,10 @@ public class WeiXinNewsTemplateController extends BaseController {
             weiXinNewsTemplateService.update(command);
             return new AlertMessage(AlertMessage.Type.SUCCESS,
                     getMessageSourceAccessor().getMessage("default.edit.success.message"));
+        } catch (DataIntegrityViolationException e) {
+            logger.error(e.getMessage(), e);
+            return new AlertMessage(AlertMessage.Type.ERROR,
+                    getMessageSourceAccessor().getMessage("default.not.unique.message"));
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             return new AlertMessage(AlertMessage.Type.ERROR,

@@ -42,6 +42,7 @@
         <version.plugin.deploy>2.8.2</version.plugin.deploy>
         <version.plugin.surefire>2.19.1</version.plugin.surefire>
         <version.plugin.jar>3.0.2</version.plugin.jar>
+        <version.plugin.war>3.0.0</version.plugin.war>
         <version.plugin.source>3.0.1</version.plugin.source>
         <!-- maven插件版本管理 -->
     </properties>
@@ -307,69 +308,65 @@
     </dependencyManagement>
 
     <build>
+        <!-- 根据环境不同加载不同配置文件 -->
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <excludes>
+                    <exclude>test/*</exclude>
+                    <exclude>product/*</exclude>
+                </excludes>
+            </resource>
+        </resources>
+
+        <!-- 插件库 -->
         <pluginManagement>
             <plugins>
+                <!-- 测试插件 -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${version.plugin.surefire}</version>
+                </plugin>
+
+                <!-- 编译插件 -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>${version.plugin.compiler}</version>
-                    <configuration>
-                        <verbose>true</verbose>
-                        <fork>true</fork>
-                        <source>1.8</source>
-                        <target>1.8</target>
-                        <encoding>UTF-8</encoding>
-                    </configuration>
                 </plugin>
+
+                <!-- 发布插件 -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-deploy-plugin</artifactId>
                     <version>${version.plugin.deploy}</version>
                 </plugin>
+
+                <!-- 源码插件 -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-surefire-plugin</artifactId>
-                    <version>${version.plugin.surefire}</version>
-                    <configuration>
-                        <skip>true</skip>
-                    </configuration>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>${version.plugin.source}</version>
                 </plugin>
+
+                <!-- war插件 -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <version>${version.plugin.war}</version>
+                </plugin>
+
+                <!-- jar插件 -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jar-plugin</artifactId>
                     <version>${version.plugin.jar}</version>
                 </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-source-plugin</artifactId>
-                    <version>${version.plugin.source}</version>
-                    <!--<executions>-->
-                    <!--<execution>-->
-                    <!--<phase>verify</phase>-->
-                    <!--<goals>-->
-                    <!--<goal>jar-no-fork</goal>-->
-                    <!--</goals>-->
-                    <!--</execution>-->
-                    <!--</executions>-->
-                </plugin>
             </plugins>
         </pluginManagement>
         <defaultGoal>compiler</defaultGoal>
     </build>
-
-    <profiles>
-        <profile>
-            <id>liwenhe-nexus</id>
-            <repositories>
-                <repository>
-                    <id>liwenhe-nexus</id>
-                    <url>http://linode.nexus.liwenhe.com/repository/maven-public/</url>
-                </repository>
-            </repositories>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-        </profile>
-    </profiles>
 
 </project>

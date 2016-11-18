@@ -1,9 +1,9 @@
 package cn.cloudwalk.ebank.web.controller.shared;
 
 import cn.cloudwalk.ebank.core.support.editor.DoubleEditor;
+import cn.cloudwalk.ebank.core.support.editor.FloatEditor;
 import cn.cloudwalk.ebank.core.support.editor.IntegerEditor;
 import cn.cloudwalk.ebank.core.support.editor.LongEditor;
-import com.sun.beans.editors.FloatEditor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.stereotype.Controller;

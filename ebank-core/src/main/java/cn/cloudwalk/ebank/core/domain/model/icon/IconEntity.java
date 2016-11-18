@@ -39,7 +39,7 @@ public class IconEntity extends AbstractEntity {
         this.description = description;
     }
 
-    @Column(name = "name")
+    @Column(name = "name", unique = true)
     public String getName() {
         return name;
     }
