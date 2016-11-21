@@ -20,6 +20,7 @@
                            value="${role.name}">
                 </div>
             </div>
+
             <div class="layui-form-item">
                 <label class="layui-form-label">描述</label>
                 <div class="layui-input-block">
@@ -27,6 +28,7 @@
                            value="${role.description}">
                 </div>
             </div>
+
             <div class="layui-form-item">
                 <label class="layui-form-label">排序</label>
                 <div class="layui-input-block">

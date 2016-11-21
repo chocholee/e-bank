@@ -37,6 +37,7 @@
             </div>
         </div>
     </div>
+
     <div class="block">
         <form class="layui-form" action="${pageContext.request.contextPath}/weixin/template/news/item/edit/${item.id}"
               method="post">
@@ -47,6 +48,7 @@
                            value="${item.title}">
                 </div>
             </div>
+
             <div class="layui-form-item">
                 <label class="layui-form-label red-star">作者</label>
                 <div class="layui-input-block">
@@ -54,6 +56,7 @@
                            value="${item.author}">
                 </div>
             </div>
+
             <div class="layui-form-item">
                 <label class="layui-form-label red-star">图片</label>
                 <div class="layui-input-block">
@@ -64,6 +67,7 @@
                            readonly style="border: 0;width: 215px;">
                 </div>
             </div>
+
             <div class="layui-form-item">
                 <label class="layui-form-label red-star">描述</label>
                 <div class="layui-input-block">
@@ -71,6 +75,7 @@
                            value="${item.description}">
                 </div>
             </div>
+
             <div class="layui-form-item">
                 <label class="layui-form-label red-star">url</label>
                 <div class="layui-input-block">
@@ -78,6 +83,7 @@
                            value="${item.url}">
                 </div>
             </div>
+
             <div class="layui-form-item">
                 <label class="layui-form-label red-star">顺序</label>
                 <div class="layui-input-block">

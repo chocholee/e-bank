@@ -1,10 +1,10 @@
-package cn.cloudwalk.ebank.core.domain.service.weixin.scene;
+package cn.cloudwalk.ebank.core.domain.service.weixin.reply;
 
 import cn.cloudwalk.ebank.core.domain.model.weixin.account.WeiXinAccountEntity;
 import cn.cloudwalk.ebank.core.domain.model.weixin.reply.WeiXinReplyEntity;
 import cn.cloudwalk.ebank.core.domain.model.weixin.scene.WeiXinSceneEntity;
-import cn.cloudwalk.ebank.core.domain.service.weixin.scene.command.WeiXinSceneCommand;
-import cn.cloudwalk.ebank.core.domain.service.weixin.scene.command.WeiXinScenePaginationCommand;
+import cn.cloudwalk.ebank.core.domain.service.weixin.reply.command.WeiXinReplyCommand;
+import cn.cloudwalk.ebank.core.domain.service.weixin.reply.command.WeiXinReplyPaginationCommand;
 import cn.cloudwalk.ebank.core.repository.Pagination;
 import cn.cloudwalk.ebank.core.repository.weixin.account.IWeiXinAccountRepository;
 import cn.cloudwalk.ebank.core.repository.weixin.reply.IWeiXinReplyRepository;
@@ -12,7 +12,6 @@ import cn.cloudwalk.ebank.core.repository.weixin.scene.IWeiXinSceneRepository;
 import cn.cloudwalk.ebank.core.support.exception.WeiXinNotFoundException;
 import cn.cloudwalk.ebank.core.support.utils.CustomSecurityContextHolderUtil;
 import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,34 +27,35 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Created by liwenhe on 16/11/17.
+ * Created by liwenhe on 16/11/21.
  */
-@Service("weiXinSceneService")
+@Service("weiXinReplyService")
 @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-public class WeiXinSceneService implements IWeiXinSceneService {
-
-    @Autowired
-    private IWeiXinSceneRepository<WeiXinSceneEntity, String> weiXinSceneRepository;
-
-    @Autowired
-    private IWeiXinAccountRepository<WeiXinAccountEntity, String> weiXinAccountRepository;
+public class WeiXinReplyService implements IWeiXinReplyService {
 
     @Autowired
     private IWeiXinReplyRepository<WeiXinReplyEntity, String> weiXinReplyRepository;
 
     @Autowired
+    private IWeiXinAccountRepository<WeiXinAccountEntity, String> weiXinAccountRepository;
+
+    @Autowired
+    private IWeiXinSceneRepository<WeiXinSceneEntity, String> weiXinSceneRepository;
+
+    @Autowired
     private MessageSourceAccessor message;
 
     @Override
-    public Pagination<WeiXinSceneEntity> pagination(WeiXinScenePaginationCommand command) {
+    @SuppressWarnings("unchecked")
+    public Pagination<WeiXinReplyEntity> pagination(WeiXinReplyPaginationCommand command) {
         String username = CustomSecurityContextHolderUtil.getUsername();
         WeiXinAccountEntity accountEntity = weiXinAccountRepository.findByUsername(username);
 
         if (null != accountEntity) {
             // 添加查询条件
             List<Criterion> criterions = new ArrayList<>();
-            if (!StringUtils.isEmpty(command.getName())) {
-                criterions.add(Restrictions.like("name", command.getName(), MatchMode.ANYWHERE));
+            if (null != command.getEvent() && !command.getEvent().isOnlyQuery()) {
+                criterions.add(Restrictions.eq("event", command.getEvent()));
             }
 
             criterions.add(Restrictions.eq("accountId", accountEntity.getId()));
@@ -64,51 +64,67 @@ public class WeiXinSceneService implements IWeiXinSceneService {
             List<Order> orders = new ArrayList<>();
             orders.add(Order.desc("createdDate"));
 
-            return weiXinSceneRepository.pagination(command.getPage(), command.getPageSize(), criterions, orders);
+            return weiXinReplyRepository.pagination(command.getPage(), command.getPageSize(), criterions, orders);
         } else {
             return new Pagination<>(command.getPage(), command.getPageSize(), 0, Collections.EMPTY_LIST);
         }
     }
 
     @Override
-    public WeiXinSceneEntity findById(String id) {
-        return weiXinSceneRepository.getById(id);
+    public List<WeiXinReplyEntity> findBySceneId(String sceneId) {
+        return null;
     }
 
     @Override
-    public WeiXinSceneEntity save(WeiXinSceneCommand command) {
+    public WeiXinReplyEntity findById(String id) {
+        return weiXinReplyRepository.getById(id);
+    }
+
+    @Override
+    public WeiXinReplyEntity save(WeiXinReplyCommand command) {
         String username = CustomSecurityContextHolderUtil.getUsername();
         WeiXinAccountEntity accountEntity = weiXinAccountRepository.findByUsername(username);
         if (null == accountEntity) {
             throw new WeiXinNotFoundException(message.getMessage("WeiXinAccountNotFoundException.message"));
         }
 
-        WeiXinSceneEntity entity = new WeiXinSceneEntity(
-                command.getName(),
-                command.getRemark(),
-                new Date(),
-                accountEntity.getId());
+        WeiXinSceneEntity sceneEntity = null;
+        if (!StringUtils.isEmpty(command.getSceneId()))
+            sceneEntity = weiXinSceneRepository.getById(command.getSceneId());
 
-        weiXinSceneRepository.save(entity);
+        WeiXinReplyEntity entity = new WeiXinReplyEntity(
+                command.getKeyword(),
+                command.getEvent(),
+                command.getType(),
+                sceneEntity,
+                command.getTemplateId(),
+                accountEntity.getId(),
+                new Date()
+        );
+
+        weiXinReplyRepository.save(entity);
         return entity;
     }
 
     @Override
-    public WeiXinSceneEntity update(WeiXinSceneCommand command) {
-        WeiXinSceneEntity entity = this.findById(command.getId());
-        entity.setName(command.getName());
-        entity.setRemark(command.getRemark());
-        weiXinSceneRepository.update(entity);
+    public WeiXinReplyEntity update(WeiXinReplyCommand command) {
+        WeiXinSceneEntity sceneEntity = null;
+        if (!StringUtils.isEmpty(command.getSceneId()))
+            sceneEntity = weiXinSceneRepository.getById(command.getSceneId());
+
+        WeiXinReplyEntity entity = this.findById(command.getId());
+        entity.setKeyword(command.getKeyword());
+        entity.setEvent(command.getEvent());
+        entity.setType(command.getType());
+        entity.setScene(sceneEntity);
+        entity.setTemplateId(command.getTemplateId());
+        weiXinReplyRepository.update(entity);
         return entity;
     }
 
     @Override
     public void delete(String id) {
-        WeiXinSceneEntity entity = this.findById(id);
-        List<WeiXinReplyEntity> replyEntities = weiXinReplyRepository.findBySceneId(entity.getId());
-        for (WeiXinReplyEntity replyEntity : replyEntities) {
-            weiXinReplyRepository.delete(replyEntity);
-        }
-        weiXinSceneRepository.delete(entity);
+        WeiXinReplyEntity entity = this.findById(id);
+        weiXinReplyRepository.delete(entity);
     }
 }

@@ -20,6 +20,7 @@
                            value="${text.name}" disabled>
                 </div>
             </div>
+
             <div class="layui-form-item">
                 <label class="layui-form-label red-star">内容</label>
                 <div class="layui-input-block">
@@ -27,6 +28,7 @@
                               disabled>${text.content}</textarea>
                 </div>
             </div>
+
             <div class="layui-form-item">
                 <label class="layui-form-label red-star">创建日期</label>
                 <div class="layui-input-block">

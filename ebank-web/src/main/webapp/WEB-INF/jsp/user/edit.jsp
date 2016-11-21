@@ -20,6 +20,7 @@
                            value="${user.username}" disabled>
                 </div>
             </div>
+
             <div class="layui-form-item">
                 <label class="layui-form-label">真实姓名</label>
                 <div class="layui-input-block">
@@ -27,6 +28,7 @@
                            value="${user.realname}">
                 </div>
             </div>
+
             <div class="layui-form-item">
                 <label class="layui-form-label">手机号码</label>
                 <div class="layui-input-block">
@@ -34,6 +36,7 @@
                            value="${user.phone}">
                 </div>
             </div>
+
             <div class="layui-form-item">
                 <label class="layui-form-label">邮箱</label>
                 <div class="layui-input-block">
@@ -41,6 +44,7 @@
                            value="${user.email}">
                 </div>
             </div>
+
             <div class="layui-form-item">
                 <label class="layui-form-label">备注</label>
                 <div class="layui-input-block">
@@ -48,6 +52,7 @@
                            value="${user.remark}">
                 </div>
             </div>
+
             <c:if test="${user.parent ne null}">
                 <div class="layui-form-item">
                     <label class="layui-form-label">父用户</label>
@@ -57,6 +62,7 @@
                     </div>
                 </div>
             </c:if>
+
             <div class="layui-form-item">
                 <div class="layui-input-block">
                     <button class="layui-btn" id="select-parent-user" type="button">选择父用户</button>

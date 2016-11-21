@@ -219,4 +219,10 @@ public class WeiXinNewsTemplateController extends BaseController {
         return CustomUploadUtil.upload(request, tempDir, prefix);
     }
 
+    @RequestMapping(value = "/list/select")
+    public ModelAndView selectScene(@ModelAttribute("news") WeiXinNewsTemplatePaginationCommand command) {
+        Pagination<WeiXinNewsTemplateEntity> pagination = weiXinNewsTemplateService.pagination(command);
+        return new ModelAndView("weixin/template/news/list-select", "pagination", pagination);
+    }
+
 }

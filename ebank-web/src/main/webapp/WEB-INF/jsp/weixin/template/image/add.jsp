@@ -31,6 +31,7 @@
             <i>封面图片</i>
         </div>
     </div>
+
     <div class="block">
         <form class="layui-form" action="${pageContext.request.contextPath}/weixin/template/image/add"
               method="post">
@@ -41,6 +42,7 @@
                            value="${image.name}">
                 </div>
             </div>
+
             <div class="layui-form-item">
                 <label class="layui-form-label red-star">图片</label>
                 <div class="layui-input-block">

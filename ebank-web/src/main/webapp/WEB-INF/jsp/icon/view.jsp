@@ -20,6 +20,7 @@
                            value="${icon.name}" disabled>
                 </div>
             </div>
+
             <div class="layui-form-item">
                 <label class="layui-form-label red-star">变化前图标</label>
                 <div class="layui-input-block">
@@ -28,6 +29,7 @@
                            readonly style="border: 0;">
                 </div>
             </div>
+
             <div class="layui-form-item">
                 <label class="layui-form-label red-star">变化后图标</label>
                 <div class="layui-input-block">
@@ -36,6 +38,7 @@
                            readonly style="border: 0;">
                 </div>
             </div>
+
             <div class="layui-form-item">
                 <label class="layui-form-label">描述</label>
                 <div class="layui-input-block">

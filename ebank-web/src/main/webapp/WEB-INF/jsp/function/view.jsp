@@ -20,6 +20,7 @@
                            value="${function.name}" disabled>
                 </div>
             </div>
+
             <div class="layui-form-item">
                 <label class="layui-form-label">路径</label>
                 <div class="layui-input-block">
@@ -27,6 +28,7 @@
                            value="${function.uri}" disabled>
                 </div>
             </div>
+
             <div class="layui-form-item">
                 <label class="layui-form-label">图标</label>
                 <div class="layui-input-block">
@@ -35,6 +37,7 @@
                            disabled>
                 </div>
             </div>
+
             <div class="layui-form-item">
                 <label class="layui-form-label">类型</label>
                 <div class="layui-input-block">
@@ -42,6 +45,7 @@
                            value="${function.type.name}" disabled>
                 </div>
             </div>
+
             <div class="layui-form-item">
                 <label class="layui-form-label">排序</label>
                 <div class="layui-input-block">
@@ -49,6 +53,7 @@
                            value="${function.order}" disabled>
                 </div>
             </div>
+
             <div class="layui-form-item">
                 <label class="layui-form-label">描述</label>
                 <div class="layui-input-block">

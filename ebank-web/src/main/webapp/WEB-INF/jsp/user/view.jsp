@@ -20,6 +20,7 @@
                            value="${user.username}" disabled>
                 </div>
             </div>
+
             <div class="layui-form-item">
                 <label class="layui-form-label">真实姓名</label>
                 <div class="layui-input-block">
@@ -27,6 +28,7 @@
                            value="${user.realname}" disabled>
                 </div>
             </div>
+
             <div class="layui-form-item">
                 <label class="layui-form-label">手机号码</label>
                 <div class="layui-input-block">
@@ -34,6 +36,7 @@
                            value="${user.phone}" disabled>
                 </div>
             </div>
+
             <div class="layui-form-item">
                 <label class="layui-form-label">邮箱</label>
                 <div class="layui-input-block">
@@ -41,6 +44,7 @@
                            value="${user.email}" disabled>
                 </div>
             </div>
+
             <div class="layui-form-item">
                 <label class="layui-form-label">备注</label>
                 <div class="layui-input-block">
@@ -48,12 +52,14 @@
                            value="${user.remark}" disabled>
                 </div>
             </div>
+
             <div class="layui-form-item">
                 <label class="layui-form-label">状态</label>
                 <div class="layui-input-block">
                     <input type="checkbox" name="status" lay-skin="switch" <c:if test="${user.status eq 'ENABLE'}">checked</c:if> disabled>
                 </div>
             </div>
+
             <div class="layui-form-item">
                 <label class="layui-form-label">登录日期</label>
                 <div class="layui-input-block">
@@ -61,6 +67,7 @@
                            value="${user.loginDate}" disabled>
                 </div>
             </div>
+
             <div class="layui-form-item">
                 <label class="layui-form-label">上次登录日期</label>
                 <div class="layui-input-block">
@@ -68,6 +75,7 @@
                            value="${user.lastLoginDate}" disabled>
                 </div>
             </div>
+
             <div class="layui-form-item">
                 <label class="layui-form-label">更新日期</label>
                 <div class="layui-input-block">
@@ -75,6 +83,7 @@
                            value="${user.updatedDate}" disabled>
                 </div>
             </div>
+
             <div class="layui-form-item">
                 <label class="layui-form-label">创建日期</label>
                 <div class="layui-input-block">
@@ -82,12 +91,14 @@
                            value="${user.createdDate}" disabled>
                 </div>
             </div>
+
             <div class="layui-form-item">
                 <label class="layui-form-label">父用户</label>
                 <div class="layui-input-block">
                     <input type="text" autocomplete="off" class="layui-input" value="<c:if test="${user.parent ne null}">${user.parent.username}</c:if>" disabled>
                 </div>
             </div>
+
             <div class="layui-form-item">
                 <label class="layui-form-label">角色</label>
                 <div class="layui-input-block">

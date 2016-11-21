@@ -20,6 +20,7 @@
                            value="${text.name}">
                 </div>
             </div>
+
             <div class="layui-form-item">
                 <label class="layui-form-label red-star">内容</label>
                 <div class="layui-input-block">

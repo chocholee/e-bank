@@ -39,7 +39,6 @@
                 <div class="layui-input-block">
                     <select name="type" lay-verify="required" lay-filter="type">
                         <option value="">请选择</option>
-                        <option value="">请选择</option>
                         <option value="CLICK">消息触发</option>
                         <option value="VIEW">网页链接</option>
                         <option value="SCANCODE_PUSH">弹出扫码功能</option>

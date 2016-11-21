@@ -149,4 +149,10 @@ public class WeiXinImageTemplateController extends BaseController {
         return CustomUploadUtil.upload(request, tempDir, prefix);
     }
 
+    @RequestMapping(value = "/list/select")
+    public ModelAndView selectScene(@ModelAttribute("image") WeiXinImageTemplatePaginationCommand command) {
+        Pagination<WeiXinImageTemplateEntity> pagination = weiXinImageTemplateService.pagination(command);
+        return new ModelAndView("weixin/template/image/list-select", "pagination", pagination);
+    }
+
 }

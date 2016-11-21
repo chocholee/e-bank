@@ -21,6 +21,7 @@
                            value="${function.name}">
                 </div>
             </div>
+
             <div class="layui-form-item">
                 <label class="layui-form-label">路径</label>
                 <div class="layui-input-block">
@@ -28,6 +29,7 @@
                            value="${function.uri}">
                 </div>
             </div>
+
             <div class="layui-form-item">
                 <label class="layui-form-label">图标</label>
                 <div class="layui-input-block">
@@ -47,6 +49,7 @@
                     </select>
                 </div>
             </div>
+
             <div class="layui-form-item">
                 <label class="layui-form-label red-star">类型</label>
                 <div class="layui-input-block layui-form-item-type">
@@ -65,6 +68,7 @@
                     </select>
                 </div>
             </div>
+
             <div class="layui-form-item">
                 <label class="layui-form-label">排序</label>
                 <div class="layui-input-block">
@@ -72,6 +76,7 @@
                            value="${function.order}">
                 </div>
             </div>
+
             <div class="layui-form-item">
                 <label class="layui-form-label">描述</label>
                 <div class="layui-input-block">
@@ -79,6 +84,7 @@
                            value="${function.description}">
                 </div>
             </div>
+
             <c:if test="${function.parent ne null}">
                 <div class="layui-form-item">
                     <label class="layui-form-label">父菜单</label>
@@ -88,6 +94,7 @@
                     </div>
                 </div>
             </c:if>
+
             <c:if test="${function.type ne 'THIRD'}">
                 <div class="layui-form-item">
                     <div class="layui-input-block">

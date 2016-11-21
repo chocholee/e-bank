@@ -15,6 +15,7 @@
     <%-- js --%>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/plugins/jquery.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/common.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/plugins/jquery.nicescroll.min.js"></script>
 </head>
 <body>
 <tmpl:block name="body">
@@ -28,7 +29,6 @@
         <div class="clearfix"></div>
     </div>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/plugins/layer/layer.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/plugins/jquery.nicescroll.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/menubar.js"></script>
 </tmpl:block>
 <tmpl:block name="page_script"/>

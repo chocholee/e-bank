@@ -20,6 +20,7 @@
                            value="${account.name}">
                 </div>
             </div>
+
             <div class="layui-form-item">
                 <label class="layui-form-label">Token</label>
                 <div class="layui-input-block">
@@ -27,6 +28,7 @@
                            value="${account.token}">
                 </div>
             </div>
+
             <div class="layui-form-item">
                 <label class="layui-form-label">微信号</label>
                 <div class="layui-input-block">
@@ -34,6 +36,7 @@
                            value="${account.number}">
                 </div>
             </div>
+
             <div class="layui-form-item">
                 <label class="layui-form-label">原始ID</label>
                 <div class="layui-input-block">
@@ -41,6 +44,7 @@
                            value="${account.accountId}">
                 </div>
             </div>
+
             <div class="layui-form-item">
                 <label class="layui-form-label">AppId</label>
                 <div class="layui-input-block">
@@ -48,6 +52,7 @@
                            value="${account.appId}">
                 </div>
             </div>
+
             <div class="layui-form-item">
                 <label class="layui-form-label">AppSecret</label>
                 <div class="layui-input-block">
@@ -55,6 +60,7 @@
                            value="${account.appSecret}">
                 </div>
             </div>
+
             <div class="layui-form-item">
                 <label class="layui-form-label">Email</label>
                 <div class="layui-input-block">
@@ -62,6 +68,7 @@
                            value="${account.email}">
                 </div>
             </div>
+
             <div class="layui-form-item">
                 <label class="layui-form-label">描述</label>
                 <div class="layui-input-block">
@@ -69,6 +76,7 @@
                            value="${account.description}">
                 </div>
             </div>
+
             <div class="layui-form-item">
                 <label class="layui-form-label">类型</label>
                 <div class="layui-input-block">

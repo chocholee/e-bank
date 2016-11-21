@@ -99,7 +99,7 @@ public class WeiXinSceneController extends BaseController {
     @RequestMapping(value = "/view/{id}", method = RequestMethod.GET)
     public ModelAndView view(@PathVariable String id) {
         WeiXinSceneEntity entity = weiXinSceneService.findById(id);
-        return new ModelAndView("weixin/scene/edit", "scene", entity);
+        return new ModelAndView("weixin/scene/view", "scene", entity);
     }
 
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
@@ -114,6 +114,12 @@ public class WeiXinSceneController extends BaseController {
             return new AlertMessage(AlertMessage.Type.ERROR,
                     getMessageSourceAccessor().getMessage("default.delete.failure.message"));
         }
+    }
+
+    @RequestMapping(value = "/list/select")
+    public ModelAndView selectScene(@ModelAttribute("scene") WeiXinScenePaginationCommand command) {
+        Pagination<WeiXinSceneEntity> pagination = weiXinSceneService.pagination(command);
+        return new ModelAndView("weixin/scene/list-select", "pagination", pagination);
     }
 
 }
