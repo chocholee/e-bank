@@ -19,20 +19,18 @@
 </tmpl:override>
 
 <tmpl:override name="body">
-    <div id="table">
-        <table id="treetable" style="width:100%;outline:0;">
-            <colgroup>
-                <col width="*"/>
-            </colgroup>
-            <thead>
-            <tr>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
-    </div>
+    <table id="treetable" style="width:100%;outline:0;">
+        <colgroup>
+            <col width="*"/>
+        </colgroup>
+        <thead>
+        <tr>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
 </tmpl:override>
 
 <tmpl:override name="page_script">

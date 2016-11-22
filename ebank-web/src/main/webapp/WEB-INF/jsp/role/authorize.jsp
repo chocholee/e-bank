@@ -19,22 +19,20 @@
 </tmpl:override>
 
 <tmpl:override name="body">
-    <div id="table">
-        <form class="layui-form" action="${pageContext.request.contextPath}/role/authorize/${id}" method="post">
-            <table id="treetable" style="width:100%;outline:0;">
-                <colgroup>
-                    <col width="*"/>
-                </colgroup>
-                <thead>
-                <tr>
-                    <th></th>
-                </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
-        </form>
-    </div>
+    <form class="layui-form" action="${pageContext.request.contextPath}/role/authorize/${id}" method="post">
+        <table id="treetable" style="width:100%;outline:0;">
+            <colgroup>
+                <col width="*"/>
+            </colgroup>
+            <thead>
+            <tr>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </form>
 </tmpl:override>
 
 <tmpl:override name="page_script">

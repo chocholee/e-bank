@@ -88,6 +88,13 @@
 <tmpl:override name="page_script">
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/plugins/layui/layui.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/submit.js"></script>
+    <c:if test="${menu eq null}">
+        <script>
+            parent.layer.alert('记录不存在', {title: "警告"}, function () {
+                parent.layer.closeAll(); //再执行关闭所有层
+            });
+        </script>
+    </c:if>
 </tmpl:override>
 
 <%@ include file="../../shared/decorator.jsp" %>
