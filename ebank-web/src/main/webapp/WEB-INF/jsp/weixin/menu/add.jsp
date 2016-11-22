@@ -81,7 +81,6 @@
                     case "MEDIA_ID":
                         break;
                 }
-                form.render("select");
             });
         });
     </script>

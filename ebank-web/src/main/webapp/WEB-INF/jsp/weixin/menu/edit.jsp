@@ -66,7 +66,7 @@
             </div>
 
             <c:if test="${menu.type eq 'CLICK'}">
-                <div class="layui-form-item">
+                <div class="layui-form-item layui-dynamic-js">
                     <label class="layui-form-label">关键字</label>
                     <div class="layui-input-block">
                         <input type="text" name="key" autocomplete="true" class="layui-input"
@@ -76,7 +76,7 @@
             </c:if>
 
             <c:if test="${menu.type eq 'VIEW'}">
-                <div class="layui-form-item">
+                <div class="layui-form-item layui-dynamic-js">
                     <label class="layui-form-label">url</label>
                     <div class="layui-input-block">
                         <input type="text" name="url" autocomplete="true" class="layui-input"
@@ -118,7 +118,6 @@
                     case "MEDIA_ID":
                         break;
                 }
-                form.render("select");
             });
         });
     </script>
