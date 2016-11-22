@@ -69,6 +69,9 @@ public class WeiXinMenuController extends BaseController {
             weiXinMenuService.save(command);
             return new AlertMessage(AlertMessage.Type.SUCCESS,
                     getMessageSourceAccessor().getMessage("default.add.success.message"));
+        } catch (WeiXinNotFoundException e) {
+            logger.error(e.getMessage(), e);
+            return new AlertMessage(AlertMessage.Type.ERROR, e.getMessage());
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             return new AlertMessage(AlertMessage.Type.ERROR,
@@ -100,6 +103,9 @@ public class WeiXinMenuController extends BaseController {
             weiXinMenuService.save(command);
             return new AlertMessage(AlertMessage.Type.SUCCESS,
                     getMessageSourceAccessor().getMessage("default.add.success.message"));
+        } catch (WeiXinNotFoundException e) {
+            logger.error(e.getMessage(), e);
+            return new AlertMessage(AlertMessage.Type.ERROR, e.getMessage());
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             return new AlertMessage(AlertMessage.Type.ERROR,

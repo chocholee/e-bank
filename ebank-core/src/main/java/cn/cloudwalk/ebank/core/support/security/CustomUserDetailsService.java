@@ -5,7 +5,6 @@ import cn.cloudwalk.ebank.core.domain.model.user.UserEntity;
 import cn.cloudwalk.ebank.core.domain.model.user.UserEntityStatus;
 import cn.cloudwalk.ebank.core.domain.service.user.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

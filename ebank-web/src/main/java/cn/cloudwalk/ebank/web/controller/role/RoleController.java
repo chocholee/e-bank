@@ -1,7 +1,6 @@
 package cn.cloudwalk.ebank.web.controller.role;
 
 import cn.cloudwalk.ebank.core.domain.model.function.FunctionEntity;
-import cn.cloudwalk.ebank.core.domain.model.function.FunctionEntityType;
 import cn.cloudwalk.ebank.core.domain.model.role.RoleEntity;
 import cn.cloudwalk.ebank.core.domain.service.function.IFunctionService;
 import cn.cloudwalk.ebank.core.domain.service.role.IRoleService;

@@ -6,10 +6,10 @@ import cn.cloudwalk.ebank.core.domain.model.weixin.template.news.WeiXinNewsTempl
 import cn.cloudwalk.ebank.core.domain.model.weixin.template.text.WeiXinTextTemplateEntity;
 import cn.cloudwalk.ebank.core.domain.service.weixin.account.IWeiXinAccountService;
 import cn.cloudwalk.ebank.core.domain.service.weixin.keyword.IWeiXinKeywordService;
-import cn.cloudwalk.ebank.core.domain.service.weixin.template.news.IWeiXinNewsItemsTemplateService;
-import cn.cloudwalk.ebank.core.domain.service.weixin.template.news.IWeiXinNewsTemplateService;
 import cn.cloudwalk.ebank.core.domain.service.weixin.receive.IWeiXinReceiveService;
 import cn.cloudwalk.ebank.core.domain.service.weixin.receive.command.WeiXinReceiveCommand;
+import cn.cloudwalk.ebank.core.domain.service.weixin.template.news.IWeiXinNewsItemsTemplateService;
+import cn.cloudwalk.ebank.core.domain.service.weixin.template.news.IWeiXinNewsTemplateService;
 import cn.cloudwalk.ebank.core.domain.service.weixin.template.text.IWeiXinTextTemplateService;
 import cn.cloudwalk.ebank.core.support.utils.CustomWeiXinXMLProcessUtil;
 import com.arm4j.weixin.exception.WeiXinRequestException;

@@ -1,7 +1,6 @@
 package cn.cloudwalk.ebank.core.domain.service.user.command;
 
 import cn.cloudwalk.ebank.core.support.command.AbstractCommand;
-import org.hibernate.validator.constraints.NotBlank;
 
 import java.util.Date;
 
