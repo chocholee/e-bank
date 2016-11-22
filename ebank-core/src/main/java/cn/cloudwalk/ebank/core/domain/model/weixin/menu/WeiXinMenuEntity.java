@@ -21,13 +21,9 @@ public class WeiXinMenuEntity extends AbstractEntity {
 
     private String                  mediaId;            // 微信永久素材id
 
-    private String                  templateId;         // 消息模板id
-
     private Integer                 order;              // 排序
 
     private WeiXinMenuEntityType    type;               // 菜单类型
-
-    private WeiXinMenuEntityMsgType msgType;            // 消息类型
 
     private WeiXinMenuEntity        parent;             // 关联自身
 
@@ -37,18 +33,16 @@ public class WeiXinMenuEntity extends AbstractEntity {
         super();
     }
 
-    public WeiXinMenuEntity(String name, String key, String url, String mediaId, String templateId, Integer order,
-                            WeiXinMenuEntityType type, WeiXinMenuEntityMsgType msgType, WeiXinMenuEntity parent,
+    public WeiXinMenuEntity(String name, String key, String url, String mediaId, Integer order,
+                            WeiXinMenuEntityType type, WeiXinMenuEntity parent,
                             String accountId) {
         this();
         this.name = name;
         this.key = key;
         this.url = url;
         this.mediaId = mediaId;
-        this.templateId = templateId;
         this.order = order;
         this.type = type;
-        this.msgType = msgType;
         this.parent = parent;
         this.accountId = accountId;
     }
@@ -73,11 +67,6 @@ public class WeiXinMenuEntity extends AbstractEntity {
         return mediaId;
     }
 
-    @Column(name = "template_id")
-    public String getTemplateId() {
-        return templateId;
-    }
-
     @Column(name = "`order`")
     public Integer getOrder() {
         return order;
@@ -87,12 +76,6 @@ public class WeiXinMenuEntity extends AbstractEntity {
     @Enumerated(value = EnumType.STRING)
     public WeiXinMenuEntityType getType() {
         return type;
-    }
-
-    @Column(name = "msg_type")
-    @Enumerated(value = EnumType.STRING)
-    public WeiXinMenuEntityMsgType getMsgType() {
-        return msgType;
     }
 
     @OneToOne
@@ -122,20 +105,12 @@ public class WeiXinMenuEntity extends AbstractEntity {
         this.mediaId = mediaId;
     }
 
-    public void setTemplateId(String templateId) {
-        this.templateId = templateId;
-    }
-
     public void setOrder(Integer order) {
         this.order = order;
     }
 
     public void setType(WeiXinMenuEntityType type) {
         this.type = type;
-    }
-
-    public void setMsgType(WeiXinMenuEntityMsgType msgType) {
-        this.msgType = msgType;
     }
 
     public void setParent(WeiXinMenuEntity parent) {

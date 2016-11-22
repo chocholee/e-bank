@@ -7,7 +7,7 @@ package cn.cloudwalk.ebank.core.domain.model.weixin.menu;
  */
 public enum WeiXinMenuEntityType {
     ALL("全部", Boolean.TRUE),
-    CLICK("消息触发", Boolean.FALSE),
+    CLICK("关键字", Boolean.FALSE),
     VIEW("网页链接", Boolean.FALSE),
     SCANCODE_PUSH("弹出扫码功能", Boolean.FALSE),
     SCANCODE_WAITMSG("弹出扫码功能并返回信息", Boolean.FALSE),

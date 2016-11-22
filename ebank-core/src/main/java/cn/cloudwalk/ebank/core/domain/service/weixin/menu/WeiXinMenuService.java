@@ -4,8 +4,6 @@ import cn.cloudwalk.ebank.core.domain.model.weixin.account.WeiXinAccountEntity;
 import cn.cloudwalk.ebank.core.domain.model.weixin.menu.WeiXinMenuEntity;
 import cn.cloudwalk.ebank.core.domain.service.weixin.account.IWeiXinAccountService;
 import cn.cloudwalk.ebank.core.domain.service.weixin.menu.command.WeiXinMenuCommand;
-import cn.cloudwalk.ebank.core.domain.service.weixin.menu.command.WeiXinMenuPaginationCommand;
-import cn.cloudwalk.ebank.core.repository.Pagination;
 import cn.cloudwalk.ebank.core.repository.weixin.menu.IWeiXinMenuRepository;
 import cn.cloudwalk.ebank.core.support.exception.WeiXinNotFoundException;
 import cn.cloudwalk.ebank.core.support.utils.CustomSecurityContextHolderUtil;
@@ -15,7 +13,6 @@ import com.arm4j.weixin.request.menu.entity.MenuButtonEntity;
 import com.arm4j.weixin.request.menu.entity.MenuEntity;
 import org.hibernate.FetchMode;
 import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
@@ -50,42 +47,37 @@ public class WeiXinMenuService implements IWeiXinMenuService {
     private MessageSourceAccessor message;
 
     @Override
-    @SuppressWarnings("unchecked")
-    public Pagination<WeiXinMenuEntity> pagination(WeiXinMenuPaginationCommand command) {
-        String username = CustomSecurityContextHolderUtil.getUsername();
-        WeiXinAccountEntity accountEntity = weiXinAccountService.findByUsername(username);
-        if (null != accountEntity) {
-            // 添加查询条件
-            List<Criterion> criterions = new ArrayList<>();
-            if (!StringUtils.isEmpty(command.getName())) {
-                criterions.add(Restrictions.like("name", command.getName(), MatchMode.ANYWHERE));
-            }
-            if (!StringUtils.isEmpty(command.getKey())) {
-                criterions.add(Restrictions.like("key", command.getKey(), MatchMode.ANYWHERE));
-            }
-            if (null != command.getType() && !command.getType().isOnlyQuery()) {
-                criterions.add(Restrictions.eq("type", command.getType()));
-            }
-            if (null != command.getMsgType() && !command.getMsgType().isOnlyQuery()) {
-                criterions.add(Restrictions.eq("msgType", command.getMsgType()));
-            }
-            if (!CustomSecurityContextHolderUtil.hasRole("administrator"))
-                criterions.add(Restrictions.eq("accountEntity.id", accountEntity.getId()));
+    public List<Map<String, Object>> dataset() {
+        List<Map<String, Object>> dataset = new ArrayList<>();
 
-            // 添加排序条件
-            List<Order> orders = new ArrayList<>();
-            orders.add(Order.asc("order"));
+        // 查找一级菜单
+        List<WeiXinMenuEntity> firstMenus = this.findByParentIsNull();
+        for (WeiXinMenuEntity first : firstMenus) {
+            Map<String, Object> firstMenuMap = new HashMap<>();
+            firstMenuMap.put("id", first.getId());
+            firstMenuMap.put("name", first.getName());
+            firstMenuMap.put("order", first.getOrder());
+            firstMenuMap.put("type", first.getType().getName());
+            firstMenuMap.put("flag", true);
 
-            // 添加fetch mode
-            Map<String, FetchMode> fetchModeMap = new HashMap<>();
-            fetchModeMap.put("parent", FetchMode.JOIN);
-            fetchModeMap.put("accountEntity", FetchMode.JOIN);
+            // 查找二级菜单
+            List<Map<String, Object>> secondMenuList = new ArrayList<>();
+            List<WeiXinMenuEntity> secondMenus = this.findByParentId(first.getId());
+            for (WeiXinMenuEntity second : secondMenus) {
+                Map<String, Object> secondMenuMap = new HashMap<>();
+                secondMenuMap.put("id", second.getId());
+                secondMenuMap.put("name", second.getName());
+                secondMenuMap.put("order", second.getOrder());
+                secondMenuMap.put("type", second.getType().getName());
+                secondMenuList.add(secondMenuMap);
+            }
 
-            return weiXinMenuRepository.pagination(
-                    command.getPage(), command.getPageSize(), criterions, orders, fetchModeMap);
-        } else {
-            return new Pagination<>(command.getPage(), command.getPageSize(), 0, Collections.EMPTY_LIST);
+            // 组装二级菜单数据至一级菜单中
+            firstMenuMap.put("children", secondMenuList);
+            dataset.add(firstMenuMap);
         }
+
+        return dataset;
     }
 
     @Override
@@ -147,6 +139,11 @@ public class WeiXinMenuService implements IWeiXinMenuService {
     }
 
     @Override
+    public WeiXinMenuEntity findByIdAndFetch(String id) {
+        return weiXinMenuRepository.findByIdAndFetch(id);
+    }
+
+    @Override
     public WeiXinMenuEntity save(WeiXinMenuCommand command) {
         // 查询公众号
         String username = CustomSecurityContextHolderUtil.getUsername();
@@ -167,10 +164,8 @@ public class WeiXinMenuService implements IWeiXinMenuService {
                 command.getKey(),
                 command.getUrl(),
                 command.getMediaId(),
-                command.getTemplateId(),
                 command.getOrder(),
                 command.getType(),
-                command.getMsgType(),
                 parent,
                 accountEntity.getId()
         );
@@ -192,10 +187,8 @@ public class WeiXinMenuService implements IWeiXinMenuService {
         entity.setName(command.getName());
         entity.setKey(command.getKey());
         entity.setUrl(command.getUrl());
-        entity.setTemplateId(command.getTemplateId());
         entity.setOrder(command.getOrder());
         entity.setType(command.getType());
-        entity.setMsgType(command.getMsgType());
         entity.setParent(parent);
 
         weiXinMenuRepository.update(entity);
@@ -204,9 +197,9 @@ public class WeiXinMenuService implements IWeiXinMenuService {
 
     @Override
     public void delete(String id) {
-        List<WeiXinMenuEntity> parents = this.findByParentId(id);
-        if (!parents.isEmpty()) {
-            this.delete(id);
+        List<WeiXinMenuEntity> children = this.findByParentId(id);
+        for (WeiXinMenuEntity child : children) {
+            this.delete(child.getId());
         }
         WeiXinMenuEntity entity = weiXinMenuRepository.getById(id);
         weiXinMenuRepository.delete(entity);
@@ -242,12 +235,12 @@ public class WeiXinMenuService implements IWeiXinMenuService {
                 menuButtonEntity.setName(entity.getName());
                 menuButtonEntity.setKey(entity.getKey());
                 menuButtonEntity.setType(entity.getType().name().toLowerCase());
-                switch (parentIsNullMenu.getType()) {
+                switch (entity.getType()) {
                     case VIEW:
-                        menuButtonEntity.setUrl(parentIsNullMenu.getUrl());
+                        menuButtonEntity.setUrl(entity.getUrl());
                         break;
                     case VIEW_LIMITED:
-                        menuButtonEntity.setMediaId(parentIsNullMenu.getMediaId());
+                        menuButtonEntity.setMediaId(entity.getMediaId());
                         break;
                 }
 

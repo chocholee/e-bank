@@ -1,6 +1,5 @@
 package cn.cloudwalk.ebank.core.domain.service.weixin.menu.command;
 
-import cn.cloudwalk.ebank.core.domain.model.weixin.menu.WeiXinMenuEntityMsgType;
 import cn.cloudwalk.ebank.core.domain.model.weixin.menu.WeiXinMenuEntityType;
 import cn.cloudwalk.ebank.core.support.command.AbstractPaginationCommand;
 
@@ -17,8 +16,6 @@ public class WeiXinMenuPaginationCommand extends AbstractPaginationCommand {
 
     private WeiXinMenuEntityType type;
 
-    private WeiXinMenuEntityMsgType msgType;
-
     public String getKey() {
         return key;
     }
@@ -29,10 +26,6 @@ public class WeiXinMenuPaginationCommand extends AbstractPaginationCommand {
 
     public WeiXinMenuEntityType getType() {
         return type;
-    }
-
-    public WeiXinMenuEntityMsgType getMsgType() {
-        return msgType;
     }
 
     public void setKey(String key) {
@@ -47,7 +40,4 @@ public class WeiXinMenuPaginationCommand extends AbstractPaginationCommand {
         this.type = type;
     }
 
-    public void setMsgType(WeiXinMenuEntityMsgType msgType) {
-        this.msgType = msgType;
-    }
 }

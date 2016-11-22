@@ -3,7 +3,7 @@
 <%@ taglib prefix="tmpl" uri="/jsp-templ.tld" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<tmpl:override name="title">新增微信主菜单</tmpl:override>
+<tmpl:override name="title">新增微信菜单</tmpl:override>
 
 <tmpl:override name="page_css">
     <link href="${pageContext.request.contextPath}/resources/css/form.css" rel="stylesheet" type="text/css">
@@ -12,7 +12,7 @@
 
 <tmpl:override name="body">
     <div class="block">
-        <form class="layui-form" action="${pageContext.request.contextPath}/weixin/menu/add" method="post">
+        <form class="layui-form" action="${pageContext.request.contextPath}/weixin/menu/add/child/${parent}" method="post">
             <div class="layui-form-item">
                 <label class="layui-form-label red-star">名称</label>
                 <div class="layui-input-block">

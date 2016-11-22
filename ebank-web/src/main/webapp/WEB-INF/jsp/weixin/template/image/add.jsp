@@ -50,7 +50,7 @@
                         <span class="layui-upload-icon"><i class="layui-icon"></i>请上传图片</span>
                     </div>
                     <input type="text" name="path" lay-verify="required" value="${image.path}"
-                           readonly style="border: 0;width: 205px;">
+                           readonly style="border: 0;width: 220px;">
                 </div>
             </div>
         </form>

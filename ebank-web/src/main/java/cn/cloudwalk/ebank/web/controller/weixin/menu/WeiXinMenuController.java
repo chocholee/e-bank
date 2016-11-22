@@ -16,8 +16,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -43,31 +41,7 @@ public class WeiXinMenuController extends BaseController {
     @RequestMapping("/dataset")
     @ResponseBody
     public List<Map<String, Object>> dataset() {
-        List<Map<String, Object>> dataset = new ArrayList<>();
-        // 查找一级菜单
-        List<WeiXinMenuEntity> firstMenus = weiXinMenuService.findByParentIsNull();
-        for (WeiXinMenuEntity first : firstMenus) {
-            Map<String, Object> firstMenuMap = new HashMap<>();
-            firstMenuMap.put("id", first.getId());
-            firstMenuMap.put("name", first.getName());
-            firstMenuMap.put("order", first.getOrder());
-
-            // 查找二级菜单
-            List<Map<String, Object>> secondMenuList = new ArrayList<>();
-            List<WeiXinMenuEntity> secondMenus = weiXinMenuService.findByParentId(first.getId());
-            for (WeiXinMenuEntity second : secondMenus) {
-                Map<String, Object> secondMenuMap = new HashMap<>();
-                secondMenuMap.put("id", second.getId());
-                secondMenuMap.put("name", second.getName());
-                secondMenuMap.put("order", second.getOrder());
-                secondMenuList.add(secondMenuMap);
-            }
-
-            // 组装二级菜单数据至一级菜单中
-            firstMenuMap.put("children", secondMenuList);
-            dataset.add(firstMenuMap);
-        }
-        return dataset;
+        return weiXinMenuService.dataset();
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.GET)
@@ -90,14 +64,36 @@ public class WeiXinMenuController extends BaseController {
                     getMessageSourceAccessor()
                             .getMessage("WeiXinMenuController.menu.first.message", new Object[]{3}));
         }
-        // 微信二级菜单不能超过5个
-        for (WeiXinMenuEntity entity : parents) {
-            List<WeiXinMenuEntity> children = weiXinMenuService.findByParentId(entity.getId());
-            if (children.size() >= 5) {
-                return new AlertMessage(AlertMessage.Type.ERROR,
-                        getMessageSourceAccessor()
-                                .getMessage("WeiXinMenuController.menu.second.message", new Object[]{5}));
-            }
+
+        try {
+            weiXinMenuService.save(command);
+            return new AlertMessage(AlertMessage.Type.SUCCESS,
+                    getMessageSourceAccessor().getMessage("default.add.success.message"));
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return new AlertMessage(AlertMessage.Type.ERROR,
+                    getMessageSourceAccessor().getMessage("default.add.failure.message"));
+        }
+    }
+
+    @RequestMapping(value = "/add/child/{parent}", method = RequestMethod.GET)
+    public ModelAndView addChild(@PathVariable String parent) {
+        return new ModelAndView("/weixin/menu/add-child", "parent", parent);
+    }
+
+    @RequestMapping(value = "/add/child/{parent}", method = RequestMethod.POST)
+    @ResponseBody
+    public AlertMessage addChild(@Validated @ModelAttribute("menu") WeiXinMenuCommand command,
+                            BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return new AlertMessage(AlertMessage.Type.ERROR, null, bindingResult.getFieldErrors());
+        }
+
+        List<WeiXinMenuEntity> children = weiXinMenuService.findByParentId(command.getParent());
+        if (children.size() >= 5) {
+            return new AlertMessage(AlertMessage.Type.ERROR,
+                    getMessageSourceAccessor()
+                            .getMessage("WeiXinMenuController.menu.second.message", new Object[]{5}));
         }
 
         try {
@@ -109,6 +105,37 @@ public class WeiXinMenuController extends BaseController {
             return new AlertMessage(AlertMessage.Type.ERROR,
                     getMessageSourceAccessor().getMessage("default.add.failure.message"));
         }
+    }
+
+    @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
+    public ModelAndView edit(@PathVariable String id) {
+        WeiXinMenuEntity menu = weiXinMenuService.findByIdAndFetch(id);
+        return new ModelAndView("/weixin/menu/edit", "menu", menu);
+    }
+
+    @RequestMapping(value = "/edit/{id}", method = RequestMethod.POST)
+    @ResponseBody
+    public AlertMessage edit(@Validated @ModelAttribute("menu") WeiXinMenuCommand command,
+                            BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return new AlertMessage(AlertMessage.Type.ERROR, null, bindingResult.getFieldErrors());
+        }
+
+        try {
+            weiXinMenuService.update(command);
+            return new AlertMessage(AlertMessage.Type.SUCCESS,
+                    getMessageSourceAccessor().getMessage("default.edit.success.message"));
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return new AlertMessage(AlertMessage.Type.ERROR,
+                    getMessageSourceAccessor().getMessage("default.edit.failure.message"));
+        }
+    }
+
+    @RequestMapping(value = "/view/{id}", method = RequestMethod.GET)
+    public ModelAndView view(@PathVariable String id) {
+        WeiXinMenuEntity menu = weiXinMenuService.findByIdAndFetch(id);
+        return new ModelAndView("/weixin/menu/view", "menu", menu);
     }
 
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)

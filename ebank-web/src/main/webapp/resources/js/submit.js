@@ -2,6 +2,23 @@
  * Created by liwenhe on 2016/11/1.
  */
 var currentWindow = undefined;
+
+// 处理layui中select处理方向的问题
+var renderLayuiSelect = function () {
+    var selects = $(".layui-form-select");
+    selects.each(function () {
+        var selectHeight = $(this).height();
+        var selectOffsetTop = $(this).offset().top;
+        var selectUlHeight = $(this).find("ul").height();
+        var htmlHeight = $(this).parents("html").height();
+        if ((selectHeight + selectOffsetTop + selectUlHeight + 4) >= htmlHeight
+            && (selectOffsetTop + 4) > selectUlHeight) {
+            $(this).find("ul").css("top", "inherit");
+            $(this).find("ul").css("bottom", "-8px");
+        }
+    });
+};
+
 // 表单提交时操作
 layui.use('form', function(){
     var form = layui.form();
@@ -40,5 +57,7 @@ layui.use('form', function(){
     window.submit = function (_pWindow) {
         currentWindow = _pWindow;
         $(".layui-form").submit();
-    }
+    };
+
+    renderLayuiSelect();
 });

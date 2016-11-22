@@ -26,5 +26,5 @@
     <logger name="org.springframework.security" level="warn"/>
     <logger name="org.springframework.web" level="warn"/>
     <logger name="org.hibernate" level="warn"/>
-    <logger name="org.apache" level="warn"/>
+    <logger name="org.apache" level="debug"/>
 </configuration>

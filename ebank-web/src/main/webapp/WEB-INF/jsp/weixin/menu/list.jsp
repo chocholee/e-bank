@@ -22,16 +22,16 @@
         <div class="left button-group-wrapper ">
             <sec:authorize url="/weixin/menu/add">
                 <div class="button-group">
-                    <a href="javascript:_add('${pageContext.request.contextPath}/weixin/menu/add', '新增', '600px', '555px');" class="button">
+                    <a href="javascript:CURD.add('${pageContext.request.contextPath}/weixin/menu/add', '新增微信主菜单', '600px', '365px');" class="button">
                         <img src="${pageContext.request.contextPath}/resources/images/btn_add_n.png" height="18" width="18"
-                             alt="添加">
-                        <span>添加</span>
+                             alt="添加主菜单">
+                        <span>添加主菜单</span>
                     </a>
                 </div>
             </sec:authorize>
             <sec:authorize url="/weixin/menu/sync">
                 <div class="button-group">
-                    <a href="javascript:_sync('${pageContext.request.contextPath}/weixin/menu/sync', '同步菜单', '600px', '450px');" class="button">
+                    <a href="javascript:_sync('${pageContext.request.contextPath}/weixin/menu/sync');" class="button">
                         <img src="${pageContext.request.contextPath}/resources/images/btn_Reset_n.png" height="18" width="18"
                              alt="同步菜单">
                         <span>同步菜单</span>
@@ -55,7 +55,7 @@
                     </p>
                 </div>
                 <div class="form-group">
-                    <a href="javascript:void(0);" onclick="_reset(this)" class="button"><img
+                    <a href="javascript:void(0);" onclick="CURD.reset(this)" class="button"><img
                             src="${pageContext.request.contextPath}/resources/images/btn_Reset_n.png" alt="" height="18"
                             width="18"><span>刷新</span></a>
                 </div>
@@ -66,12 +66,14 @@
     <table id="treetable" style="width:100%;outline:0;">
         <colgroup>
             <col width="30%"/>
+            <col width="30%"/>
             <col width="*"/>
-            <col width="100px"/>
+            <col width="150px"/>
         </colgroup>
         <thead>
         <tr>
             <th>菜单名称</th>
+            <th>菜单类型</th>
             <th style="cursor:pointer;">顺序</th>
             <th>操作</th>
         </tr>
@@ -87,6 +89,9 @@
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/plugins/fancytree/jquery.fancytree.table.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/plugins/fancytree/jquery.fancytree.filter.js"></script>
     <script>
+        // 初始化CURD
+        CURD.init(window, window);
+
         // 初始化插件
         $("#treetable").fancytree({
             debugLevel: 0,
@@ -126,25 +131,46 @@
             },
             renderColumns: function(event, data) {
                 var node = data.node, $tdList = $(node.tr).find(">td");
-//                $tdList.eq(0).find(".fancytree-title").text(node.data.name);
-                $tdList.eq(1).text(node.data.order).css({"text-align": "center"});
+
+                $tdList.eq(1).text(node.data.type).css({"text-align": "center"});
+                $tdList.eq(2).text(node.data.order).css({"text-align": "center"});
+
                 var operateElem = "";
+                <sec:authorize url="/weixin/menu/add/child/">
+                    if (node.data.flag != undefined && node.data.flag == true) {
+                        operateElem += "<a class='mr-5' "
+                                + "href=\"javascript:CURD.add('${pageContext.request.contextPath}/weixin/menu/add/child/"
+                                + node.data.id + "', '新增子菜单', '600px', '365px');\" title='新增子菜单'>"
+                                + "<img src='${pageContext.request.contextPath}/resources/images/add.png'>"
+                                + "</a>";
+                    }
+                </sec:authorize>
+
                 <sec:authorize url="/weixin/menu/view/">
-                operateElem +=  "<a class='mr-5' href=\"javascript:_view('${pageContext.request.contextPath}/weixin/menu/view/" + node.data.id + "', '查看', '600px', '450px');\" title='查看'>" +
-                        "<img src='${pageContext.request.contextPath}/resources/images/eye.png'>" +
-                        "</a>";
+                operateElem += "<a class='mr-5' "
+                        + "href=\"javascript:CURD.view('${pageContext.request.contextPath}/weixin/menu/view/"
+                        + node.data.id + "', '查看菜单', '600px', '365px');\" title='查看菜单'>"
+                        + "<img src='${pageContext.request.contextPath}/resources/images/eye.png'>"
+                        + "</a>";
                 </sec:authorize>
+
                 <sec:authorize url="/weixin/menu/edit/">
-                operateElem +=  "<a class='mr-5' href=\"javascript:_edit('${pageContext.request.contextPath}/weixin/menu/edit/" + node.data.id + "', '编辑', '600px', '450px');\" title='查看'>" +
-                        "<img src='${pageContext.request.contextPath}/resources/images/edit.png'>" +
-                        "</a>";
+                operateElem += "<a class='mr-5' "
+                        + "href=\"javascript:CURD.edit('${pageContext.request.contextPath}/weixin/menu/edit/"
+                        + node.data.id + "', '编辑菜单', '600px', '365px');\" title='编辑菜单'>"
+                        + "<img src='${pageContext.request.contextPath}/resources/images/edit.png'>"
+                        + "</a>";
                 </sec:authorize>
+
                 <sec:authorize url="/weixin/menu/delete/">
-                operateElem +=  "<a href=\"javascript:_delete('${pageContext.request.contextPath}/weixin/menu/delete/" + node.data.id + "');\" title='删除'>" +
-                        "<img src='${pageContext.request.contextPath}/resources/images/btn_delete_n.png'>" +
-                        "</a>";
+                operateElem += "<a "
+                        + "href=\"javascript:CURD.delete('${pageContext.request.contextPath}/weixin/menu/delete/"
+                        + node.data.id + "');\" title='删除菜单'>"
+                        + "<img src='${pageContext.request.contextPath}/resources/images/btn_delete_n.png'>"
+                        + "</a>";
                 </sec:authorize>
-                $tdList.eq(2).html(operateElem).css({'text-align': 'center'});
+
+                $tdList.eq(3).html(operateElem).css({'text-align': 'center'});
             }
         });
 
@@ -185,17 +211,19 @@
             tree.clearFilter();
         };
 
-        var _sync = function (url) {
-            layer.confirm('确定同步数据至微信?', {icon: 7, title:'警告'}, function(){
-                var index = layer.load();
-                $.get(url, function (result) {
-                    layer.alert(result.message, function () {
-                        layer.close(index);
-                        window.location.reload();
+        <sec:authorize url="/weixin/menu/sync">
+            var _sync = function (url) {
+                layer.confirm('确定同步数据至微信?', {icon: 7, title: '警告'}, function () {
+                    var index = layer.load();
+                    $.get(url, function (result) {
+                        layer.alert(result.message, function () {
+                            layer.close(index);
+                            window.location.reload();
+                        });
                     });
                 });
-            });
-        }
+            };
+        </sec:authorize>
     </script>
 </tmpl:override>
 

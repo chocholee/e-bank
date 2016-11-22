@@ -1,6 +1,5 @@
 package cn.cloudwalk.ebank.core.domain.service.weixin.menu.command;
 
-import cn.cloudwalk.ebank.core.domain.model.weixin.menu.WeiXinMenuEntityMsgType;
 import cn.cloudwalk.ebank.core.domain.model.weixin.menu.WeiXinMenuEntityType;
 import cn.cloudwalk.ebank.core.support.command.AbstractCommand;
 import org.hibernate.validator.constraints.NotBlank;
@@ -19,7 +18,6 @@ public class WeiXinMenuCommand extends AbstractCommand {
     @NotBlank(message = "{WeiXinMenuCommand.name.NotBlank}")
     private String                  name;               // 微信菜单名称
 
-    @NotBlank(message = "{WeiXinMenuCommand.key.NotBlank}")
     private String                  key;                // 菜单KEY值(click等点击类型必须)
 
     private String                  url;                // 网页链接(view类型必须)
@@ -33,8 +31,6 @@ public class WeiXinMenuCommand extends AbstractCommand {
 
     @NotNull(message = "{WeiXinMenuCommand.type.NotNull}")
     private WeiXinMenuEntityType    type;               // 菜单类型
-
-    private WeiXinMenuEntityMsgType msgType;            // 消息类型
 
     private String                  parent;             // 关联自身
 
@@ -68,10 +64,6 @@ public class WeiXinMenuCommand extends AbstractCommand {
 
     public WeiXinMenuEntityType getType() {
         return type;
-    }
-
-    public WeiXinMenuEntityMsgType getMsgType() {
-        return msgType;
     }
 
     public String getParent() {
@@ -108,10 +100,6 @@ public class WeiXinMenuCommand extends AbstractCommand {
 
     public void setType(WeiXinMenuEntityType type) {
         this.type = type;
-    }
-
-    public void setMsgType(WeiXinMenuEntityMsgType msgType) {
-        this.msgType = msgType;
     }
 
     public void setParent(String parent) {

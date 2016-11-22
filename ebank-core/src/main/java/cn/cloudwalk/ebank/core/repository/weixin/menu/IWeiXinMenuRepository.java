@@ -8,4 +8,7 @@ import cn.cloudwalk.ebank.core.repository.IHibernateRepository;
  * @author 李文禾
  */
 public interface IWeiXinMenuRepository<T, ID> extends IHibernateRepository<T, ID> {
+
+    T findByIdAndFetch(ID id);
+
 }
