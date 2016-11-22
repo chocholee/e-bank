@@ -5,13 +5,15 @@ import cn.cloudwalk.ebank.core.support.entity.AbstractEntity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import java.util.Date;
 
 /**
  * Created by liwenhe on 16/11/17.
  */
 @Entity
-@Table(name = "weixin_scene")
+@Table(name = "weixin_scene",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"name", "account_id"}))
 public class WeiXinSceneEntity extends AbstractEntity {
 
     private String name;                        // 名称
@@ -34,7 +36,7 @@ public class WeiXinSceneEntity extends AbstractEntity {
         this.accountId = accountId;
     }
 
-    @Column(name = "name", unique = true)
+    @Column(name = "name")
     public String getName() {
         return name;
     }

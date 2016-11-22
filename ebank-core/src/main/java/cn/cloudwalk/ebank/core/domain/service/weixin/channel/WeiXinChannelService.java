@@ -42,6 +42,7 @@ public class WeiXinChannelService implements IWeiXinChannelService {
     private MessageSourceAccessor message;
 
     @Override
+    @SuppressWarnings("unchecked")
     public Pagination<WeiXinChannelEntity> pagination(WeiXinChannelPaginationCommand command) {
         String username = CustomSecurityContextHolderUtil.getUsername();
         WeiXinAccountEntity accountEntity = weiXinAccountRepository.findByUsername(username);

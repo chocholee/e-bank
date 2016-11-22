@@ -5,6 +5,7 @@ import cn.cloudwalk.ebank.core.support.entity.AbstractEntity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import java.util.Date;
 
 /**
@@ -13,7 +14,8 @@ import java.util.Date;
  * @author 李文禾
  */
 @Entity
-@Table(name = "weixin_template_text")
+@Table(name = "weixin_template_text",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"name", "account_id"}))
 public class WeiXinTextTemplateEntity extends AbstractEntity {
 
     private String              name;                   // 文本消息模板名称
@@ -36,7 +38,7 @@ public class WeiXinTextTemplateEntity extends AbstractEntity {
         this.accountId = accountId;
     }
 
-    @Column(name = "name", unique = true)
+    @Column(name = "name")
     public String getName() {
         return name;
     }
