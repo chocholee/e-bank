@@ -37,6 +37,6 @@ public interface IWeiXinMenuService {
 
     void delete(String id);
 
-    boolean sync() throws WeiXinRequestException;
+    void sync() throws WeiXinRequestException;
 
 }

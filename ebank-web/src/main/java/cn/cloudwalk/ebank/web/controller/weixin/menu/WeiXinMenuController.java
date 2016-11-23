@@ -170,14 +170,9 @@ public class WeiXinMenuController extends BaseController {
     @ResponseBody
     public AlertMessage sync() {
         try {
-            boolean result = weiXinMenuService.sync();
-            if (result) {
-                return new AlertMessage(AlertMessage.Type.SUCCESS,
-                        getMessageSourceAccessor().getMessage("WeiXinMenuController.menu.sync.success.message"));
-            } else {
-                return new AlertMessage(AlertMessage.Type.ERROR,
-                        getMessageSourceAccessor().getMessage("WeiXinMenuController.menu.sync.failure.message"));
-            }
+            weiXinMenuService.sync();
+            return new AlertMessage(AlertMessage.Type.SUCCESS,
+                    getMessageSourceAccessor().getMessage("WeiXinMenuController.menu.sync.success.message"));
         } catch (WeiXinRequestException e) {
             logger.error(e.getMessage(), e);
             return new AlertMessage(AlertMessage.Type.SUCCESS,

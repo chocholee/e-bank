@@ -258,7 +258,7 @@ public class WeiXinMenuService implements IWeiXinMenuService {
     }
 
     @Override
-    public boolean sync() throws WeiXinRequestException {
+    public void sync() throws WeiXinRequestException {
         String username = CustomSecurityContextHolderUtil.getUsername();
         WeiXinAccountEntity accountEntity = weiXinAccountService.findByUsername(username);
 
@@ -311,6 +311,6 @@ public class WeiXinMenuService implements IWeiXinMenuService {
         // 同步至微信中
         MenuEntity menuEntity = new MenuEntity();
         menuEntity.setButtons(allMenuButtonEntities);
-        return WeiXinMenuCreateRequest.request(weiXinAccountService.getAccessToken(accountEntity.getAppId()), menuEntity);
+        WeiXinMenuCreateRequest.request(weiXinAccountService.getAccessToken(accountEntity.getAppId()), menuEntity);
     }
 }
