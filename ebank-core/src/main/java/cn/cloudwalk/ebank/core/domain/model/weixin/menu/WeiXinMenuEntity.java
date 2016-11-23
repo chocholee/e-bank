@@ -1,5 +1,6 @@
 package cn.cloudwalk.ebank.core.domain.model.weixin.menu;
 
+import cn.cloudwalk.ebank.core.domain.model.weixin.menucustom.WeiXinMenuCustomEntity;
 import cn.cloudwalk.ebank.core.support.entity.AbstractEntity;
 
 import javax.persistence.*;
@@ -27,6 +28,8 @@ public class WeiXinMenuEntity extends AbstractEntity {
 
     private WeiXinMenuEntity        parent;             // 关联自身
 
+    private WeiXinMenuCustomEntity  menuCustom;         // 关联个性化菜单
+
     private String                  accountId;          // 关联公众号
 
     public WeiXinMenuEntity() {
@@ -34,7 +37,7 @@ public class WeiXinMenuEntity extends AbstractEntity {
     }
 
     public WeiXinMenuEntity(String name, String key, String url, String mediaId, Integer order,
-                            WeiXinMenuEntityType type, WeiXinMenuEntity parent,
+                            WeiXinMenuEntityType type, WeiXinMenuEntity parent, WeiXinMenuCustomEntity menuCustom,
                             String accountId) {
         this();
         this.name = name;
@@ -44,6 +47,7 @@ public class WeiXinMenuEntity extends AbstractEntity {
         this.order = order;
         this.type = type;
         this.parent = parent;
+        this.menuCustom = menuCustom;
         this.accountId = accountId;
     }
 
@@ -84,6 +88,12 @@ public class WeiXinMenuEntity extends AbstractEntity {
         return parent;
     }
 
+    @ManyToOne
+    @JoinColumn(name = "menu_custom_id", referencedColumnName = "id")
+    public WeiXinMenuCustomEntity getMenuCustom() {
+        return menuCustom;
+    }
+
     @Column(name = "account_id")
     public String getAccountId() {
         return accountId;
@@ -115,6 +125,10 @@ public class WeiXinMenuEntity extends AbstractEntity {
 
     public void setParent(WeiXinMenuEntity parent) {
         this.parent = parent;
+    }
+
+    public void setMenuCustom(WeiXinMenuCustomEntity menuCustom) {
+        this.menuCustom = menuCustom;
     }
 
     public void setAccountId(String accountId) {

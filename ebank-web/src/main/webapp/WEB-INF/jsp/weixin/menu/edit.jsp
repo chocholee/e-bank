@@ -16,6 +16,11 @@
             <c:if test="${menu.parent ne null}">
                 <input type="hidden" name="parent" value="${menu.parent.id}">
             </c:if>
+
+            <c:if test="${menu.menuCustom ne null}">
+                <input type="hidden" name="menuCustom" value="${menu.menuCustom.id}">
+            </c:if>
+
             <div class="layui-form-item">
                 <label class="layui-form-label red-star">名称</label>
                 <div class="layui-input-block">

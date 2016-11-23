@@ -74,7 +74,7 @@
                                 </a>
                             </sec:authorize>
                             <sec:authorize url="/weixin/template/news/item/add/">
-                                <a href="javascript:CURD.add('${pageContext.request.contextPath}/weixin/template/news/item/add/${news.id}', '添加图文项', '900px', '495px')" title="添加图文项">
+                                <a href="javascript:CURD.add('${pageContext.request.contextPath}/weixin/template/news/item/add/${news.id}', '添加图文项', '930px', '495px')" title="添加图文项">
                                     <img src="${pageContext.request.contextPath}/resources/images/add.png">
                                 </a>
                             </sec:authorize>

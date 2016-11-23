@@ -13,6 +13,8 @@
 <tmpl:override name="body">
     <div class="block">
         <form class="layui-form" action="${pageContext.request.contextPath}/weixin/menu/add" method="post">
+            <input type="hidden" value="${menuCustom}" name="menuCustom">
+
             <div class="layui-form-item">
                 <label class="layui-form-label red-star">名称</label>
                 <div class="layui-input-block">

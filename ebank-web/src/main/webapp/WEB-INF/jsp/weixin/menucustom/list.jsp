@@ -4,34 +4,43 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt_rt" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
-<tmpl:override name="title">图片消息列表</tmpl:override>
+<tmpl:override name="title">个性化菜单列表</tmpl:override>
 
 <tmpl:override name="page_css">
 </tmpl:override>
 
 <tmpl:override name="rightBox">
     <%-- 标题 --%>
-    <span class="title">图片消息列表</span>
+    <span class="title">个性化菜单列表</span>
     <div class="greyLine"></div>
 
     <%-- 条件查询及按钮操作区域 --%>
     <div class="button-wrapper">
         <div class="left button-group-wrapper">
-            <sec:authorize url="/weixin/template/image/add">
-                <div class="button-group mr-20">
-                    <a href="javascript:CURD.add('${pageContext.request.contextPath}/weixin/template/image/add', '新增', '930px', '400px');" class="button">
+            <sec:authorize url="/weixin/menu/custom/add">
+                <div class="button-group">
+                    <a href="javascript:CURD.add('${pageContext.request.contextPath}/weixin/menu/custom/add', '新增', '600px', '345px');" class="button">
                         <img src="${pageContext.request.contextPath}/resources/images/btn_add_n.png" height="18" width="18"
                              alt="添加">
                         <span>添加</span>
                     </a>
                 </div>
             </sec:authorize>
+            <sec:authorize url="/weixin/menu/custom/menu/list/">
+                <div class="button-group">
+                    <a href="javascript:package('${pageContext.request.contextPath}/weixin/menu/custom/menu/list');" class="button">
+                        <img src="${pageContext.request.contextPath}/resources/images/btn_edit_n.png" height="18" width="18"
+                             alt="编辑菜单包">
+                        <span>编辑菜单包</span>
+                    </a>
+                </div>
+            </sec:authorize>
         </div>
         <div class="right">
-            <form class="form-inline" role="form" action="${pageContext.request.contextPath}/weixin/template/image/list">
+            <form class="form-inline" role="form" action="${pageContext.request.contextPath}/weixin/menu/custom/list">
                 <div class="form-group">
                     <label>名称</label>
-                    <input name="name" type="text" class="form-control" value="${image.name}">
+                    <input name="name" type="text" class="form-control" value="${menuCustom.name}">
                 </div>
                 <div class="form-group">
                     <a href="javascript:void(0);" onclick="CURD.search(this)" class="button"><img
@@ -58,28 +67,32 @@
     <div id="table">
         <table class="table" cellspacing="0">
             <tr>
+                <th></th>
                 <th>名称</th>
+                <th>备注</th>
                 <th>创建日期</th>
                 <th>操作</th>
             </tr>
             <c:if test="${pagination ne null && pagination.data ne null}">
-                <c:forEach var="image" items="${pagination.data}">
+                <c:forEach var="menuCustom" items="${pagination.data}">
                     <tr>
-                        <td>${image.name}</td>
-                        <td>${image.createdDate}</td>
+                        <td><input type="checkbox" value="${menuCustom.id}"></td>
+                        <td>${menuCustom.name}</td>
+                        <td>${menuCustom.remark}</td>
+                        <td>${menuCustom.createdDate}</td>
                         <td class="last-td">
-                            <sec:authorize url="/weixin/template/image/view/">
-                                <a href="javascript:CURD.view('${pageContext.request.contextPath}/weixin/template/image/view/${image.id}', '查看', '360px', '345px')" title="查看">
+                            <sec:authorize url="/weixin/menu/custom/view/">
+                                <a href="javascript:CURD.view('${pageContext.request.contextPath}/weixin/menu/custom/view/${menuCustom.id}', '查看', '650px', '355px')" title="查看">
                                     <img src="${pageContext.request.contextPath}/resources/images/eye.png">
                                 </a>
                             </sec:authorize>
-                            <sec:authorize url="/weixin/template/text/edit/">
-                                <a href="javascript:CURD.edit('${pageContext.request.contextPath}/weixin/template/image/edit/${image.id}', '编辑', '930px', '400px')" title="编辑">
+                            <sec:authorize url="/weixin/menu/custom/edit/">
+                                <a href="javascript:CURD.edit('${pageContext.request.contextPath}/weixin/menu/custom/edit/${menuCustom.id}', '编辑', '600px', '345px')" title="编辑">
                                     <img src="${pageContext.request.contextPath}/resources/images/edit.png" alt="编辑">
                                 </a>
                             </sec:authorize>
-                            <sec:authorize url="/weixin/template/text/delete/">
-                                <a href="javascript:CURD.delete('${pageContext.request.contextPath}/weixin/template/image/delete/${image.id}')" title="删除">
+                            <sec:authorize url="/weixin/menu/custom/delete/">
+                                <a href="javascript:CURD.delete('${pageContext.request.contextPath}/weixin/menu/custom/delete/${menuCustom.id}')" title="删除">
                                     <img src="${pageContext.request.contextPath}/resources/images/btn_delete_n.png" alt="删除">
                                 </a>
                             </sec:authorize>
@@ -91,9 +104,9 @@
     </div>
 
     <%-- 引入分页 --%>
-    <jsp:include page="../../../shared/pagination.jsp" flush="true">
+    <jsp:include page="../../shared/pagination.jsp" flush="true">
         <jsp:param name="pagination" value="${pagination}"/>
-        <jsp:param name="paginationURL" value="${pageContext.request.contextPath}/weixin/template/image/list?name=${text.name}"/>
+        <jsp:param name="paginationURL" value="${pageContext.request.contextPath}/weixin/menu/custom/list?name=${menuCustom.name}"/>
     </jsp:include>
 </tmpl:override>
 
@@ -103,7 +116,29 @@
     <script type="text/javascript">
         // 初始化CURD
         CURD.init(window, window);
+
+        <sec:authorize url="/weixin/menu/custom/menu/list/">
+            // 编辑菜单包
+            function package(url) {
+                var checkboxes = $("#table").find("input[type=checkbox]").filter(":checked");
+                if (checkboxes.length != 1) {
+                    layer.alert("请择一条记录进行操作!")
+                    return false;
+                } else {
+                    url = url + "/" + $(checkboxes).val();
+                    layer.open({
+                        type: 2,
+                        title: "编辑菜单包",
+                        shadeClose: true,
+                        shade: [0.5],
+                        area: ["800px", "600px"],
+                        content: url,
+                        maxmin: false
+                    })
+                }
+            }
+        </sec:authorize>
     </script>
 </tmpl:override>
 
-<%@ include file="../../../shared/decorator.jsp" %>
+<%@ include file="../../shared/decorator.jsp" %>

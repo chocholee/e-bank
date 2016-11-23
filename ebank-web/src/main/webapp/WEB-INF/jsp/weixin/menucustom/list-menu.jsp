@@ -9,32 +9,22 @@
 <tmpl:override name="page_css">
     <link href="${pageContext.request.contextPath}/resources/js/plugins/fancytree/css/ui.fancytree.css" rel="stylesheet" type="text/css">
     <style>
+        body {background: inherit;margin: 0 auto;width: 98%;}
         th { text-align:center;font-weight:500;padding: 15px 0; }
         thead { background:rgb(244,244,244); }
         tbody tr td { padding-top:5px; padding-bottom: 5px; }
     </style>
 </tmpl:override>
 
-<tmpl:override name="rightBox">
-    <span class="title">微信菜单列表</span>
-    <div class="greyLine"></div>
+<tmpl:override name="body">
     <div class="button-wrapper">
         <div class="left button-group-wrapper ">
             <sec:authorize url="/weixin/menu/add">
                 <div class="button-group">
-                    <a href="javascript:CURD.add('${pageContext.request.contextPath}/weixin/menu/add', '新增微信主菜单', '600px', '365px');" class="button">
+                    <a href="javascript:CURD.add('${pageContext.request.contextPath}/weixin/menu/custom/menu/add/${id}', '新增微信主菜单', '600px', '365px');" class="button">
                         <img src="${pageContext.request.contextPath}/resources/images/btn_add_n.png" height="18" width="18"
                              alt="添加主菜单">
                         <span>添加主菜单</span>
-                    </a>
-                </div>
-            </sec:authorize>
-            <sec:authorize url="/weixin/menu/sync">
-                <div class="button-group">
-                    <a href="javascript:_sync('${pageContext.request.contextPath}/weixin/menu/sync');" class="button">
-                        <img src="${pageContext.request.contextPath}/resources/images/btn_Reset_n.png" height="18" width="18"
-                             alt="同步菜单">
-                        <span>同步菜单</span>
                     </a>
                 </div>
             </sec:authorize>
@@ -47,7 +37,7 @@
             </div>
         </div>
         <div class="right">
-            <form class="form-inline" role="form" action="${pageContext.request.contextPath}/weixin/menu/list">
+            <form class="form-inline" role="form" action="${pageContext.request.contextPath}/weixin/menu/custom/menu/list/${id}">
                 <div class="form-group">
                     <p>
                         <label>筛选</label>
@@ -90,7 +80,7 @@
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/plugins/fancytree/jquery.fancytree.filter.js"></script>
     <script type="text/javascript">
         // 初始化CURD
-        CURD.init(window, window);
+        CURD.init(window, parent);
 
         // 初始化插件
         $("#treetable").fancytree({
@@ -112,7 +102,7 @@
                 autoExpand:true
             },
             source: {
-                url: "${pageContext.request.contextPath}/weixin/menu/dataset"
+                url: "${pageContext.request.contextPath}/weixin/menu/custom/menu/dataset/${id}"
             },
             icon: function (event, data) {
                 if (data.node.key != 1 && data.node.data.icon == null) {
@@ -210,20 +200,6 @@
             $(_this).val("");
             tree.clearFilter();
         };
-
-        <sec:authorize url="/weixin/menu/sync">
-            var _sync = function (url) {
-                layer.confirm('确定同步数据至微信?', {icon: 7, title: '警告'}, function () {
-                    var index = layer.load();
-                    $.get(url, function (result) {
-                        layer.alert(result.message, function () {
-                            layer.close(index);
-                            window.location.reload();
-                        });
-                    });
-                });
-            };
-        </sec:authorize>
     </script>
 </tmpl:override>
 

@@ -84,7 +84,7 @@
 
             var editURL   = "${pageContext.request.contextPath}/weixin/template/news/item/edit/" + itemId;
             var deleteURL = "${pageContext.request.contextPath}/weixin/template/news/item/delete/" + itemId;
-            $(".mask > .btn-group > a:first").attr("href", "javascript:CURD.edit('" + editURL + "', '编辑图文项', '900px', '495px');");
+            $(".mask > .btn-group > a:first").attr("href", "javascript:CURD.edit('" + editURL + "', '编辑图文项', '930px', '495px');");
             $(".mask > .btn-group > a:last").attr("href", "javascript:CURD.delete('" + deleteURL + "');");
         });
     </script>

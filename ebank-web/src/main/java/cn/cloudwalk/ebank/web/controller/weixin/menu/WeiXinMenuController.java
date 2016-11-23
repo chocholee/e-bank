@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -57,7 +58,14 @@ public class WeiXinMenuController extends BaseController {
             return new AlertMessage(AlertMessage.Type.ERROR, null, bindingResult.getFieldErrors());
         }
 
-        List<WeiXinMenuEntity> parents = weiXinMenuService.findByParentIsNull();
+        // 查询菜单
+        List<WeiXinMenuEntity> parents;
+        if (!StringUtils.isEmpty(command.getMenuCustom())) {
+            parents = weiXinMenuService.findByParentIsNullAndMenuCustom(command.getMenuCustom());
+        } else {
+            parents = weiXinMenuService.findByParentAndMenuCustomIsNull();
+        }
+
         // 微信一级菜单不能超过3个
         if (parents.size() >= 3) {
             return new AlertMessage(AlertMessage.Type.ERROR,

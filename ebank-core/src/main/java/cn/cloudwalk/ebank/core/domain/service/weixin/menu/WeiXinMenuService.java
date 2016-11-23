@@ -2,9 +2,12 @@ package cn.cloudwalk.ebank.core.domain.service.weixin.menu;
 
 import cn.cloudwalk.ebank.core.domain.model.weixin.account.WeiXinAccountEntity;
 import cn.cloudwalk.ebank.core.domain.model.weixin.menu.WeiXinMenuEntity;
+import cn.cloudwalk.ebank.core.domain.model.weixin.menucustom.WeiXinMenuCustomEntity;
 import cn.cloudwalk.ebank.core.domain.service.weixin.account.IWeiXinAccountService;
 import cn.cloudwalk.ebank.core.domain.service.weixin.menu.command.WeiXinMenuCommand;
+import cn.cloudwalk.ebank.core.domain.service.weixin.menucustom.IWeiXinMenuCustomService;
 import cn.cloudwalk.ebank.core.repository.weixin.menu.IWeiXinMenuRepository;
+import cn.cloudwalk.ebank.core.repository.weixin.menucustom.IWeiXinMenuCustomRepository;
 import cn.cloudwalk.ebank.core.support.exception.WeiXinNotFoundException;
 import cn.cloudwalk.ebank.core.support.utils.CustomSecurityContextHolderUtil;
 import com.arm4j.weixin.exception.WeiXinRequestException;
@@ -41,6 +44,9 @@ public class WeiXinMenuService implements IWeiXinMenuService {
     private IWeiXinMenuRepository<WeiXinMenuEntity, String> weiXinMenuRepository;
 
     @Autowired
+    private IWeiXinMenuCustomRepository<WeiXinMenuCustomEntity, String> weiXinMenuCustomRepository;
+
+    @Autowired
     private IWeiXinAccountService weiXinAccountService;
 
     @Autowired
@@ -51,7 +57,7 @@ public class WeiXinMenuService implements IWeiXinMenuService {
         List<Map<String, Object>> dataset = new ArrayList<>();
 
         // 查找一级菜单
-        List<WeiXinMenuEntity> firstMenus = this.findByParentIsNull();
+        List<WeiXinMenuEntity> firstMenus = this.findByParentAndMenuCustomIsNull();
         for (WeiXinMenuEntity first : firstMenus) {
             Map<String, Object> firstMenuMap = new HashMap<>();
             firstMenuMap.put("id", first.getId());
@@ -101,7 +107,38 @@ public class WeiXinMenuService implements IWeiXinMenuService {
     }
 
     @Override
-    public List<WeiXinMenuEntity> findByParentIsNull() {
+    public List<WeiXinMenuEntity> findAll(List<Criterion> criterions, List<Order> orders, Map<String, FetchMode> fetchModeMap) {
+        return weiXinMenuRepository.findAll(criterions, orders, fetchModeMap);
+    }
+
+    @Override
+    public List<WeiXinMenuEntity> findByParentIsNullAndMenuCustom(String menuCustomId) {
+        String username = CustomSecurityContextHolderUtil.getUsername();
+        WeiXinAccountEntity accountEntity = weiXinAccountService.findByUsername(username);
+
+        if (null != accountEntity) {
+            // 添加查询条件
+            List<Criterion> criterions = new ArrayList<>();
+            criterions.add(Restrictions.eq("accountId", accountEntity.getId()));
+            criterions.add(Restrictions.eq("menuCustom.id", menuCustomId));
+            criterions.add(Restrictions.isNull("parent"));
+
+            // 添加排序条件
+            List<Order> orders = new ArrayList<>();
+            orders.add(Order.asc("order"));
+
+            // 添加fetchMode
+            Map<String, FetchMode> fetchModeMap = new HashMap<>();
+            fetchModeMap.put("menuCustom", FetchMode.JOIN);
+
+            return weiXinMenuRepository.findAll(criterions, orders, fetchModeMap);
+        } else {
+            return Collections.EMPTY_LIST;
+        }
+    }
+
+    @Override
+    public List<WeiXinMenuEntity> findByParentAndMenuCustomIsNull() {
         String username = CustomSecurityContextHolderUtil.getUsername();
         WeiXinAccountEntity accountEntity = weiXinAccountService.findByUsername(username);
 
@@ -110,6 +147,7 @@ public class WeiXinMenuService implements IWeiXinMenuService {
             List<Criterion> criterions = new ArrayList<>();
             criterions.add(Restrictions.eq("accountId", accountEntity.getId()));
             criterions.add(Restrictions.isNull("parent"));
+            criterions.add(Restrictions.isNull("menuCustom"));
 
             // 添加排序条件
             List<Order> orders = new ArrayList<>();
@@ -158,6 +196,12 @@ public class WeiXinMenuService implements IWeiXinMenuService {
             parent = weiXinMenuRepository.getById(command.getParent());
         }
 
+        // 查询个性化菜单
+        WeiXinMenuCustomEntity menuCustomEntity = null;
+        if (!StringUtils.isEmpty(command.getMenuCustom())) {
+            menuCustomEntity = weiXinMenuCustomRepository.getById(command.getMenuCustom());
+        }
+
         // 新增数据
         WeiXinMenuEntity entity = new WeiXinMenuEntity(
                 command.getName(),
@@ -167,6 +211,7 @@ public class WeiXinMenuService implements IWeiXinMenuService {
                 command.getOrder(),
                 command.getType(),
                 parent,
+                menuCustomEntity,
                 accountEntity.getId()
         );
 
@@ -182,6 +227,12 @@ public class WeiXinMenuService implements IWeiXinMenuService {
             parent = weiXinMenuRepository.getById(command.getParent());
         }
 
+        // 查询个性化菜单
+        WeiXinMenuCustomEntity menuCustomEntity = null;
+        if (!StringUtils.isEmpty(command.getMenuCustom())) {
+            menuCustomEntity = weiXinMenuCustomRepository.getById(command.getMenuCustom());
+        }
+
         // 更新当前数据
         WeiXinMenuEntity entity = weiXinMenuRepository.getById(command.getId());
         entity.setName(command.getName());
@@ -190,6 +241,7 @@ public class WeiXinMenuService implements IWeiXinMenuService {
         entity.setOrder(command.getOrder());
         entity.setType(command.getType());
         entity.setParent(parent);
+        entity.setMenuCustom(menuCustomEntity);
 
         weiXinMenuRepository.update(entity);
         return entity;
@@ -211,7 +263,7 @@ public class WeiXinMenuService implements IWeiXinMenuService {
         WeiXinAccountEntity accountEntity = weiXinAccountService.findByUsername(username);
 
         List<MenuButtonEntity> allMenuButtonEntities = new ArrayList<>();
-        List<WeiXinMenuEntity> weiXinMenuEntities = this.findByParentIsNull();
+        List<WeiXinMenuEntity> weiXinMenuEntities = this.findByParentAndMenuCustomIsNull();
         for (WeiXinMenuEntity parentIsNullMenu : weiXinMenuEntities) {
             // 第一级菜单
             MenuButtonEntity firstMenuButtonEntity = new MenuButtonEntity();

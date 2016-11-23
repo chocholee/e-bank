@@ -34,6 +34,8 @@ public class WeiXinMenuCommand extends AbstractCommand {
 
     private String                  parent;             // 关联自身
 
+    private String                  menuCustom;         // 关联个性化菜单
+
     public String getId() {
         return id;
     }
@@ -70,6 +72,10 @@ public class WeiXinMenuCommand extends AbstractCommand {
         return parent;
     }
 
+    public String getMenuCustom() {
+        return menuCustom;
+    }
+
     public void setId(String id) {
         this.id = id;
     }
@@ -104,5 +110,9 @@ public class WeiXinMenuCommand extends AbstractCommand {
 
     public void setParent(String parent) {
         this.parent = parent;
+    }
+
+    public void setMenuCustom(String menuCustom) {
+        this.menuCustom = menuCustom;
     }
 }
