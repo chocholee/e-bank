@@ -10,7 +10,7 @@ import java.util.Date;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class WeiXinGroupEntity extends AbstractEntity {
+public abstract class WeiXinGroupEntity extends AbstractEntity {
 
     private String                  name;               // 组名称
 

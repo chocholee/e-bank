@@ -80,8 +80,8 @@ public class WeiXinReplyController extends BaseController {
     }
 
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
-    public ModelAndView edit(@ModelAttribute("reply") WeiXinReplyCommand command, Model model) {
-        WeiXinReplyEntity entity = weiXinReplyService.findById(command.getId());
+    public ModelAndView edit(@PathVariable String id, Model model) {
+        WeiXinReplyEntity entity = weiXinReplyService.findById(id);
         if (entity.getType() == WeiXinReplyEntityType.TEXT) {
             WeiXinTextTemplateEntity template = weiXinTextTemplateService.findById(entity.getTemplateId());
             model.addAttribute("template", template);

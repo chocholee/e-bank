@@ -2,17 +2,17 @@ package cn.cloudwalk.ebank.core.domain.service.weixin.channel;
 
 import cn.cloudwalk.ebank.core.domain.model.weixin.account.WeiXinAccountEntity;
 import cn.cloudwalk.ebank.core.domain.model.weixin.channel.WeiXinChannelEntity;
+import cn.cloudwalk.ebank.core.domain.model.weixin.qrcode.WeiXinQRCodeEntity;
 import cn.cloudwalk.ebank.core.domain.service.weixin.channel.command.WeiXinChannelCommand;
 import cn.cloudwalk.ebank.core.domain.service.weixin.channel.command.WeiXinChannelPaginationCommand;
 import cn.cloudwalk.ebank.core.repository.Pagination;
 import cn.cloudwalk.ebank.core.repository.weixin.account.IWeiXinAccountRepository;
 import cn.cloudwalk.ebank.core.repository.weixin.channel.IWeiXinChannelRepository;
+import cn.cloudwalk.ebank.core.repository.weixin.qrcode.IWeiXinQRCodeRepository;
 import cn.cloudwalk.ebank.core.support.exception.WeiXinNotFoundException;
 import cn.cloudwalk.ebank.core.support.utils.CustomSecurityContextHolderUtil;
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
+import org.hibernate.criterion.*;
+import org.hibernate.sql.JoinType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.stereotype.Service;
@@ -37,6 +37,9 @@ public class WeiXinChannelService implements IWeiXinChannelService {
 
     @Autowired
     private IWeiXinAccountRepository<WeiXinAccountEntity, String> weiXinAccountRepository;
+
+    @Autowired
+    private IWeiXinQRCodeRepository<WeiXinQRCodeEntity, String> weiXinQRCodeRepository;
 
     @Autowired
     private MessageSourceAccessor message;
@@ -101,6 +104,16 @@ public class WeiXinChannelService implements IWeiXinChannelService {
     @Override
     public void delete(String id) {
         WeiXinChannelEntity entity = this.findById(id);
+
+        // 删除与二维码间的外键关系
+        DetachedCriteria dc = DetachedCriteria.forClass(WeiXinQRCodeEntity.class);
+        dc.add(Restrictions.eq("channel.id", id))
+                .createAlias("channel", "channel", JoinType.LEFT_OUTER_JOIN);
+        List<WeiXinQRCodeEntity> qrList = weiXinQRCodeRepository.findAll(dc);
+        for (WeiXinQRCodeEntity qrCode : qrList) {
+            weiXinQRCodeRepository.delete(qrCode);
+        }
+
         weiXinChannelRepository.delete(entity);
     }
 }

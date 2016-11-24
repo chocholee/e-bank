@@ -5,6 +5,7 @@ import cn.cloudwalk.ebank.core.domain.model.weixin.group.WeiXinGroupEntity;
 import cn.cloudwalk.ebank.core.domain.model.weixin.group.WeiXinGroupEntityType;
 import cn.cloudwalk.ebank.core.domain.model.weixin.group.virtual.WeiXinGroupVirtualEntity;
 import cn.cloudwalk.ebank.core.domain.model.weixin.group.wechat.WeiXinGroupWechatEntity;
+import cn.cloudwalk.ebank.core.domain.model.weixin.qrcode.WeiXinQRCodeEntity;
 import cn.cloudwalk.ebank.core.domain.service.weixin.account.IWeiXinAccountService;
 import cn.cloudwalk.ebank.core.domain.service.weixin.group.command.WeiXinGroupCommand;
 import cn.cloudwalk.ebank.core.domain.service.weixin.group.command.WeiXinGroupPaginationCommand;
@@ -12,6 +13,7 @@ import cn.cloudwalk.ebank.core.repository.Pagination;
 import cn.cloudwalk.ebank.core.repository.weixin.group.IWeiXinGroupRepository;
 import cn.cloudwalk.ebank.core.repository.weixin.group.virtual.IWeiXinGroupVirtualRepository;
 import cn.cloudwalk.ebank.core.repository.weixin.group.wechat.IWeiXinGroupWechatRepository;
+import cn.cloudwalk.ebank.core.repository.weixin.qrcode.IWeiXinQRCodeRepository;
 import cn.cloudwalk.ebank.core.support.exception.WeiXinNotFoundException;
 import cn.cloudwalk.ebank.core.support.utils.CustomSecurityContextHolderUtil;
 import com.arm4j.weixin.exception.WeiXinRequestException;
@@ -20,10 +22,8 @@ import com.arm4j.weixin.request.group.WeiXinGroupsDeleteRequest;
 import com.arm4j.weixin.request.group.WeiXinGroupsGetRequest;
 import com.arm4j.weixin.request.group.WeiXinGroupsUpdateRequest;
 import com.arm4j.weixin.request.group.entity.GroupEntity;
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
+import org.hibernate.criterion.*;
+import org.hibernate.sql.JoinType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.stereotype.Service;
@@ -51,6 +51,9 @@ public class WeiXinGroupService implements IWeiXinGroupService {
 
     @Autowired
     private IWeiXinGroupVirtualRepository<WeiXinGroupVirtualEntity, String> weiXinGroupVirtualRepository;
+
+    @Autowired
+    private IWeiXinQRCodeRepository<WeiXinQRCodeEntity, String> weiXinQRCodeRepository;
 
     @Autowired
     private IWeiXinAccountService weiXinAccountService;
@@ -182,6 +185,23 @@ public class WeiXinGroupService implements IWeiXinGroupService {
             group.setId(entity.getGroupId());
             WeiXinGroupsDeleteRequest.request(
                     weiXinAccountService.getAccessToken(accountEntity.getAppId()), group);
+        }
+
+        // 删除二维码与分组的外键关系
+        DetachedCriteria dc = DetachedCriteria.forClass(WeiXinQRCodeEntity.class);
+        dc.add(Restrictions.or(
+                Restrictions.eq("groupWechat.id", id),
+                Restrictions.eq("groupVirtual.id", id)))
+                .createAlias("groupWechat", "groupWechat", JoinType.LEFT_OUTER_JOIN)
+                .createAlias("groupVirtual", "groupVirtual", JoinType.LEFT_OUTER_JOIN);
+        List<WeiXinQRCodeEntity> qrList = weiXinQRCodeRepository.findAll(dc);
+        for (WeiXinQRCodeEntity qrCode : qrList) {
+            if (entity.getType() == WeiXinGroupEntityType.WECHAT) {
+                weiXinQRCodeRepository.delete(qrCode);
+            } else {
+                qrCode.setGroupVirtual(null);
+                weiXinQRCodeRepository.update(qrCode);
+            }
         }
 
         // 删除数据库中的记录

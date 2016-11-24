@@ -61,8 +61,8 @@ public class WeiXinAccountController extends BaseController {
     }
 
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
-    public ModelAndView edit(@ModelAttribute("account") WeiXinAccountCommand command) {
-        WeiXinAccountEntity account = weiXinAccountService.findById(command.getId());
+    public ModelAndView edit(@PathVariable String id) {
+        WeiXinAccountEntity account = weiXinAccountService.findById(id);
         return new ModelAndView("weixin/account/edit", "account", account);
     }
 

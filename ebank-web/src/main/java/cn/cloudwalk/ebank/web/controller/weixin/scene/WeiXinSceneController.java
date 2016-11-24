@@ -117,7 +117,7 @@ public class WeiXinSceneController extends BaseController {
     }
 
     @RequestMapping(value = "/list/select")
-    public ModelAndView selectScene(@ModelAttribute("scene") WeiXinScenePaginationCommand command) {
+    public ModelAndView listSelect(@ModelAttribute("scene") WeiXinScenePaginationCommand command) {
         Pagination<WeiXinSceneEntity> pagination = weiXinSceneService.pagination(command);
         return new ModelAndView("weixin/scene/list-select", "pagination", pagination);
     }

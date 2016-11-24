@@ -1,9 +1,13 @@
 package cn.cloudwalk.ebank.web.controller.weixin.group;
 
 import cn.cloudwalk.ebank.core.domain.model.weixin.group.WeiXinGroupEntity;
+import cn.cloudwalk.ebank.core.domain.model.weixin.group.virtual.WeiXinGroupVirtualEntity;
+import cn.cloudwalk.ebank.core.domain.model.weixin.group.wechat.WeiXinGroupWechatEntity;
 import cn.cloudwalk.ebank.core.domain.service.weixin.group.IWeiXinGroupService;
 import cn.cloudwalk.ebank.core.domain.service.weixin.group.command.WeiXinGroupCommand;
 import cn.cloudwalk.ebank.core.domain.service.weixin.group.command.WeiXinGroupPaginationCommand;
+import cn.cloudwalk.ebank.core.domain.service.weixin.group.virtual.IWeiXinGroupVirtualService;
+import cn.cloudwalk.ebank.core.domain.service.weixin.group.wechat.IWeiXinGroupWechatService;
 import cn.cloudwalk.ebank.core.repository.Pagination;
 import cn.cloudwalk.ebank.core.support.exception.WeiXinNotFoundException;
 import cn.cloudwalk.ebank.web.controller.shared.AlertMessage;
@@ -28,6 +32,12 @@ public class WeiXinGroupController extends BaseController {
 
     @Autowired
     private IWeiXinGroupService weiXinGroupService;
+
+    @Autowired
+    private IWeiXinGroupWechatService weiXinGroupWechatService;
+
+    @Autowired
+    private IWeiXinGroupVirtualService weiXinGroupVirtualService;
 
     @RequestMapping("/list")
     public ModelAndView pagination(@ModelAttribute("group") WeiXinGroupPaginationCommand command) {
@@ -63,8 +73,8 @@ public class WeiXinGroupController extends BaseController {
     }
 
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
-    public ModelAndView edit(@ModelAttribute("group") WeiXinGroupCommand command) {
-        WeiXinGroupEntity entity = weiXinGroupService.findById(command.getId());
+    public ModelAndView edit(@PathVariable String id) {
+        WeiXinGroupEntity entity = weiXinGroupService.findById(id);
         return new ModelAndView("weixin/group/edit", "group", entity);
     }
 
@@ -91,7 +101,7 @@ public class WeiXinGroupController extends BaseController {
     }
 
     @RequestMapping(value = "/view/{id}", method = RequestMethod.GET)
-    public ModelAndView edit(@PathVariable String id) {
+    public ModelAndView view(@PathVariable String id) {
         WeiXinGroupEntity entity = weiXinGroupService.findById(id);
         return new ModelAndView("weixin/group/edit", "group", entity);
     }
@@ -122,6 +132,18 @@ public class WeiXinGroupController extends BaseController {
             return new AlertMessage(AlertMessage.Type.ERROR,
                     getMessageSourceAccessor().getMessage("WeiXinGroupController.sync.failure.message"));
         }
+    }
+
+    @RequestMapping("/list/select/wechat")
+    public ModelAndView listSelectWechat(@ModelAttribute("group") WeiXinGroupPaginationCommand command) {
+        Pagination<WeiXinGroupWechatEntity> pagination = weiXinGroupWechatService.pagination(command);
+        return new ModelAndView("weixin/group/list-select", "pagination", pagination);
+    }
+
+    @RequestMapping("/list/select/virtual")
+    public ModelAndView listSelectVirtual(@ModelAttribute("group") WeiXinGroupPaginationCommand command) {
+        Pagination<WeiXinGroupVirtualEntity> pagination = weiXinGroupVirtualService.pagination(command);
+        return new ModelAndView("weixin/group/list-select", "pagination", pagination);
     }
 
 }
