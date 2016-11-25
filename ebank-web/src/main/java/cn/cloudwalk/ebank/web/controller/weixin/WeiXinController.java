@@ -45,7 +45,11 @@ public class WeiXinController {
             Arrays.sort(encryptArr);
 
             // 对参数加密并判断是否与签名相等
-            String sign = DigestUtils.sha1Hex(String.join("", encryptArr));
+            StringBuilder sb = new StringBuilder();
+            for (String str : encryptArr) {
+                sb.append(str);
+            }
+            String sign = DigestUtils.sha1Hex(sb.toString());
             if (sign.equals(signature)) {
                 response.setCharacterEncoding("UTF-8");
                 response.getWriter().write(echostr);
