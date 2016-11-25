@@ -257,6 +257,12 @@
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
+            <repositories>
+                <repository>
+                    <id>liwenhe-nexus</id>
+                    <url>http://linode.nexus.liwenhe.com/repository/maven-public/</url>
+                </repository>
+            </repositories>
         </profile>
 
         <!-- 生产环境 -->
