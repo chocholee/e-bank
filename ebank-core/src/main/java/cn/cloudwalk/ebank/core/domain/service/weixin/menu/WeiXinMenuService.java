@@ -261,6 +261,9 @@ public class WeiXinMenuService implements IWeiXinMenuService {
     public void sync() throws WeiXinRequestException {
         String username = CustomSecurityContextHolderUtil.getUsername();
         WeiXinAccountEntity accountEntity = weiXinAccountService.findByUsername(username);
+        if (null == accountEntity) {
+            throw new WeiXinNotFoundException(message.getMessage("WeiXinAccountNotFoundException.message"));
+        }
 
         List<MenuButtonEntity> allMenuButtonEntities = new ArrayList<>();
         List<WeiXinMenuEntity> weiXinMenuEntities = this.findByParentAndMenuCustomIsNull();

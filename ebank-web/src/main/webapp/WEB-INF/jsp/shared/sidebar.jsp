@@ -30,13 +30,13 @@
                         <ul>
                             <c:forEach var="secondFunc" items="${secondFuncs}">
                                 <li>
-                                    <a href="${secondFunc.uri}">${secondFunc.name}</a>
+                                    <a href="${pageContext.request.contextPath}${secondFunc.uri}">${secondFunc.name}</a>
                                 </li>
                             </c:forEach>
                         </ul>
                     </c:when>
                     <c:otherwise>
-                        <a href="${firstFunc.uri}" style="background-image: none;">
+                        <a href="${pageContext.request.contextPath}${firstFunc.uri}" style="background-image: none;">
                             <c:choose>
                                 <c:when test="${firstFunc.iconEntity ne null}">
                                     <img src="${iconHost}/${firstFunc.iconEntity.beforeHoverPath}"

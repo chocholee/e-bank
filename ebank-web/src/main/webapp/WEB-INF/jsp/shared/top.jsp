@@ -7,7 +7,7 @@
         <div class="setting right">
             <a class="user left">系统管理员</a>
             <a class="control left">控制面板</a>
-            <a class="exit left" href="/logout">退出</a>
+            <a class="exit left" href="${pageContext.request.contextPath}/logout">退出</a>
         </div>
     </div>
     <div class="line"></div>

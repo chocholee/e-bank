@@ -3,19 +3,19 @@ package cn.cloudwalk.ebank.core.domain.service.weixin.menucustom;
 import cn.cloudwalk.ebank.core.domain.model.weixin.account.WeiXinAccountEntity;
 import cn.cloudwalk.ebank.core.domain.model.weixin.menu.WeiXinMenuEntity;
 import cn.cloudwalk.ebank.core.domain.model.weixin.menucustom.WeiXinMenuCustomEntity;
+import cn.cloudwalk.ebank.core.domain.model.weixin.menucustomrule.WeiXinMenuCustomRuleEntity;
 import cn.cloudwalk.ebank.core.domain.service.weixin.menu.IWeiXinMenuService;
 import cn.cloudwalk.ebank.core.domain.service.weixin.menucustom.command.WeiXinMenuCustomCommand;
 import cn.cloudwalk.ebank.core.domain.service.weixin.menucustom.command.WeiXinMenuCustomPaginationCommand;
 import cn.cloudwalk.ebank.core.repository.Pagination;
 import cn.cloudwalk.ebank.core.repository.weixin.account.IWeiXinAccountRepository;
 import cn.cloudwalk.ebank.core.repository.weixin.menucustom.IWeiXinMenuCustomRepository;
+import cn.cloudwalk.ebank.core.repository.weixin.menucustomrule.IWeiXinMenuCustomRuleRepository;
 import cn.cloudwalk.ebank.core.support.exception.WeiXinNotFoundException;
 import cn.cloudwalk.ebank.core.support.utils.CustomSecurityContextHolderUtil;
 import org.hibernate.FetchMode;
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
+import org.hibernate.criterion.*;
+import org.hibernate.sql.JoinType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.stereotype.Service;
@@ -37,6 +37,9 @@ public class WeiXinMenuCustomService implements IWeiXinMenuCustomService {
 
     @Autowired
     private IWeiXinAccountRepository<WeiXinAccountEntity, String> weiXinAccountRepository;
+
+    @Autowired
+    private IWeiXinMenuCustomRuleRepository<WeiXinMenuCustomRuleEntity, String> weiXinMenuCustomRuleRepository;
 
     @Autowired
     private IWeiXinMenuService weiXinMenuService;
@@ -155,6 +158,15 @@ public class WeiXinMenuCustomService implements IWeiXinMenuCustomService {
         List<WeiXinMenuEntity> menuEntities = weiXinMenuService.findByParentIsNullAndMenuCustom(entity.getId());
         for (WeiXinMenuEntity menu : menuEntities) {
             weiXinMenuService.delete(menu.getId());
+        }
+
+        // 删除与个性化规则的外键关系
+        DetachedCriteria menuCustomRuleDc = DetachedCriteria.forClass(WeiXinMenuCustomRuleEntity.class);
+        menuCustomRuleDc.add(Restrictions.eq("menuCustom.id", id))
+                .createAlias("menuCustom", "menuCustom", JoinType.LEFT_OUTER_JOIN);
+        List<WeiXinMenuCustomRuleEntity> mcRuleList = weiXinMenuCustomRuleRepository.findAll(menuCustomRuleDc);
+        for (WeiXinMenuCustomRuleEntity mcRule : mcRuleList) {
+            weiXinMenuCustomRuleRepository.delete(mcRule);
         }
 
         // 删除个性化菜单

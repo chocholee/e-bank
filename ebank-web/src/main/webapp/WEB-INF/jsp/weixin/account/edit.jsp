@@ -14,7 +14,7 @@
     <div class="block">
         <form class="layui-form" action="${pageContext.request.contextPath}/weixin/account/edit/${account.id}" method="post">
             <div class="layui-form-item">
-                <label class="layui-form-label">名称</label>
+                <label class="layui-form-label red-star">名称</label>
                 <div class="layui-input-block">
                     <input type="text" name="name" lay-verify="required" autocomplete="off" class="layui-input"
                            value="${account.name}">
@@ -22,7 +22,7 @@
             </div>
 
             <div class="layui-form-item">
-                <label class="layui-form-label">Token</label>
+                <label class="layui-form-label red-star">Token</label>
                 <div class="layui-input-block">
                     <input type="text" name="token" lay-verify="required" autocomplete="off" class="layui-input"
                            value="${account.token}">
@@ -30,7 +30,7 @@
             </div>
 
             <div class="layui-form-item">
-                <label class="layui-form-label">微信号</label>
+                <label class="layui-form-label red-star">微信号</label>
                 <div class="layui-input-block">
                     <input type="text" name="number" lay-verify="required" autocomplete="off" class="layui-input"
                            value="${account.number}">
@@ -38,7 +38,7 @@
             </div>
 
             <div class="layui-form-item">
-                <label class="layui-form-label">原始ID</label>
+                <label class="layui-form-label red-star">原始ID</label>
                 <div class="layui-input-block">
                     <input type="text" name="accountId" lay-verify="required" autocomplete="off" class="layui-input"
                            value="${account.accountId}">
@@ -46,7 +46,7 @@
             </div>
 
             <div class="layui-form-item">
-                <label class="layui-form-label">AppId</label>
+                <label class="layui-form-label red-star">AppId</label>
                 <div class="layui-input-block">
                     <input type="text" name="appId" lay-verify="required" autocomplete="off" class="layui-input"
                            value="${account.appId}">
@@ -54,7 +54,7 @@
             </div>
 
             <div class="layui-form-item">
-                <label class="layui-form-label">AppSecret</label>
+                <label class="layui-form-label red-star">AppSecret</label>
                 <div class="layui-input-block">
                     <input type="text" name="appSecret" lay-verify="required" autocomplete="off" class="layui-input"
                            value="${account.appSecret}">
@@ -78,7 +78,7 @@
             </div>
 
             <div class="layui-form-item">
-                <label class="layui-form-label">类型</label>
+                <label class="layui-form-label red-star">类型</label>
                 <div class="layui-input-block">
                     <c:if test="${account.type ne null}">
                         <select lay-verify="required" name="type" id="type">
