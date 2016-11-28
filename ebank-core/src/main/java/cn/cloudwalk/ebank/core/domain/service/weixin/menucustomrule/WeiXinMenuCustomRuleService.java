@@ -177,10 +177,13 @@ public class WeiXinMenuCustomRuleService implements IWeiXinMenuCustomRuleService
             entity.setGroupWechat(groupWechat);
         }
 
+        if (entity.getStatus() == WeiXinMenuCustomRuleEntityStatus.SYNCED) {
+            entity.setStatus(WeiXinMenuCustomRuleEntityStatus.EDITED_SYNC);
+        }
+
         entity.setSex(command.getSex());
         entity.setPlatform(command.getPlatform());
         entity.setLanguage(command.getLanguage());
-        entity.setStatus(WeiXinMenuCustomRuleEntityStatus.EDITED_SYNC);
 
         weiXinMenuCustomRuleRepository.update(entity);
         return entity;

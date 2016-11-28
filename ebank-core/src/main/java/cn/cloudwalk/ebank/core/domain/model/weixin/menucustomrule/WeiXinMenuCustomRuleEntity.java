@@ -135,7 +135,7 @@ public class WeiXinMenuCustomRuleEntity extends AbstractEntity {
     }
 
     @ManyToOne
-    @JoinColumn(name = "group_wechat_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "group_wechat_id", referencedColumnName = "id")
     public WeiXinGroupWechatEntity getGroupWechat() {
         return groupWechat;
     }

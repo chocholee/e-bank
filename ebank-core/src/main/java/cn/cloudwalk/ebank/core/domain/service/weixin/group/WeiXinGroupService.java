@@ -215,7 +215,8 @@ public class WeiXinGroupService implements IWeiXinGroupService {
                 .createAlias("groupWechat", "groupWechat", JoinType.LEFT_OUTER_JOIN);
         List<WeiXinMenuCustomRuleEntity> mcRuleList = weiXinMenuCustomRuleRepository.findAll(menuCustomRuleDc);
         for (WeiXinMenuCustomRuleEntity mcRule : mcRuleList) {
-            weiXinMenuCustomRuleRepository.delete(mcRule);
+            mcRule.setGroupWechat(null);
+            weiXinMenuCustomRuleRepository.update(mcRule);
         }
 
         // 删除数据库中的记录
