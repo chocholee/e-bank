@@ -4,6 +4,7 @@ import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
@@ -146,6 +147,9 @@ public class AbstractHibernateRepository<T, ID extends Serializable> implements 
                 queryCount.createAlias(key, aliasMap.get(key));
             }
         }
+
+        queryCount.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+        query.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 
         int count = queryCount.list().size();
         List<T> list = query.setFirstResult((page - 1) * pageSize)

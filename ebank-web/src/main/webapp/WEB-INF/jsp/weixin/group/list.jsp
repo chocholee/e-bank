@@ -94,6 +94,11 @@
                         <td>${group.type.name}</td>
                         <td>${group.remark}</td>
                         <td class="last-td">
+                            <sec:authorize url="/weixin/user/list/group/">
+                                <a href="javascript:CURD.view('${pageContext.request.contextPath}/weixin/user/list/group/${group.id}', '查看用户', '800px', '500px')" title="查看用户">
+                                    <img src="${pageContext.request.contextPath}/resources/images/btn_user_n.png">
+                                </a>
+                            </sec:authorize>
                             <sec:authorize url="/weixin/group/view/">
                                 <a href="javascript:CURD.view('${pageContext.request.contextPath}/weixin/group/view/${group.id}', '查看', '650px', '400px')" title="查看">
                                     <img src="${pageContext.request.contextPath}/resources/images/eye.png">
@@ -134,12 +139,15 @@
         <sec:authorize url="/weixin/group/sync">
             // 拉取微信分组
             function sync(url) {
-                var index = layer.load();
-                $.get(url, function (result) {
-                    layer.alert(result.message, function () {
-                        layer.close(index);
-                        window.location.reload();
+                layer.confirm('您确定拉取微信分组信息并等待完成?', {icon: 0, title:'提示'}, function(index) {
+                    var loadIndex = layer.load();
+                    $.get(url, function (result) {
+                        layer.alert(result.message, function () {
+                            layer.close(loadIndex);
+                            window.location.reload();
+                        });
                     });
+                    layer.close(index);
                 });
             }
         </sec:authorize>

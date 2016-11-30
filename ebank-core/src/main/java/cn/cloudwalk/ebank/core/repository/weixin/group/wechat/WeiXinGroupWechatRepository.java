@@ -14,9 +14,10 @@ public class WeiXinGroupWechatRepository extends AbstractHibernateRepository<Wei
         implements IWeiXinGroupWechatRepository<WeiXinGroupWechatEntity, String> {
 
     @Override
-    public WeiXinGroupWechatEntity findByGroupId(Integer groupId) {
+    public WeiXinGroupWechatEntity findByGroupId(Integer groupId, String accountId) {
         Criteria criteria = getSession().createCriteria(getPersistenceClass());
-        criteria.add(Restrictions.eq("groupId", groupId));
+        criteria.add(Restrictions.eq("groupId", groupId))
+                .add(Restrictions.eq("accountId", accountId));
         return (WeiXinGroupWechatEntity) criteria.uniqueResult();
     }
 

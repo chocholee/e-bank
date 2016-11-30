@@ -15,6 +15,7 @@ import cn.cloudwalk.ebank.web.controller.shared.BaseController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -62,6 +63,10 @@ public class WeiXinGroupController extends BaseController {
             weiXinGroupService.save(command);
             return new AlertMessage(AlertMessage.Type.SUCCESS,
                     getMessageSourceAccessor().getMessage("default.add.success.message"));
+        } catch (DataIntegrityViolationException e) {
+            logger.error(e.getMessage(), e);
+            return new AlertMessage(AlertMessage.Type.ERROR,
+                    getMessageSourceAccessor().getMessage("default.not.unique.message"));
         } catch (WeiXinNotFoundException e) {
             logger.error(e.getMessage(), e);
             return new AlertMessage(AlertMessage.Type.ERROR, e.getMessage());
@@ -90,6 +95,10 @@ public class WeiXinGroupController extends BaseController {
             weiXinGroupService.update(command);
             return new AlertMessage(AlertMessage.Type.SUCCESS,
                     getMessageSourceAccessor().getMessage("default.edit.success.message"));
+        } catch (DataIntegrityViolationException e) {
+            logger.error(e.getMessage(), e);
+            return new AlertMessage(AlertMessage.Type.ERROR,
+                    getMessageSourceAccessor().getMessage("default.not.unique.message"));
         } catch (WeiXinNotFoundException e) {
             logger.error(e.getMessage(), e);
             return new AlertMessage(AlertMessage.Type.ERROR, e.getMessage());

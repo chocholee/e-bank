@@ -7,6 +7,6 @@ import cn.cloudwalk.ebank.core.repository.IHibernateRepository;
  */
 public interface IWeiXinGroupWechatRepository<T, ID> extends IHibernateRepository<T, ID> {
 
-    T findByGroupId(Integer groupId);
+    T findByGroupId(Integer groupId, String accountId);
 
 }

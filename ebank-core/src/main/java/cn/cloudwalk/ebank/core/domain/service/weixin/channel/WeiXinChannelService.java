@@ -3,12 +3,14 @@ package cn.cloudwalk.ebank.core.domain.service.weixin.channel;
 import cn.cloudwalk.ebank.core.domain.model.weixin.account.WeiXinAccountEntity;
 import cn.cloudwalk.ebank.core.domain.model.weixin.channel.WeiXinChannelEntity;
 import cn.cloudwalk.ebank.core.domain.model.weixin.qrcode.WeiXinQRCodeEntity;
+import cn.cloudwalk.ebank.core.domain.model.weixin.user.WeiXinUserEntity;
 import cn.cloudwalk.ebank.core.domain.service.weixin.channel.command.WeiXinChannelCommand;
 import cn.cloudwalk.ebank.core.domain.service.weixin.channel.command.WeiXinChannelPaginationCommand;
 import cn.cloudwalk.ebank.core.repository.Pagination;
 import cn.cloudwalk.ebank.core.repository.weixin.account.IWeiXinAccountRepository;
 import cn.cloudwalk.ebank.core.repository.weixin.channel.IWeiXinChannelRepository;
 import cn.cloudwalk.ebank.core.repository.weixin.qrcode.IWeiXinQRCodeRepository;
+import cn.cloudwalk.ebank.core.repository.weixin.user.IWeiXinUserRepository;
 import cn.cloudwalk.ebank.core.support.exception.WeiXinNotFoundException;
 import cn.cloudwalk.ebank.core.support.utils.CustomSecurityContextHolderUtil;
 import org.hibernate.criterion.*;
@@ -40,6 +42,9 @@ public class WeiXinChannelService implements IWeiXinChannelService {
 
     @Autowired
     private IWeiXinQRCodeRepository<WeiXinQRCodeEntity, String> weiXinQRCodeRepository;
+
+    @Autowired
+    private IWeiXinUserRepository<WeiXinUserEntity, String> weiXinUserRepository;
 
     @Autowired
     private MessageSourceAccessor message;
@@ -106,12 +111,22 @@ public class WeiXinChannelService implements IWeiXinChannelService {
         WeiXinChannelEntity entity = this.findById(id);
 
         // 删除与二维码间的外键关系
-        DetachedCriteria dc = DetachedCriteria.forClass(WeiXinQRCodeEntity.class);
-        dc.add(Restrictions.eq("channel.id", id))
+        DetachedCriteria qrCodeDc = DetachedCriteria.forClass(WeiXinQRCodeEntity.class);
+        qrCodeDc.add(Restrictions.eq("channel.id", id))
                 .createAlias("channel", "channel", JoinType.LEFT_OUTER_JOIN);
-        List<WeiXinQRCodeEntity> qrList = weiXinQRCodeRepository.findAll(dc);
+        List<WeiXinQRCodeEntity> qrList = weiXinQRCodeRepository.findAll(qrCodeDc);
         for (WeiXinQRCodeEntity qrCode : qrList) {
             weiXinQRCodeRepository.delete(qrCode);
+        }
+
+        // 删除与微信用户间的外键关系
+        DetachedCriteria userDc = DetachedCriteria.forClass(WeiXinUserEntity.class);
+        userDc.add(Restrictions.eq("channel.id", id))
+                .createAlias("channel", "channel", JoinType.LEFT_OUTER_JOIN);
+        List<WeiXinUserEntity> userEntityList = weiXinUserRepository.findAll(userDc);
+        for (WeiXinUserEntity userEntity : userEntityList) {
+            userEntity.setChannel(null);
+            weiXinUserRepository.update(userEntity);
         }
 
         weiXinChannelRepository.delete(entity);

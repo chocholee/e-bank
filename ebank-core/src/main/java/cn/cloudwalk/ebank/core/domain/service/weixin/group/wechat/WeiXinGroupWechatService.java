@@ -2,7 +2,6 @@ package cn.cloudwalk.ebank.core.domain.service.weixin.group.wechat;
 
 import cn.cloudwalk.ebank.core.domain.model.weixin.account.WeiXinAccountEntity;
 import cn.cloudwalk.ebank.core.domain.model.weixin.group.wechat.WeiXinGroupWechatEntity;
-import cn.cloudwalk.ebank.core.domain.service.weixin.account.IWeiXinAccountService;
 import cn.cloudwalk.ebank.core.domain.service.weixin.group.command.WeiXinGroupPaginationCommand;
 import cn.cloudwalk.ebank.core.repository.Pagination;
 import cn.cloudwalk.ebank.core.repository.weixin.account.IWeiXinAccountRepository;
@@ -49,6 +48,10 @@ public class WeiXinGroupWechatService implements IWeiXinGroupWechatService {
             }
 
             criterions.add(Restrictions.eq("accountId", accountEntity.getId()));
+            criterions.add(
+                    Restrictions.or(
+                            Restrictions.not(Restrictions.in("groupId", 1, 2)),
+                            Restrictions.isNull("groupId")));
 
             // 添加排序条件
             List<Order> orders = new ArrayList<>();
@@ -57,6 +60,31 @@ public class WeiXinGroupWechatService implements IWeiXinGroupWechatService {
             return weiXinGroupWechatRepository.pagination(command.getPage(), command.getPageSize(), criterions, orders);
         } else {
             return new Pagination<>(command.getPage(), command.getPageSize(), 0, Collections.EMPTY_LIST);
+        }
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<WeiXinGroupWechatEntity> findAll() {
+        String username = CustomSecurityContextHolderUtil.getUsername();
+        WeiXinAccountEntity accountEntity = weiXinAccountRepository.findByUsername(username);
+
+        if (null != accountEntity) {
+            // 添加查询条件
+            List<Criterion> criterions = new ArrayList<>();
+            criterions.add(Restrictions.eq("accountId", accountEntity.getId()));
+            criterions.add(
+                    Restrictions.or(
+                            Restrictions.not(Restrictions.in("groupId", 1, 2)),
+                            Restrictions.isNull("groupId")));
+
+            // 添加排序条件
+            List<Order> orders = new ArrayList<>();
+            orders.add(Order.desc("createdDate"));
+
+            return weiXinGroupWechatRepository.findAll(criterions, orders, null);
+        } else {
+            return Collections.EMPTY_LIST;
         }
     }
 

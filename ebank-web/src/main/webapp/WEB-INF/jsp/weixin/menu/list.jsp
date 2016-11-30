@@ -213,14 +213,15 @@
 
         <sec:authorize url="/weixin/menu/sync">
             var _sync = function (url) {
-                layer.confirm('确定同步数据至微信?', {icon: 7, title: '警告'}, function () {
-                    var index = layer.load();
+                layer.confirm('确定同步数据至微信?', {icon: 7, title: '警告'}, function (index) {
+                    var loadIndex = layer.load();
                     $.get(url, function (result) {
                         layer.alert(result.message, function () {
-                            layer.close(index);
+                            layer.close(loadIndex);
                             window.location.reload();
                         });
                     });
+                    layer.close(index);
                 });
             };
         </sec:authorize>

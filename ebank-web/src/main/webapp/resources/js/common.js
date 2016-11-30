@@ -82,6 +82,7 @@ var CURD = {
         this.search(_this);
     },
     view: function () {
+        var _this = this;
         // 校验参数
         var returnValue = this.validate(arguments);
 
@@ -100,7 +101,10 @@ var CURD = {
             shade: [0.5],
             area: [width, height],
             content: url,
-            maxmin: false
+            maxmin: false,
+            end: function () {
+                _this.currentWindow.location.reload();
+            }
         });
     },
     add: function () {

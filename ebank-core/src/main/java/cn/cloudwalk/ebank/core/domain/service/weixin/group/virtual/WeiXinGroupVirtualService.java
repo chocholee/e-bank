@@ -59,4 +59,25 @@ public class WeiXinGroupVirtualService implements IWeiXinGroupVirtualService {
         }
     }
 
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<WeiXinGroupVirtualEntity> findAll() {
+        String username = CustomSecurityContextHolderUtil.getUsername();
+        WeiXinAccountEntity accountEntity = weiXinAccountRepository.findByUsername(username);
+
+        if (null != accountEntity) {
+            // 添加查询条件
+            List<Criterion> criterions = new ArrayList<>();
+            criterions.add(Restrictions.eq("accountId", accountEntity.getId()));
+
+            // 添加排序条件
+            List<Order> orders = new ArrayList<>();
+            orders.add(Order.desc("createdDate"));
+
+            return weiXinGroupVirtualRepository.findAll(criterions, orders, null);
+        } else {
+            return Collections.EMPTY_LIST;
+        }
+    }
+
 }

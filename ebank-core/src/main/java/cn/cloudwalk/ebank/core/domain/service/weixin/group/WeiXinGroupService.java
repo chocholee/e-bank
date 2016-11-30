@@ -7,6 +7,7 @@ import cn.cloudwalk.ebank.core.domain.model.weixin.group.virtual.WeiXinGroupVirt
 import cn.cloudwalk.ebank.core.domain.model.weixin.group.wechat.WeiXinGroupWechatEntity;
 import cn.cloudwalk.ebank.core.domain.model.weixin.menucustomrule.WeiXinMenuCustomRuleEntity;
 import cn.cloudwalk.ebank.core.domain.model.weixin.qrcode.WeiXinQRCodeEntity;
+import cn.cloudwalk.ebank.core.domain.model.weixin.user.WeiXinUserEntity;
 import cn.cloudwalk.ebank.core.domain.service.weixin.account.IWeiXinAccountService;
 import cn.cloudwalk.ebank.core.domain.service.weixin.group.command.WeiXinGroupCommand;
 import cn.cloudwalk.ebank.core.domain.service.weixin.group.command.WeiXinGroupPaginationCommand;
@@ -16,6 +17,7 @@ import cn.cloudwalk.ebank.core.repository.weixin.group.virtual.IWeiXinGroupVirtu
 import cn.cloudwalk.ebank.core.repository.weixin.group.wechat.IWeiXinGroupWechatRepository;
 import cn.cloudwalk.ebank.core.repository.weixin.menucustomrule.IWeiXinMenuCustomRuleRepository;
 import cn.cloudwalk.ebank.core.repository.weixin.qrcode.IWeiXinQRCodeRepository;
+import cn.cloudwalk.ebank.core.repository.weixin.user.IWeiXinUserRepository;
 import cn.cloudwalk.ebank.core.support.exception.WeiXinNotFoundException;
 import cn.cloudwalk.ebank.core.support.utils.CustomSecurityContextHolderUtil;
 import com.arm4j.weixin.exception.WeiXinRequestException;
@@ -61,6 +63,9 @@ public class WeiXinGroupService implements IWeiXinGroupService {
     private IWeiXinMenuCustomRuleRepository<WeiXinMenuCustomRuleEntity, String> weiXinMenuCustomRuleRepository;
 
     @Autowired
+    private IWeiXinUserRepository<WeiXinUserEntity, String> weiXinUserRepository;
+
+    @Autowired
     private IWeiXinAccountService weiXinAccountService;
 
     @Autowired
@@ -83,6 +88,10 @@ public class WeiXinGroupService implements IWeiXinGroupService {
             }
 
             criterions.add(Restrictions.eq("accountId", accountEntity.getId()));
+            criterions.add(
+                    Restrictions.or(
+                            Restrictions.not(Restrictions.in("groupId", 1, 2)),
+                            Restrictions.isNull("groupId")));
 
             // 添加排序条件
             List<Order> orders = new ArrayList<>();
@@ -133,7 +142,7 @@ public class WeiXinGroupService implements IWeiXinGroupService {
             WeiXinGroupVirtualEntity entity = new WeiXinGroupVirtualEntity(
                     command.getName(),
                     null,
-                    null,
+                    0,
                     command.getRemark(),
                     new Date(),
                     accountEntity.getId()
@@ -219,6 +228,34 @@ public class WeiXinGroupService implements IWeiXinGroupService {
             weiXinMenuCustomRuleRepository.update(mcRule);
         }
 
+        // 删除微信分组与微信用户的外键关系
+        if (entity.getType() == WeiXinGroupEntityType.WECHAT) {
+            DetachedCriteria groupWechatUserDc = DetachedCriteria.forClass(WeiXinUserEntity.class);
+            groupWechatUserDc.add(Restrictions.eq("groupWechat.id", id))
+                    .createAlias("groupWechat", "groupWechat", JoinType.LEFT_OUTER_JOIN);
+            List<WeiXinUserEntity> groupWechatUserList = weiXinUserRepository.findAll(groupWechatUserDc);
+            for (WeiXinUserEntity groupWechatUser : groupWechatUserList) {
+                groupWechatUser.setGroupWechat(null);
+                weiXinUserRepository.update(groupWechatUser);
+            }
+        }
+
+        // 删除虚拟分组与微信用户的外键关系
+        if (entity.getType() == WeiXinGroupEntityType.VIRTUAL) {
+            DetachedCriteria groupVirtualDc = DetachedCriteria.forClass(WeiXinGroupVirtualEntity.class);
+            groupVirtualDc.add(Restrictions.eq("id", id))
+                    .createAlias("weiXinUserEntities", "weiXinUserEntities", JoinType.LEFT_OUTER_JOIN);
+
+            List<WeiXinGroupVirtualEntity> groupVirtualEntities =
+                    weiXinGroupVirtualRepository.findAll(groupVirtualDc);
+            for (WeiXinGroupVirtualEntity groupVirtualEntity : groupVirtualEntities) {
+                for (WeiXinUserEntity grUserEntity : groupVirtualEntity.getWeiXinUserEntities()) {
+                    grUserEntity.getGroupVirtualEntities().remove(groupVirtualEntity);
+                    weiXinUserRepository.update(grUserEntity);
+                }
+            }
+        }
+
         // 删除数据库中的记录
         weiXinGroupRepository.delete(entity);
     }
@@ -235,7 +272,8 @@ public class WeiXinGroupService implements IWeiXinGroupService {
         List<GroupEntity> groupEntities =
                 WeiXinGroupsGetRequest.request(weiXinAccountService.getAccessToken(accountEntity.getAppId()));
         for (GroupEntity group : groupEntities) {
-            WeiXinGroupWechatEntity groupWechatEntity = weiXinGroupWechatRepository.findByGroupId(group.getId());
+            WeiXinGroupWechatEntity groupWechatEntity =
+                    weiXinGroupWechatRepository.findByGroupId(group.getId(), accountEntity.getId());
             if (null != groupWechatEntity) {
                 if (!groupWechatEntity.getName().equals(group.getName())
                         || !groupWechatEntity.getCount().equals(group.getCount())) {
