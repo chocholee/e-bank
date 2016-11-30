@@ -11,4 +11,6 @@ public interface IWeiXinReplyRepository<T, ID> extends IHibernateRepository<T, I
 
     List<T> findBySceneId(String sceneId);
 
+    T findByKeyword(String keyword, String accountId);
+
 }

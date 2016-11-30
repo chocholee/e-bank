@@ -1,13 +1,16 @@
 package cn.cloudwalk.ebank.core.domain.service.weixin;
 
-import cn.cloudwalk.ebank.core.domain.model.weixin.keyword.WeiXinKeywordEntity;
+import cn.cloudwalk.ebank.core.domain.model.weixin.account.WeiXinAccountEntity;
+import cn.cloudwalk.ebank.core.domain.model.weixin.reply.WeiXinReplyEntity;
+import cn.cloudwalk.ebank.core.domain.model.weixin.template.image.WeiXinImageTemplateEntity;
 import cn.cloudwalk.ebank.core.domain.model.weixin.template.news.WeiXinNewsItemsTemplateEntity;
 import cn.cloudwalk.ebank.core.domain.model.weixin.template.news.WeiXinNewsTemplateEntity;
 import cn.cloudwalk.ebank.core.domain.model.weixin.template.text.WeiXinTextTemplateEntity;
 import cn.cloudwalk.ebank.core.domain.service.weixin.account.IWeiXinAccountService;
-import cn.cloudwalk.ebank.core.domain.service.weixin.keyword.IWeiXinKeywordService;
 import cn.cloudwalk.ebank.core.domain.service.weixin.receive.IWeiXinReceiveService;
 import cn.cloudwalk.ebank.core.domain.service.weixin.receive.command.WeiXinReceiveCommand;
+import cn.cloudwalk.ebank.core.domain.service.weixin.reply.IWeiXinReplyService;
+import cn.cloudwalk.ebank.core.domain.service.weixin.template.image.IWeiXinImageTemplateService;
 import cn.cloudwalk.ebank.core.domain.service.weixin.template.news.IWeiXinNewsItemsTemplateService;
 import cn.cloudwalk.ebank.core.domain.service.weixin.template.news.IWeiXinNewsTemplateService;
 import cn.cloudwalk.ebank.core.domain.service.weixin.template.text.IWeiXinTextTemplateService;
@@ -35,7 +38,7 @@ public class WeiXinService {
     private IWeiXinAccountService weiXinAccountService;
 
     @Autowired
-    private IWeiXinKeywordService weiXinKeywordService;
+    private IWeiXinReplyService weiXinReplyService;
 
     @Autowired
     private IWeiXinTextTemplateService weiXinTextTemplateService;
@@ -45,6 +48,9 @@ public class WeiXinService {
 
     @Autowired
     private IWeiXinNewsItemsTemplateService weiXinNewsItemsTemplateService;
+
+    @Autowired
+    private IWeiXinImageTemplateService weiXinImageTemplateService;
 
     @Autowired
     private IWeiXinReceiveService weiXinReceiveService;
@@ -113,10 +119,11 @@ public class WeiXinService {
             // 查询关键字表中是否存在用户请求的内容
             // 存在并取出数据返回给用户
             // 不存在则返回欢迎语
-            WeiXinKeywordEntity entity = weiXinKeywordService
-                    .findByKeyword((String) data.get("ToUserName"), (String) data.get("Content"));
+            WeiXinAccountEntity accountEntity = weiXinAccountService.findByAccountId((String) data.get("ToUserName"));
+            WeiXinReplyEntity entity = weiXinReplyService
+                    .findByKeyword((String) data.get("Content"), accountEntity.getId());
             if (null != entity) {
-                switch (entity.getMsgType()) {
+                switch (entity.getType()) {
                     case TEXT:
                         // 返回文本消息
                         WeiXinTextTemplateEntity templateEntity = weiXinTextTemplateService.findById(entity.getTemplateId());
@@ -145,6 +152,10 @@ public class WeiXinService {
                         break;
                     case IMAGE:
                         // 返回扩展消息
+                        WeiXinImageTemplateEntity imageTemplateEntity =
+                                weiXinImageTemplateService.findById(entity.getTemplateId());
+                        responseMap.put("MsgType", "image");
+                        responseMap.put("MediaId", imageTemplateEntity.getMediaId());
                         break;
                 }
 

@@ -81,6 +81,11 @@ public class WeiXinReplyService implements IWeiXinReplyService {
     }
 
     @Override
+    public WeiXinReplyEntity findByKeyword(String keyword, String accountId) {
+        return weiXinReplyRepository.findByKeyword(keyword, accountId);
+    }
+
+    @Override
     public WeiXinReplyEntity save(WeiXinReplyCommand command) {
         String username = CustomSecurityContextHolderUtil.getUsername();
         WeiXinAccountEntity accountEntity = weiXinAccountRepository.findByUsername(username);

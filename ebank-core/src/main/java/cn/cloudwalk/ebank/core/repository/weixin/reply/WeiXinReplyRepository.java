@@ -24,4 +24,12 @@ public class WeiXinReplyRepository extends AbstractHibernateRepository<WeiXinRep
         return criteria.list();
     }
 
+    @Override
+    public WeiXinReplyEntity findByKeyword(String keyword, String accountId) {
+        Criteria criteria = getSession().createCriteria(getPersistenceClass());
+        criteria.add(Restrictions.eq("keyword", keyword))
+                .add(Restrictions.eq("accountId", accountId));
+        return (WeiXinReplyEntity) criteria.uniqueResult();
+    }
+
 }

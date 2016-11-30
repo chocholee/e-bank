@@ -18,6 +18,8 @@ public interface IWeiXinReplyService {
 
     WeiXinReplyEntity findById(String id);
 
+    WeiXinReplyEntity findByKeyword(String keyword, String accountId);
+
     WeiXinReplyEntity save(WeiXinReplyCommand command);
 
     WeiXinReplyEntity update(WeiXinReplyCommand command);

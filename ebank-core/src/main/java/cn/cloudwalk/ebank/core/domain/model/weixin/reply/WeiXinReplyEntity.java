@@ -13,19 +13,19 @@ import java.util.Date;
 @Table(name = "weixin_reply")
 public class WeiXinReplyEntity extends AbstractEntity {
 
-    private String                  keyword;
+    private String                  keyword;                // 关键字
 
-    private WeiXinReplyEntityEvent  event;
+    private WeiXinReplyEntityEvent  event;                  // 事件类型
 
-    private WeiXinReplyEntityType   type;
+    private WeiXinReplyEntityType   type;                   // 消息类型
 
-    private WeiXinSceneEntity       scene;
+    private WeiXinSceneEntity       scene;                  // 关联场景
 
-    private String                  templateId;
+    private String                  templateId;             // 关联模板消息
 
-    private String                  accountId;
+    private String                  accountId;              // 关联公众号
 
-    private Date                    createdDate;
+    private Date                    createdDate;            // 创建日期
 
     public WeiXinReplyEntity() {
         super();
